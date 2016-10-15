@@ -29,6 +29,8 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	else
 		return false;
 
+	m_pGameStateMachine = new GameStateMachine();
+
 	m_bRunning = true;
 
 	return true;
@@ -62,6 +64,7 @@ void Game::clean()
 
 	TheInputHandler::Instance()->clean();
 	delete TheInputHandler::Instance();
+	delete m_pGameStateMachine;
 
 	SDL_Quit();
 }

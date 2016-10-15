@@ -4,6 +4,8 @@
 #include "InputHandler.h"
 #include "LoaderParams.h"
 #include "GameObject.h"
+#include "TextureManager.h"
+#include "GameStateMachine.h"
 
 class Game
 {
@@ -20,6 +22,8 @@ public:
 
 	SDL_Renderer* getRenderer() const { return m_pRenderer; }
 
+	GameStateMachine* getGameStateMachine() { return m_pGameStateMachine; }
+
 	static Game* Instance() // This makes this class a singletone, so it has only one member
 	{
 		if (s_pInstance == 0)
@@ -33,7 +37,11 @@ private:
 	SDL_Window* m_pWindow = 0;
 	SDL_Renderer* m_pRenderer = 0;
 
+	GameStateMachine* m_pGameStateMachine;
+
 	static Game* s_pInstance;
+
+	std::vector<GameObject*> m_gameObjects;
 
 	bool m_bRunning;
 };
