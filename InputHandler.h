@@ -11,7 +11,7 @@ enum mouse_buttons
 	LEFT, MIDDLE, RIGHT
 };
 
-class InputHandler
+class InputHandler // This is class for handling input
 {
 public:
 	void update();

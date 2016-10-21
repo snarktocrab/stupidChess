@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-class Vector2D
+class Vector2D // Vector = point
 {
 public:
 	Vector2D(double x, double y) : m_x(x), m_y(y) {}

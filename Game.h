@@ -6,23 +6,26 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 #include "GameStateMachine.h"
+#include "PlayState.h"
+#include "MainMenuState.h"
+#include "PauseState.h"
 
 class Game
 {
 public:
-	bool init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
+	bool init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen); // Initial function
 
 	void render();
 	void update();
 	void handleEvents();
 	void clean();
-	void quit();
+	void quit(); // To finish this program
 
 	bool running() { return m_bRunning; }
 
 	SDL_Renderer* getRenderer() const { return m_pRenderer; }
 
-	GameStateMachine* getGameStateMachine() { return m_pGameStateMachine; }
+	GameStateMachine* getStateMachine() { return m_pGameStateMachine; }
 
 	static Game* Instance() // This makes this class a singletone, so it has only one member
 	{

@@ -29,7 +29,9 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	else
 		return false;
 
+	// Initializing GSM
 	m_pGameStateMachine = new GameStateMachine();
+	m_pGameStateMachine->changeState(new MainMenuState());
 
 	m_bRunning = true;
 
@@ -40,19 +42,22 @@ void Game::handleEvents()
 {
 	TheInputHandler::Instance()->update();
 
-	// TODO: Insert here some code to handle events
+	if (TheInputHandler::Instance()->isKeyDown(SDL_SCANCODE_RETURN))
+	{
+		m_pGameStateMachine->changeState(new PlayState());
+	}
 }
 
 void Game::update()
 {
-	// TODO: Insert here some update code
+	m_pGameStateMachine->update(); // This is using polymorphism. So this functions calls current game state's ones
 }
 
 void Game::render()
 {
 	SDL_RenderClear(m_pRenderer);
 
-	// TODO: Insert here some draw code
+	m_pGameStateMachine->render();
 
 	SDL_RenderPresent(m_pRenderer);
 }
@@ -63,7 +68,7 @@ void Game::clean()
 	SDL_DestroyRenderer(m_pRenderer);
 
 	TheInputHandler::Instance()->clean();
-	delete TheInputHandler::Instance();
+	delete TheInputHandler::Instance(); // Deleting pointers to prevent the leak of memory
 	delete m_pGameStateMachine;
 
 	SDL_Quit();

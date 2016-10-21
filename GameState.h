@@ -16,7 +16,7 @@ public:
 	virtual std::string getStateID() const = 0;
 
 protected:
-	std::vector<std::string> n_textureIDList;
+	std::vector<std::string> m_textureIDList; // For future
 };
 
 #endif

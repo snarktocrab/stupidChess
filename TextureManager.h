@@ -4,8 +4,9 @@
 #include <map>
 #include <string>
 #include <SDL.h>
+#include <SDL_image.h>
 
-class TextureManager
+class TextureManager // It operates all textures
 {
 public:
 	bool load(std::string fileName, std::string id, SDL_Renderer* pRenderer);

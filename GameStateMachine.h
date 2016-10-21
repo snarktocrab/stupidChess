@@ -5,7 +5,7 @@
 
 #include "GameState.h"
 
-class GameStateMachine
+class GameStateMachine // This is class for handling game states
 {
 public:
 	void pushState(GameState* pState);

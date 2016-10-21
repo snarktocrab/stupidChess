@@ -3,7 +3,7 @@
 
 #include <string>
 
-class LoaderParams
+class LoaderParams // Just makes code simpler
 {
 public:
 	LoaderParams(int x, int y, int width, int height,
