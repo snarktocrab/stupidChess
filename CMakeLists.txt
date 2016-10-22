@@ -13,7 +13,9 @@ set(SOURCE_FILES
         MenuButton.cpp
         MainMenuState.cpp
         PlayState.cpp
-        PauseState.cpp GameOverState.cpp)
+        PauseState.cpp
+        GameOverState.cpp
+        assets)
 
 
 add_executable(StupidChess ${SOURCE_FILES}

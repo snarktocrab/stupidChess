@@ -24,7 +24,8 @@ void MainMenuState::render()
 
 bool MainMenuState::onEnter() // Loading images
 {
-    if (!TheTextureManager::Instanse()->load("assets/button.png", "playbutton", TheGame::Instance()->getRenderer()))
+    if (!TheTextureManager::Instanse()->load("assets/button.png", "playbutton",
+                                             TheGame::Instance()->getRenderer()))
         return false;
 
     if (!TheTextureManager::Instanse()->load("assets/exit.png", "exitbutton", TheGame::Instance()->getRenderer()))

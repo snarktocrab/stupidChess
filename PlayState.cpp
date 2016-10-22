@@ -33,8 +33,6 @@ bool PlayState::onEnter()
 
 bool PlayState::onExit()
 {
-    SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), 0, 0, 0, 255);
-
     for (auto pCurrentObject : m_gameObjects)
     {
         pCurrentObject->clean();

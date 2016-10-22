@@ -1,9 +1,13 @@
 #include "TextureManager.h"
 
+#include <bits/stdc++.h>
+
 TextureManager* TextureManager::s_pInstance = 0;
 
 bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pRenderer)
 {
+    fileName = (std::string)getenv("HOME") + "/ClionProjects/StupidChess/" + fileName;
+
 	SDL_Surface* p_TempSurface = IMG_Load(fileName.c_str());
 
 	if (p_TempSurface == 0)

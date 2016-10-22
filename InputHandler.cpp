@@ -53,7 +53,7 @@ bool InputHandler::isKeyDown(SDL_Scancode key)
 void InputHandler::clean()
 {
 	delete m_mousePosition;
-	delete m_keystates;
+	/*delete m_keystates;*/
 }
 
 void InputHandler::onKeyDown()
