@@ -7,8 +7,10 @@ import java.lang.ref.WeakReference;
 public class Board {
     boolean whiteTurn;
 
+    static Piece p = new Pawn(0, 0, true, true, true);
+
     // Singleton
-    public static final Board INSTANCE = new Board(new Piece[]{}, true);
+    public static final Board INSTANCE = new Board(new Piece[]{p}, true);
 
     // Фигуры
     public Piece[] pieces;
@@ -29,7 +31,7 @@ public class Board {
         return new WeakReference<Piece>(null);
     }
 
-    // Проверяет, нажодится ли клетка под ударом (нужно для короля)
+    // Проверяет, находится ли клетка под ударом (нужно для короля)
     public boolean isThreatened(int x, int y, boolean colour) {
         for (Piece piece : pieces) {
             if (piece.isAlive() && piece.getColour() != colour && piece.checkAttack(x, y))
@@ -38,10 +40,12 @@ public class Board {
         return false;
     }
 
-    public void move(int x1, int y1, int x2, int y2) {
-        if (getPiece(x1, y1) != null && getPiece(x1, y1).get().checkMove(x2, y2)) {
+    public boolean move(int x1, int y1, int x2, int y2) {
+        if (getPiece(x1, y1) != null && getPiece(x1, y1).get().checkMove(x2, y2) && getPiece(x1, y1).get().getColour() == whiteTurn) {
             getPiece(x1, y1).get().move(x2, y2);
+            return true;
         }
+        return false;
     }
 
     public void take(int x1, int y1, int x2, int y2) {
