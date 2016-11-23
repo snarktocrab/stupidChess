@@ -40,8 +40,13 @@ public class BasicController implements Controller {
                 System.out.println("Invalid command.");
                 continue;
             }
-            if (!makeMove(x1, y1, x2, y2)) {
-                System.out.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
+            // Теперь пешки могут есть (другие фигуры тоже, но некоторые не ходят
+            // TODO: Исправить ходы фигур
+            // Сначала выполняем проверку может ли взять, если нет то может ли сходить
+            if (!Board.INSTANCE.take(x1, y1, x2, y2)) {
+                if (!makeMove(x1, y1, x2, y2)) {
+                    System.out.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
+                }
             } else break;
         }
     }

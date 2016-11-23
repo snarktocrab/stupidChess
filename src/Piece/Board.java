@@ -79,12 +79,14 @@ public class Board {
         return false;
     }
 
-    public void take(int x1, int y1, int x2, int y2) {
+    public boolean take(int x1, int y1, int x2, int y2) {
         try {
-            if (getPiece(x1, y1).get().checkMove(x2, y2)) {
+            if (getPiece(x1, y1).get().checkAttack(x2, y2)) {
                 getPiece(x2, y2).get().die();
                 getPiece(x1, y1).get().move(x2, y2);
             }
+            else return false;
         } catch (NullPointerException e) {}
+        return true;
     }
 }
