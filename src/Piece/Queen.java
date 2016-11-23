@@ -5,6 +5,12 @@ package Piece;
  */
 public class Queen extends Piece {
     char TYPE = 'Q';
+
+    public Queen(int _x, int _y, boolean _colour, boolean _alive, boolean moved) {
+        super(_x, _y, _colour, _alive);
+        hasMoved = moved;
+    }
+
     private boolean checkInBetween(int newX, int newY) {
         if (x - y != newX - newY || x + y != newX + newY || x != newX && y != newY || x == newX && y == newY) {
             return false;
@@ -88,4 +94,6 @@ public class Queen extends Piece {
         } catch (NullPointerException e) { return false; }
         return checkInBetween(newX, newY);
     }
+
+    public char getType() { return TYPE; }
 }

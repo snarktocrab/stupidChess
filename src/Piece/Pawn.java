@@ -11,11 +11,18 @@ public class Pawn extends Piece {
     }
 
     public boolean checkMove(int newX, int newY) {
-        return newX == x && (!hasMoved && newY - y == 2 || newY - y == 1);
+        if (colour) {
+            return newX == x && (!hasMoved && newY - y == 2 || newY - y == 1);
+        }
+        else {
+            return newX == x && (!hasMoved && newY - y == -2 || newY - y == -1);
+        }
     }
 
     public boolean checkAttack(int newX, int newY) {
         return Math.abs(newX - x) == 1 && newY - y == 1 && Board.INSTANCE.getPiece(newX, newY).get() != null &&
                 Board.INSTANCE.getPiece(newX, newY).get().getColour() != colour;
     }
+
+    public char getType() { return TYPE; }
 }

@@ -41,6 +41,7 @@ public abstract class Piece {
     public int getY() { return y; }
     public boolean getColour() { return colour; }
     public boolean isAlive() { return alive; }
+    public abstract char getType();
 
     // Мой любимый метод
     public void die() { alive = false; }

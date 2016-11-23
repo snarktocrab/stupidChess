@@ -5,6 +5,12 @@ package Piece;
  */
 public class Bishop extends Piece {
     char TYPE = 'B';
+
+    public Bishop(int _x, int _y, boolean _colour, boolean _alive, boolean moved) {
+        super(_x, _y, _colour, _alive);
+        hasMoved = moved;
+    }
+
     public boolean checkInBetween(int newX, int newY) {
         if (x - y != newX - newY || x + y != newX + newY || x == newX && y == newY) {
             return false;
@@ -55,4 +61,6 @@ public class Bishop extends Piece {
         } catch (NullPointerException e) { return false; }
         return checkInBetween(newX, newY);
     }
+
+    public char getType() { return TYPE; }
 }
