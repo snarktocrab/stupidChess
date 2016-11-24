@@ -2,6 +2,8 @@ package Piece; /**
  * Created by daniel on 21.11.16.
  */
 
+import Controller.BasicController;
+
 import java.lang.ref.WeakReference;
 
 public class Board {
@@ -72,6 +74,8 @@ public class Board {
         try {
             if (getPiece(x1, y1).get().checkMove(x2, y2) && getPiece(x1, y1).get().getColour() == whiteTurn) {
                 getPiece(x1, y1).get().move(x2, y2);
+                if (isCheck(!whiteTurn)) // Мы уже передали ход
+                    BasicController.INSTANCE.checkHandler();
                 return true;
             }
         } catch (NullPointerException e) { System.out.println("NOPE");}
@@ -83,9 +87,25 @@ public class Board {
             if (getPiece(x1, y1).get().checkAttack(x2, y2)) {
                 getPiece(x2, y2).get().die();
                 getPiece(x1, y1).get().move(x2, y2);
+                if (isCheck(!whiteTurn)) // Мы уже передали ход
+                    BasicController.INSTANCE.checkHandler();
             }
-            else return false;
+            else
+                return false;
         } catch (NullPointerException e) {}
         return true;
+    }
+
+    public boolean isCheck(boolean curr_colour) {
+        Piece king = null;
+        for (Piece p : pieces) { // Ищем короля чужого
+            if (p.getType() == 'K' && p.colour != curr_colour) {
+                king = p;
+                break;
+            }
+        }
+        if (isThreatened(king.x, king.y, king.colour))
+            return true;
+        return false;
     }
 }

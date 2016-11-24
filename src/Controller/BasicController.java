@@ -56,6 +56,10 @@ public class BasicController implements Controller {
         return Board.INSTANCE.move(x1, y1, x2, y2);
     }
 
+    public void checkHandler() {
+        System.out.println("Check!");
+    }
+
     public boolean isRunning() { return running; } // Вместо бесконечного цикла
     public void quit() { running = false; } // Завершает программу
 }
