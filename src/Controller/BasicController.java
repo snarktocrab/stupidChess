@@ -33,8 +33,8 @@ public class BasicController implements Controller {
                 continue;
             }
 
-            int x1 = (int) (s.charAt(0) - 'a'), y1 = (int) (s.charAt(1) - '1'),
-                    x2 = (int) (s.charAt(3) - 'a'), y2 = (int) (s.charAt(4) - '1');
+            int x1 = s.charAt(0) - 'a', y1 = s.charAt(1) - '1',
+                    x2 = s.charAt(3) - 'a', y2 = s.charAt(4) - '1';
 
             if (x1 > 7 || x2 > 7 || y1 > 7 || y2 > 7 || x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0) {
                 System.out.println("Invalid command.");

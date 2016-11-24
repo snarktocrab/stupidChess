@@ -20,8 +20,12 @@ public class Pawn extends Piece {
     }
 
     public boolean checkAttack(int newX, int newY) {
-        return Math.abs(newX - x) == 1 && newY - y == 1 && Board.INSTANCE.getPiece(newX, newY).get() != null &&
-                Board.INSTANCE.getPiece(newX, newY).get().getColour() != colour;
+        if (colour)
+            return Math.abs(newX - x) == 1 && newY - y == 1 && Board.INSTANCE.getPiece(newX, newY).get() != null &&
+                    Board.INSTANCE.getPiece(newX, newY).get().getColour() != colour;
+        else
+            return Math.abs(newX - x) == 1 && newY - y == -1 && Board.INSTANCE.getPiece(newX, newY).get() != null &&
+                    Board.INSTANCE.getPiece(newX, newY).get().getColour() != colour;
     }
 
     public char getType() { return TYPE; }

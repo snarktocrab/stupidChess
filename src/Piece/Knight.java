@@ -17,7 +17,7 @@ public class Knight extends Piece {
         return ((Math.abs(newX - x) == 2 && Math.abs(newY - y) == 1) || (Math.abs(newX - x) == 1 && Math.abs(newY - y) == 2));
     }
     public boolean checkMove(int newX, int newY) {
-        return Board.INSTANCE.getPiece(newX, newY) == null && canMoveTo(newX, newY);
+        return Board.INSTANCE.getPiece(newX, newY).get() == null && canMoveTo(newX, newY);
     }
     public boolean checkAttack(int newX, int newY) {
         try {

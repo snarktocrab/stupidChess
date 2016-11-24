@@ -12,19 +12,19 @@ public class Bishop extends Piece {
     }
 
     public boolean checkInBetween(int newX, int newY) {
-        if (x - y != newX - newY || x + y != newX + newY || x == newX && y == newY) {
+        if (x - y != newX - newY && x + y != newX + newY || x == newX && y == newY) {
             return false;
         }
         if (x - y == newX - newY) {
             if (x < newX) {
-                for (int i = x, j = y; i < newX; i++, j++) {
+                for (int i = x + 1, j = y + 1; i < newX; i++, j++) {
                     try {
                         if (Board.INSTANCE.getPiece(i, j).get().isAlive()) return false;
                     } catch (NullPointerException e) {}
                 }
             }
             if (x > newX) {
-                for (int i = x, j = y; i > newX; i--, j--) {
+                for (int i = x - 1, j = y - 1; i > newX; i--, j--) {
                     try {
                         if (Board.INSTANCE.getPiece(i, j).get().isAlive()) return false;
                     } catch (NullPointerException e) {}
@@ -33,14 +33,14 @@ public class Bishop extends Piece {
         }
         if (x + y == newX + newY) {
             if (x < newX) {
-                for (int i = x, j = y; i < newX; i++, j--) {
+                for (int i = x + 1, j = y - 1; i < newX; i++, j--) {
                     try {
                         if (Board.INSTANCE.getPiece(i, j).get().isAlive()) return false;
                     } catch (NullPointerException e) {}
                 }
             }
             if (x > newX) {
-                for (int i = x, j = y; i > newX; i--, j++) {
+                for (int i = x - 1, j = y + 1; i > newX; i--, j++) {
                     try {
                         if (Board.INSTANCE.getPiece(i, j).get().isAlive()) return false;
                     } catch (NullPointerException e) {}
