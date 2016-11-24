@@ -72,7 +72,6 @@ public class Board {
         try {
             if (getPiece(x1, y1).get().checkMove(x2, y2) && getPiece(x1, y1).get().getColour() == whiteTurn) {
                 getPiece(x1, y1).get().move(x2, y2);
-                whiteTurn = !whiteTurn;
                 return true;
             }
         } catch (NullPointerException e) { System.out.println("NOPE");}

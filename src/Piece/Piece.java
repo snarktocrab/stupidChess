@@ -25,6 +25,7 @@ public abstract class Piece {
     public void move(int newX, int newY) {
         x = newX;
         y = newY;
+        Board.INSTANCE.whiteTurn = !Board.INSTANCE.whiteTurn;
     }
     public void take(int newX, int newY) {
         x = newX;

@@ -7,7 +7,7 @@ import Piece.Board;
  */
 public class Main {
     public static void main(String[] args) {
-        while (true) {
+        while (BasicController.INSTANCE.isRunning()) {
             BasicController.INSTANCE.getMove();
         }
     }
