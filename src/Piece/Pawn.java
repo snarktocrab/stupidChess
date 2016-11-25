@@ -12,10 +12,14 @@ public class Pawn extends Piece {
 
     public boolean checkMove(int newX, int newY) {
         if (colour) {
-            return newX == x && (!hasMoved && newY - y == 2 || newY - y == 1);
+            return newX == x && (
+                    !hasMoved && newY - y == 2 && Board.INSTANCE.getPiece(x, y + 1).get() == null || newY - y == 1
+            );
         }
         else {
-            return newX == x && (!hasMoved && newY - y == -2 || newY - y == -1);
+            return newX == x && (
+                    !hasMoved && newY - y == -2 && Board.INSTANCE.getPiece(x, y - 1).get() == null || newY - y == -1
+            );
         }
     }
 

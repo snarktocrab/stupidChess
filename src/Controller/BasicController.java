@@ -38,7 +38,7 @@ public class BasicController implements Controller {
         }
 
         if (s.length() != 5) {
-            System.out.println("Invalid command.");
+            System.err.println("Invalid command.");
             return;
         }
 
@@ -46,13 +46,13 @@ public class BasicController implements Controller {
                 x2 = s.charAt(3) - 'a', y2 = s.charAt(4) - '1';
 
         if (x1 > 7 || x2 > 7 || y1 > 7 || y2 > 7 || x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0) {
-            System.out.println("Invalid command.");
+            System.err.println("Invalid command.");
             return;
         }
         // Сначала выполняем проверку может ли взять, если нет то может ли сходить
         if (!Board.INSTANCE.take(x1, y1, x2, y2)) {
             if (!makeMove(x1, y1, x2, y2)) {
-                System.out.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
+                System.err.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
             }
         }
     }

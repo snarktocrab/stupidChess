@@ -80,11 +80,17 @@ public class Board {
 
     public boolean move(int x1, int y1, int x2, int y2) {
         try {
-            if (getPiece(x1, y1).get().checkMove(x2, y2) && getPiece(x1, y1).get().getColour() == whiteTurn) {
-                getPiece(x1, y1).get().move(x2, y2);
+            Piece p = getPiece(x1,y1).get();
+            if (p.checkMove(x2, y2) && p.getColour() == whiteTurn) {
+                p.move(x2, y2);
                 if (isCheck(!whiteTurn)) // Мы уже передали ход
                     BasicController.INSTANCE.checkHandler();
-                lastTurn = "m" + x1 + y1 + x2 + y2;
+                if (!p.getHasMoved()) {
+                    p.setHasMoved(true);
+                    lastTurn = "m" + x1 + y1 + x2 + y2 + "@";
+                }
+                else
+                    lastTurn = "m" + x1 + y1 + x2 + y2 + "$";
                 return true;
             }
         } catch (NullPointerException e) { System.out.println("NOPE");}
@@ -93,13 +99,19 @@ public class Board {
 
     public boolean take(int x1, int y1, int x2, int y2) {
         try {
-            if (getPiece(x1, y1).get().checkAttack(x2, y2)) {
+            Piece p = getPiece(x1,y1).get();
+            if (p.checkAttack(x2, y2)) {
                 int id = getPiece(x2, y2).get().getID();
                 getPiece(x2, y2).get().die();
-                getPiece(x1, y1).get().move(x2, y2);
+                p.move(x2, y2);
                 if (isCheck(!whiteTurn)) // Мы уже передали ход
                     BasicController.INSTANCE.checkHandler();
-                lastTurn = "t" + x1 + y1 + x2 + y2 + "#" + id;
+                if (!p.getHasMoved()) {
+                    p.setHasMoved(true);
+                    lastTurn = "m" + x1 + y1 + x2 + y2 + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
+                }
+                else
+                    lastTurn = "m" + x1 + y1 + x2 + y2 + "$" + id;
             }
             else
                 return false;
@@ -129,6 +141,8 @@ public class Board {
         try {
             Piece p = getPiece(lastTurn.charAt(3) - '0', lastTurn.charAt(4) - '0').get();
             p.move(lastTurn.charAt(1) - '0', lastTurn.charAt(2) - '0');
+            if (lastTurn.charAt(5) == '@')
+                p.setHasMoved(false);
         } catch (NullPointerException e) { System.err.println("Can't move backward!" + lastTurn); }
 
         if (lastTurn.charAt(0) == 't') {
