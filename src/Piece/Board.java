@@ -9,6 +9,8 @@ import java.lang.ref.WeakReference;
 public class Board {
     boolean whiteTurn;
 
+    String lastTurn;
+
     // Singleton
     public static final Board INSTANCE = new Board();
 
@@ -19,11 +21,13 @@ public class Board {
     public Board(Piece[] newPieces, boolean turn) {
         pieces = newPieces;
         whiteTurn = turn;
+        lastTurn = "-";
     }
 
     public Board() {
         whiteTurn = true;
         pieces = new Piece[32];
+        lastTurn = "-";
         // Пешки
         for (int i = 0; i < 8; ++i)
             pieces[i] = new Pawn(i, 1, true, true, false);
@@ -61,6 +65,10 @@ public class Board {
         return new WeakReference<Piece>(null);
     }
 
+    public WeakReference<Piece> getPiece(int id) {
+        return new WeakReference<Piece>(pieces[id]);
+    }
+
     // Проверяет, находится ли клетка под ударом (нужно для короля)
     public boolean isThreatened(int x, int y, boolean colour) {
         for (Piece piece : pieces) {
@@ -76,6 +84,7 @@ public class Board {
                 getPiece(x1, y1).get().move(x2, y2);
                 if (isCheck(!whiteTurn)) // Мы уже передали ход
                     BasicController.INSTANCE.checkHandler();
+                lastTurn = "m" + x1 + y1 + x2 + y2;
                 return true;
             }
         } catch (NullPointerException e) { System.out.println("NOPE");}
@@ -85,10 +94,12 @@ public class Board {
     public boolean take(int x1, int y1, int x2, int y2) {
         try {
             if (getPiece(x1, y1).get().checkAttack(x2, y2)) {
+                int id = getPiece(x2, y2).get().getID();
                 getPiece(x2, y2).get().die();
                 getPiece(x1, y1).get().move(x2, y2);
                 if (isCheck(!whiteTurn)) // Мы уже передали ход
                     BasicController.INSTANCE.checkHandler();
+                lastTurn = "t" + x1 + y1 + x2 + y2 + "#" + id;
             }
             else
                 return false;
@@ -107,5 +118,25 @@ public class Board {
         if (isThreatened(king.x, king.y, king.colour))
             return true;
         return false;
+    }
+
+    public void undo()
+    {
+        if (lastTurn.equals("-")) {
+            System.err.println("Nothing to undo!");
+            return;
+        }
+        try {
+            Piece p = getPiece(lastTurn.charAt(3) - '0', lastTurn.charAt(4) - '0').get();
+            p.move(lastTurn.charAt(1) - '0', lastTurn.charAt(2) - '0');
+        } catch (NullPointerException e) { System.err.println("Can't move backward!" + lastTurn); }
+
+        if (lastTurn.charAt(0) == 't') {
+            int id = Integer.parseInt(lastTurn.substring(6));
+            try {
+                getPiece(id).get().respawn();
+            } catch (NullPointerException e) { System.err.println("We aren't Gods. We can't resurrect figures!"); }
+
+        }
     }
 }

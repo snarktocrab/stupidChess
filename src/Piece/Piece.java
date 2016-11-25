@@ -40,10 +40,12 @@ public abstract class Piece {
 
     public int getX() { return x; }
     public int getY() { return y; }
+    public int getID() { return thisID; }
     public boolean getColour() { return colour; }
     public boolean isAlive() { return alive; }
     public abstract char getType();
 
     // Мой любимый метод
     public void die() { alive = false; }
+    public void respawn() { alive = true; }
 }

@@ -27,6 +27,11 @@ public class BasicController implements Controller {
             return;
         }
 
+        if (s.equals("undo")) {
+            Board.INSTANCE.undo();
+            return;
+        }
+
         if (s.equals("show")) {
             TextDisplay.INSTANCE.update();
             return;
