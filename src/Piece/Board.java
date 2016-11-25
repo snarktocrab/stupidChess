@@ -100,7 +100,7 @@ public class Board {
     public boolean take(int x1, int y1, int x2, int y2) {
         try {
             Piece p = getPiece(x1,y1).get();
-            if (p.checkAttack(x2, y2)) {
+            if (p.checkAttack(x2, y2) && p.getColour() == whiteTurn) {
                 int id = getPiece(x2, y2).get().getID();
                 getPiece(x2, y2).get().die();
                 p.move(x2, y2);
@@ -112,11 +112,10 @@ public class Board {
                 }
                 else
                     lastTurn = "m" + x1 + y1 + x2 + y2 + "$" + id;
+                return true;
             }
-            else
-                return false;
         } catch (NullPointerException e) {}
-        return true;
+        return false;
     }
 
     public boolean isCheck(boolean curr_colour) {
@@ -153,4 +152,6 @@ public class Board {
 
         }
     }
+
+    public boolean getTurn() { return whiteTurn; }
 }

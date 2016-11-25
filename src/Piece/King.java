@@ -14,7 +14,7 @@ public class King extends Piece {
     boolean checkMove(int newX, int newY) {
         if (newX == x - 2 && newY == y &&
                 !hasMoved &&
-                Board.INSTANCE.getPiece(x - 4, y) != null &&
+                Board.INSTANCE.getPiece(x - 4, y).get() != null &&
                 Board.INSTANCE.getPiece(x - 4, y).get().getType() == 'R' &&
                 Board.INSTANCE.getPiece(x - 4, y).get().colour == colour &&
                 !Board.INSTANCE.getPiece(x - 4, y).get().hasMoved &&
@@ -28,7 +28,7 @@ public class King extends Piece {
             return true;
         }
         if (newX == x + 2 && newY == y &&
-                !hasMoved && Board.INSTANCE.getPiece(x + 3, y) != null &&
+                !hasMoved && Board.INSTANCE.getPiece(x + 3, y).get() != null &&
                 Board.INSTANCE.getPiece(x + 3, y).get().getType() == 'R' &&
                 Board.INSTANCE.getPiece(x + 3, y).get().colour == colour &&
                 !Board.INSTANCE.getPiece(x + 3, y).get().hasMoved &&
@@ -42,7 +42,7 @@ public class King extends Piece {
                 Math.abs(newX - x) > 1 ||
                 Math.abs(newY - y) > 1 ||
                 Board.INSTANCE.isThreatened(newX, newY, colour) ||
-                Board.INSTANCE.getPiece(newX, newY) != null
+                Board.INSTANCE.getPiece(newX, newY).get() != null
         );
     }
 
@@ -51,7 +51,7 @@ public class King extends Piece {
                 Math.abs(newX - x) > 1 ||
                 Math.abs(newY - y) > 1 ||
                 Board.INSTANCE.isThreatened(newX, newY, colour) ||
-                Board.INSTANCE.getPiece(newX, newY) == null ||
+                Board.INSTANCE.getPiece(newX, newY).get() == null ||
                 Board.INSTANCE.getPiece(newX, newY).get().getColour() == colour
         );
     }
@@ -65,8 +65,7 @@ public class King extends Piece {
                 Board.INSTANCE.getPiece(x + 3, newY).get().move(newX - 1, y);
             }
         }
-        x = newX;
-        y = newY;
+        super.move(newX, newY);
     }
 
     public char getType() { return TYPE; }

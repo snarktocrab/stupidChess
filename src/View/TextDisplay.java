@@ -22,10 +22,12 @@ public class TextDisplay implements View {
     }
 
     public void update() {
-        for (int i = 0; i < Board.INSTANCE.pieces.length; ++i) {
+        /*for (int i = 0; i < Board.INSTANCE.pieces.length; ++i) {
             Piece p = Board.INSTANCE.pieces[i];
-            System.out.println(p.getX() + " " + p.getY() + " " + p.getType());
-        } // Раскоментировать это если нужен отладочный вывод состояния всех фигур
+            System.out.println(p.getX() + " " + p.getY() + " " + p.getType() + " " + p.isAlive());
+        }
+        System.out.println(Board.INSTANCE.getTurn());*/
+        // Раскоментировать это если нужен отладочный вывод состояния всех фигур
         for (int j = 7; j >= 0; --j) {
             for (int i = 0; i < 8; ++i) {
                 try {
