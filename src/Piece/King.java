@@ -15,7 +15,7 @@ public class King extends Piece {
         if (newX == x - 2 && newY == y &&
                 !hasMoved &&
                 Board.INSTANCE.getPiece(x - 4, y) != null &&
-                Board.INSTANCE.getPiece(x - 4, y).get().TYPE == 'R' &&
+                Board.INSTANCE.getPiece(x - 4, y).get().getType() == 'R' &&
                 Board.INSTANCE.getPiece(x - 4, y).get().colour == colour &&
                 !Board.INSTANCE.getPiece(x - 4, y).get().hasMoved &&
                 Board.INSTANCE.getPiece(x - 1, y).get() == null &&
@@ -29,7 +29,7 @@ public class King extends Piece {
         }
         if (newX == x + 2 && newY == y &&
                 !hasMoved && Board.INSTANCE.getPiece(x + 3, y) != null &&
-                Board.INSTANCE.getPiece(x + 3, y).get().TYPE == 'R' &&
+                Board.INSTANCE.getPiece(x + 3, y).get().getType() == 'R' &&
                 Board.INSTANCE.getPiece(x + 3, y).get().colour == colour &&
                 !Board.INSTANCE.getPiece(x + 3, y).get().hasMoved &&
                 Board.INSTANCE.getPiece(x + 1, y).get() == null &&
