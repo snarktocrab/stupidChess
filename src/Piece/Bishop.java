@@ -5,20 +5,26 @@ package Piece;
  */
 public class Bishop extends Piece {
     char TYPE = 'B';
+
+    public Bishop(int _x, int _y, boolean _colour, boolean _alive, boolean moved) {
+        super(_x, _y, _colour, _alive);
+        hasMoved = moved;
+    }
+
     public boolean checkInBetween(int newX, int newY) {
-        if (x - y != newX - newY || x + y != newX + newY || x == newX && y == newY) {
+        if (x - y != newX - newY && x + y != newX + newY || x == newX && y == newY) {
             return false;
         }
         if (x - y == newX - newY) {
             if (x < newX) {
-                for (int i = x, j = y; i < newX; i++, j++) {
+                for (int i = x + 1, j = y + 1; i < newX; i++, j++) {
                     try {
                         if (Board.INSTANCE.getPiece(i, j).get().isAlive()) return false;
                     } catch (NullPointerException e) {}
                 }
             }
             if (x > newX) {
-                for (int i = x, j = y; i > newX; i--, j--) {
+                for (int i = x - 1, j = y - 1; i > newX; i--, j--) {
                     try {
                         if (Board.INSTANCE.getPiece(i, j).get().isAlive()) return false;
                     } catch (NullPointerException e) {}
@@ -27,14 +33,14 @@ public class Bishop extends Piece {
         }
         if (x + y == newX + newY) {
             if (x < newX) {
-                for (int i = x, j = y; i < newX; i++, j--) {
+                for (int i = x + 1, j = y - 1; i < newX; i++, j--) {
                     try {
                         if (Board.INSTANCE.getPiece(i, j).get().isAlive()) return false;
                     } catch (NullPointerException e) {}
                 }
             }
             if (x > newX) {
-                for (int i = x, j = y; i > newX; i--, j++) {
+                for (int i = x - 1, j = y + 1; i > newX; i--, j++) {
                     try {
                         if (Board.INSTANCE.getPiece(i, j).get().isAlive()) return false;
                     } catch (NullPointerException e) {}
@@ -55,4 +61,6 @@ public class Bishop extends Piece {
         } catch (NullPointerException e) { return false; }
         return checkInBetween(newX, newY);
     }
+
+    public char getType() { return TYPE; }
 }

@@ -25,10 +25,7 @@ public abstract class Piece {
     public void move(int newX, int newY) {
         x = newX;
         y = newY;
-    }
-    public void take(int newX, int newY) {
-        x = newX;
-        y = newY;
+        Board.INSTANCE.whiteTurn = !Board.INSTANCE.whiteTurn;
     }
 
     // Проверяет, может ли фигура сходить в клетку x, y
@@ -39,9 +36,14 @@ public abstract class Piece {
 
     public int getX() { return x; }
     public int getY() { return y; }
+    public int getID() { return thisID; }
     public boolean getColour() { return colour; }
     public boolean isAlive() { return alive; }
+    public void setHasMoved(boolean moved) { hasMoved = moved; }
+    public boolean getHasMoved() { return hasMoved; }
+    public abstract char getType();
 
     // Мой любимый метод
     public void die() { alive = false; }
+    public void respawn() { alive = true; }
 }

@@ -62,4 +62,6 @@ public class Rook extends Piece {
         } catch (NullPointerException e) { return false; }
         return checkInBetween(newX, newY);
     }
+
+    public char getType() { return TYPE; }
 }

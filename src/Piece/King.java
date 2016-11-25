@@ -68,4 +68,6 @@ public class King extends Piece {
         x = newX;
         y = newY;
     }
+
+    public char getType() { return TYPE; }
 }
