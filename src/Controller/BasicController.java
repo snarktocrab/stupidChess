@@ -65,6 +65,10 @@ public class BasicController implements Controller {
         System.out.println("Check!");
     }
 
+    public void update() {
+        TextDisplay.INSTANCE.update();
+    }
+
     public boolean isRunning() { return running; } // Вместо бесконечного цикла
     public void quit() { running = false; } // Завершает программу
 }

@@ -140,20 +140,22 @@ public class Board {
     }
 
     public boolean isMate(boolean curr_colour) {
+        String oldTurn = lastTurn;
         for (Piece p : pieces) {
             if (p.getColour() == curr_colour && p.isAlive()) {
                 for (int i = 0; i < 8; ++i) {
                     for (int j = 0; j < 8; ++j) {
                         if (p.checkMove(i, j)) {
-                            p.move(i, j);
                             if (!p.getHasMoved()) {
                                 p.setHasMoved(true);
                                 lastTurn = "m" + p.getX() + p.getY() + i + j + "@";
                             }
                             else
                                 lastTurn = "m" + p.getX() + p.getY() + i + j + "$";
+                            p.move(i, j);
                             if (!isCheck(!whiteTurn)) {
                                 undo();
+                                lastTurn = oldTurn;
                                 return false;
                             }
                             undo();
@@ -162,14 +164,15 @@ public class Board {
                             if (p.checkAttack(i, j)) {
                                 int id = getPiece(i, j).get().getID();
                                 getPiece(i, j).get().die();
-                                p.move(i, j);
                                 if (!p.getHasMoved()) {
                                     p.setHasMoved(true);
-                                    lastTurn = "t" + p.getX() + p.getY() + i + j + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
+                                    lastTurn = "t" + p.getX() + p.getY() + i + j + "@" + id;
                                 } else
                                     lastTurn = "t" + p.getX() + p.getY() + i + j + "$" + id;
+                                p.move(i, j);
                                 if (!isCheck(!whiteTurn)) {
                                     undo();
+                                    lastTurn = oldTurn;
                                     return false;
                                 }
                                 undo();
@@ -179,6 +182,7 @@ public class Board {
                 }
             }
         }
+        lastTurn = oldTurn;
         return true;
     }
 

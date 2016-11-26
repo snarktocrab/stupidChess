@@ -4,6 +4,7 @@ package View;
  * Created by yury on 23.11.16.
  */
 
+import Controller.BasicController;
 import Piece.Piece;
 import Piece.Board;
 
@@ -61,6 +62,17 @@ public class TextDisplay implements View {
                 } catch (NullPointerException e) { System.out.print("."); }
             }
             System.out.print("\n");
+        }
+
+        if (Board.INSTANCE.isMate(Board.INSTANCE.getTurn())) {
+            String s = "Game over! ";
+            if (!Board.INSTANCE.getTurn()) // Уже передали ход
+                s += "White ";
+            else
+                s += "Black ";
+            s += "wins!";
+            System.out.println(s);
+            BasicController.INSTANCE.quit();
         }
     }
 }

@@ -9,6 +9,7 @@ public class Main {
     public static void main(String[] args) {
         while (BasicController.INSTANCE.isRunning()) {
             BasicController.INSTANCE.getMove();
+            BasicController.INSTANCE.update();
         }
     }
 }

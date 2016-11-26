@@ -25,7 +25,7 @@ public class Knight extends Piece {
                 return false;
             }
         } catch (NullPointerException e) {
-            System.err.println("Attacking empty tile");
+            //System.err.println("Attacking empty tile");
         }
         return canMoveTo(newX, newY);
     }
