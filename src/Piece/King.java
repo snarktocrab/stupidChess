@@ -51,7 +51,7 @@ public class King extends Piece {
                 Math.abs(newX - x) > 1 ||
                 Math.abs(newY - y) > 1 ||
                 Board.INSTANCE.isThreatened(newX, newY, colour) ||
-                Board.INSTANCE.getPiece(newX, newY).get() == null ||
+                Board.INSTANCE.getPiece(newX, newY).get() != null &&
                 Board.INSTANCE.getPiece(newX, newY).get().getColour() == colour
         );
     }

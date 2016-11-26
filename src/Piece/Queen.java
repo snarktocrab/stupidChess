@@ -91,7 +91,9 @@ public class Queen extends Piece {
             if (Board.INSTANCE.getPiece(newX, newY).get().getColour() == colour) {
                 return false;
             }
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.err.println("Attacking empty tile");
+        }
         return checkInBetween(newX, newY);
     }
 

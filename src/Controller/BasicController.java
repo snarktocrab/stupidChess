@@ -50,8 +50,8 @@ public class BasicController implements Controller {
             return;
         }
         // Сначала выполняем проверку может ли взять, если нет то может ли сходить
-        if (!Board.INSTANCE.take(x1, y1, x2, y2)) {
-            if (!makeMove(x1, y1, x2, y2)) {
+        if (!makeMove(x1, y1, x2, y2)) {
+            if (!Board.INSTANCE.take(x1, y1, x2, y2)) {
                 System.err.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
             }
         }

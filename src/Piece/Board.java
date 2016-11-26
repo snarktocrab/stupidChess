@@ -83,7 +83,7 @@ public class Board {
             Piece p = getPiece(x1,y1).get();
             if (p.checkMove(x2, y2) && p.getColour() == whiteTurn) {
                 p.move(x2, y2);
-                if (isCheck(!whiteTurn)) // Мы уже передали ход
+                if (isCheck(whiteTurn)) // Мы уже передали ход
                     BasicController.INSTANCE.checkHandler();
                 if (!p.getHasMoved()) {
                     p.setHasMoved(true);
@@ -91,6 +91,10 @@ public class Board {
                 }
                 else
                     lastTurn = "m" + x1 + y1 + x2 + y2 + "$";
+                if (isCheck(!whiteTurn)) {
+                    System.err.println("Moving into check");
+                    undo();
+                }
                 return true;
             }
         } catch (NullPointerException e) { System.out.println("NOPE");}
@@ -104,14 +108,18 @@ public class Board {
                 int id = getPiece(x2, y2).get().getID();
                 getPiece(x2, y2).get().die();
                 p.move(x2, y2);
-                if (isCheck(!whiteTurn)) // Мы уже передали ход
+                if (isCheck(whiteTurn)) // Мы уже передали ход
                     BasicController.INSTANCE.checkHandler();
                 if (!p.getHasMoved()) {
                     p.setHasMoved(true);
-                    lastTurn = "m" + x1 + y1 + x2 + y2 + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
+                    lastTurn = "t" + x1 + y1 + x2 + y2 + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
                 }
                 else
-                    lastTurn = "m" + x1 + y1 + x2 + y2 + "$" + id;
+                    lastTurn = "t" + x1 + y1 + x2 + y2 + "$" + id;
+                if (isCheck(!whiteTurn)) {
+                    System.err.println("Moving into check");
+                    undo();
+                }
                 return true;
             }
         } catch (NullPointerException e) {}
@@ -120,8 +128,8 @@ public class Board {
 
     public boolean isCheck(boolean curr_colour) {
         Piece king = null;
-        for (Piece p : pieces) { // Ищем короля чужого
-            if (p.getType() == 'K' && p.colour != curr_colour) {
+        for (Piece p : pieces) { // Ищем своего короля
+            if (p.getType() == 'K' && p.colour == curr_colour) {
                 king = p;
                 break;
             }
@@ -129,6 +137,49 @@ public class Board {
         if (isThreatened(king.x, king.y, king.colour))
             return true;
         return false;
+    }
+
+    public boolean isMate(boolean curr_colour) {
+        for (Piece p : pieces) {
+            if (p.getColour() == curr_colour && p.isAlive()) {
+                for (int i = 0; i < 8; ++i) {
+                    for (int j = 0; j < 8; ++j) {
+                        if (p.checkMove(i, j)) {
+                            p.move(i, j);
+                            if (!p.getHasMoved()) {
+                                p.setHasMoved(true);
+                                lastTurn = "m" + p.getX() + p.getY() + i + j + "@";
+                            }
+                            else
+                                lastTurn = "m" + p.getX() + p.getY() + i + j + "$";
+                            if (!isCheck(!whiteTurn)) {
+                                undo();
+                                return false;
+                            }
+                            undo();
+                        }
+                        try {
+                            if (p.checkAttack(i, j)) {
+                                int id = getPiece(i, j).get().getID();
+                                getPiece(i, j).get().die();
+                                p.move(i, j);
+                                if (!p.getHasMoved()) {
+                                    p.setHasMoved(true);
+                                    lastTurn = "t" + p.getX() + p.getY() + i + j + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
+                                } else
+                                    lastTurn = "t" + p.getX() + p.getY() + i + j + "$" + id;
+                                if (!isCheck(!whiteTurn)) {
+                                    undo();
+                                    return false;
+                                }
+                                undo();
+                            }
+                        } catch (NullPointerException e) {}
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public void undo()
@@ -152,6 +203,5 @@ public class Board {
 
         }
     }
-
     public boolean getTurn() { return whiteTurn; }
 }
