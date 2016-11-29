@@ -11,8 +11,10 @@ public class Board {
     String lastTurn;
 
     // Singleton
-    public static final Board INSTANCE = new Board(new Piece[]{new Pawn(0, 6, true, true, true), new King(0, 0, true, true, true),
-    new King(7, 7, false, true, true)}, true);
+    public static final Board INSTANCE = new Board();
+    //public static final Board INSTANCE = new Board(new Piece[]{new Pawn(0, 6, true, true, true), new King(0, 0, true, true, true),
+    //new King(7, 7, false, true, true)}, true);
+
 
     // Фигуры
     public Piece[] pieces;
