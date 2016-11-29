@@ -85,13 +85,7 @@ public class Board {
             if (p.checkMove(x2, y2) && p.getColour() == whiteTurn) {
                 p.move(x2, y2);
                 if (isCheck(whiteTurn)) // Мы уже передали ход
-                    if (isMate(whiteTurn)) {
-                        TextDisplay.INSTANCE.mateHandler();
-                        BasicController.INSTANCE.quit();
-                    }
-                    else {
-                        TextDisplay.INSTANCE.checkHandler();
-                    }
+                    TextDisplay.INSTANCE.checkHandler();
                 if (!p.getHasMoved()) {
                     p.setHasMoved(true);
                     lastTurn = "m" + x1 + y1 + x2 + y2 + "@";
@@ -116,13 +110,7 @@ public class Board {
                 getPiece(x2, y2).get().die();
                 p.move(x2, y2);
                 if (isCheck(whiteTurn)) // Мы уже передали ход
-                    if (isMate(whiteTurn)) {
-                        TextDisplay.INSTANCE.mateHandler();
-                        BasicController.INSTANCE.quit();
-                    }
-                    else {
-                        TextDisplay.INSTANCE.checkHandler();
-                    }
+                    TextDisplay.INSTANCE.checkHandler();
                 if (!p.getHasMoved()) {
                     p.setHasMoved(true);
                     lastTurn = "t" + x1 + y1 + x2 + y2 + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
@@ -153,6 +141,7 @@ public class Board {
     }
 
     public boolean isMate(boolean curr_colour) {
+        String oldTurn = lastTurn;
         for (Piece p : pieces) {
             if (p.getColour() == curr_colour && p.isAlive()) {
                 for (int i = 0; i < 8; ++i) {
@@ -167,6 +156,7 @@ public class Board {
                             p.move(i, j);
                             if (!isCheck(!whiteTurn)) {
                                 undo();
+                                lastTurn = oldTurn;
                                 return false;
                             }
                             undo();
@@ -176,13 +166,14 @@ public class Board {
                                 int id = getPiece(i, j).get().getID();
                                 if (!p.getHasMoved()) {
                                     p.setHasMoved(true);
-                                    lastTurn = "t" + p.getX() + p.getY() + i + j + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
+                                    lastTurn = "t" + p.getX() + p.getY() + i + j + "@" + id;
                                 } else
                                     lastTurn = "t" + p.getX() + p.getY() + i + j + "$" + id;
                                 getPiece(i, j).get().die();
                                 p.move(i, j);
                                 if (!isCheck(!whiteTurn)) {
                                     undo();
+                                    lastTurn = oldTurn;
                                     return false;
                                 }
                                 undo();
@@ -192,6 +183,7 @@ public class Board {
                 }
             }
         }
+        lastTurn = oldTurn;
         return true;
     }
 

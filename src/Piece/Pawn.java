@@ -32,7 +32,7 @@ public class Pawn extends Piece {
                 return Math.abs(newX - x) == 1 && newY - y == -1 &&
                         Board.INSTANCE.getPiece(newX, newY).get().getColour() != colour;
         } catch (NullPointerException e) {
-            System.err.println("Attacking empty tile");
+            //System.err.println("Attacking empty tile");
             if (colour)
                 return Math.abs(newX - x) == 1 && newY - y == 1;
             else
