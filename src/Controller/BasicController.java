@@ -32,10 +32,10 @@ public class BasicController implements Controller {
             return;
         }
 
-        if (s.equals("show")) {
+        /*if (s.equals("show")) {
             TextDisplay.INSTANCE.update();
             return;
-        }
+        }*/
 
         if (s.length() != 5) {
             System.err.println("Invalid command.");
@@ -53,16 +53,15 @@ public class BasicController implements Controller {
         if (!makeMove(x1, y1, x2, y2)) {
             if (!Board.INSTANCE.take(x1, y1, x2, y2)) {
                 System.err.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
+                return;
             }
         }
+
+        TextDisplay.INSTANCE.update();
     }
 
     public boolean makeMove(int x1, int y1, int x2, int y2) {
         return Board.INSTANCE.move(x1, y1, x2, y2);
-    }
-
-    public void checkHandler() {
-        System.out.println("Check!");
     }
 
     public boolean isRunning() { return running; } // Вместо бесконечного цикла

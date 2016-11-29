@@ -8,6 +8,7 @@ import Piece.Piece;
 import Piece.Board;
 
 import java.io.Console;
+import java.lang.management.BufferPoolMXBean;
 
 public class TextDisplay implements View {
     public static TextDisplay INSTANCE = new TextDisplay();
@@ -61,6 +62,20 @@ public class TextDisplay implements View {
                 } catch (NullPointerException e) { System.out.print("."); }
             }
             System.out.print("\n");
+        }
+    }
+
+    public void checkHandler() {
+        System.out.println("Check!");
+    }
+
+    public void mateHandler() {
+        System.out.println("Checkmate!");
+        if (!Board.INSTANCE.getTurn()) {
+            System.out.println("White wins");
+        }
+        else {
+            System.out.println("Black wins");
         }
     }
 }
