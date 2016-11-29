@@ -1,6 +1,14 @@
 package Controller;
 
+import View.View;
+
 public interface Controller {
-    public void getMove();
-    public boolean makeMove(int x1, int y1, int x2, int y2);
+    // Tell the controller where to output
+    void init(View v);
+
+    // Input a command, relay it to Board
+    void getCommand();
+
+    // End the game
+    void quit();
 }

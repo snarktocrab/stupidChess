@@ -2,12 +2,13 @@ package Piece; /**
  * Created by daniel on 21.11.16.
  */
 
-import Controller.BasicController;
 import View.TextDisplay;
+import View.View;
 
 import java.lang.ref.WeakReference;
 
 public class Board {
+
     boolean whiteTurn;
 
     String lastTurn;
@@ -66,6 +67,7 @@ public class Board {
         return new WeakReference<Piece>(null);
     }
 
+    // Returns a reference to a piece by id
     public WeakReference<Piece> getPiece(int id) {
         return new WeakReference<Piece>(pieces[id]);
     }
@@ -79,13 +81,14 @@ public class Board {
         return false;
     }
 
+    // Moves piece from (x1, y1) to (x2, y2), returns true if successful
     public boolean move(int x1, int y1, int x2, int y2) {
         try {
             Piece p = getPiece(x1,y1).get();
             if (p.checkMove(x2, y2) && p.getColour() == whiteTurn) {
                 p.move(x2, y2);
-                if (isCheck(whiteTurn)) // Мы уже передали ход
-                    TextDisplay.INSTANCE.checkHandler();
+
+                // Generating move signature
                 if (!p.getHasMoved()) {
                     p.setHasMoved(true);
                     lastTurn = "m" + x1 + y1 + x2 + y2 + "@";
@@ -95,13 +98,15 @@ public class Board {
                 if (isCheck(!whiteTurn)) {
                     System.err.println("Moving into check");
                     undo();
+                    return false;
                 }
                 return true;
             }
-        } catch (NullPointerException e) { System.out.println("NOPE");}
+        } catch (NullPointerException e) { System.err.println("Attempted to move from empty tile " + x2 + " " + y2);}
         return false;
     }
 
+    // Attempt to take (x2, y2) with (x1, y1), returns true if successful
     public boolean take(int x1, int y1, int x2, int y2) {
         try {
             Piece p = getPiece(x1,y1).get();
@@ -109,8 +114,7 @@ public class Board {
                 int id = getPiece(x2, y2).get().getID();
                 getPiece(x2, y2).get().die();
                 p.move(x2, y2);
-                if (isCheck(whiteTurn)) // Мы уже передали ход
-                    TextDisplay.INSTANCE.checkHandler();
+                // Generates move for undo
                 if (!p.getHasMoved()) {
                     p.setHasMoved(true);
                     lastTurn = "t" + x1 + y1 + x2 + y2 + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
@@ -142,6 +146,8 @@ public class Board {
 
     public boolean isMate(boolean curr_colour) {
         String oldTurn = lastTurn;
+        // Checks all living loyal pieces, attempts to move them to all possible tiles - if at least one move can
+        // prevent check, then returns false
         for (Piece p : pieces) {
             if (p.getColour() == curr_colour && p.isAlive()) {
                 for (int i = 0; i < 8; ++i) {
@@ -198,15 +204,16 @@ public class Board {
             p.move(lastTurn.charAt(1) - '0', lastTurn.charAt(2) - '0');
             if (lastTurn.charAt(5) == '@')
                 p.setHasMoved(false);
-        } catch (NullPointerException e) { System.err.println("Can't move backward!" + lastTurn); }
+        } catch (NullPointerException e) { System.err.println("Can't undo, the turn must be fucked up! " + lastTurn); }
 
         if (lastTurn.charAt(0) == 't') {
             int id = Integer.parseInt(lastTurn.substring(6));
             try {
                 getPiece(id).get().respawn();
-            } catch (NullPointerException e) { System.err.println("We aren't Gods. We can't resurrect figures!"); }
+            } catch (NullPointerException e) { System.err.println("Attempt to respawn nonexistent piece"); }
 
         }
     }
+    
     public boolean getTurn() { return whiteTurn; }
 }

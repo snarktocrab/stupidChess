@@ -3,37 +3,27 @@ package View;
 /**
  * Created by yury on 23.11.16.
  */
-
-import Controller.BasicController;
+import Controller.Controller;
 import Piece.Piece;
 import Piece.Board;
 
-import java.io.Console;
-import java.lang.management.BufferPoolMXBean;
-
 public class TextDisplay implements View {
     public static TextDisplay INSTANCE = new TextDisplay();
-    //Console c;
 
-    public TextDisplay() {
-        this.init();
-    }
-
-    public void init() {
-        //c = System.console();
-    }
+    Board chessboard = Board.INSTANCE;
 
     public void update() {
-        /*for (int i = 0; i < Board.INSTANCE.pieces.length; ++i) {
-            Piece p = Board.INSTANCE.pieces[i];
+        // Activate this to monitor the state of every board piece
+        /*for (int i = 0; i < chessboard.pieces.length; ++i) {
+            Piece p = chessboard.pieces[i];
             System.out.println(p.getX() + " " + p.getY() + " " + p.getType() + " " + p.isAlive());
         }
-        System.out.println(Board.INSTANCE.getTurn());*/
-        // Раскоментировать это если нужен отладочный вывод состояния всех фигур
+        System.out.println(chessboard.getTurn());*/
+
         for (int j = 7; j >= 0; --j) {
             for (int i = 0; i < 8; ++i) {
                 try {
-                    Piece p = Board.INSTANCE.getPiece(i, j).get();
+                    Piece p = chessboard.getPiece(i, j).get();
                     switch (p.getType()) {
                         case 'K':
                             if (p.getColour()) System.out.print((char)0x2654);
@@ -64,20 +54,19 @@ public class TextDisplay implements View {
             }
             System.out.print("\n");
         }
-
-        if (Board.INSTANCE.isMate(Board.INSTANCE.getTurn())) {
-            String s = "Game over! ";
-            if (!Board.INSTANCE.getTurn()) // Уже передали ход
-                s += "White ";
-            else
-                s += "Black ";
-            s += "wins!";
-            System.out.println(s);
-            BasicController.INSTANCE.quit();
-        }
     }
 
     public void checkHandler() {
         System.out.println("Check!");
+    }
+
+    public void mateHandler() {
+        String s = "Checkmate!\n";
+        if (!chessboard.getTurn())
+            s += "White ";
+        else
+            s += "Black ";
+        s += "wins!";
+        System.out.println(s);
     }
 }
