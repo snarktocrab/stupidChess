@@ -2,9 +2,6 @@ package Piece; /**
  * Created by daniel on 21.11.16.
  */
 
-import View.TextDisplay;
-import View.View;
-
 import java.lang.ref.WeakReference;
 
 public class Board {
@@ -14,7 +11,8 @@ public class Board {
     String lastTurn;
 
     // Singleton
-    public static final Board INSTANCE = new Board();
+    public static final Board INSTANCE = new Board(new Piece[]{new Pawn(0, 6, true, true, true), new King(0, 0, true, true, true),
+    new King(7, 7, false, true, true)}, true);
 
     // Фигуры
     public Piece[] pieces;
@@ -214,6 +212,48 @@ public class Board {
 
         }
     }
-    
+
+    public int needsPromotion(boolean colour) {
+        if (colour) {
+            for (Piece p : pieces)
+                if (p.getType() == 'p' && p.isAlive() && p.colour == colour && p.y == 7)
+                    return p.getID();
+        }
+        else {
+            for (Piece p : pieces)
+                if (p.getType() == 'p' && p.isAlive() && p.colour == colour && p.y == 0)
+                    return p.getID();
+        }
+        return -1;
+    }
+
+    public void promote(int id, char type) {
+        int i;
+        for (i = 0; i < pieces.length; ++i) {
+            if (pieces[i].getID() == id) break;
+        }
+
+        if (i == pieces.length) {
+            System.err.println("Attempted to promote nonexistent piece at id " + id);
+            return;
+        }
+
+        switch (type) {
+            case 'R':
+                pieces[i] = new Rook(pieces[i].getX(), pieces[i].getY(), pieces[i].colour, true, true);
+                break;
+            case 'N':
+                pieces[i] = new Knight(pieces[i].getX(), pieces[i].getY(), pieces[i].colour, true, true);
+                break;
+            case 'B':
+                pieces[i] = new Bishop(pieces[i].getX(), pieces[i].getY(), pieces[i].colour, true, true);
+                break;
+            case 'Q':
+                pieces[i] = new Queen(pieces[i].getX(), pieces[i].getY(), pieces[i].colour, true, true);
+                break;
+            default:
+                System.err.println("Illegal promotion, use RNBQ");
+        }
+    }
     public boolean getTurn() { return whiteTurn; }
 }

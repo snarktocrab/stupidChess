@@ -42,6 +42,18 @@ public class BasicController implements Controller {
             display.checkHandler();
         }
 
+        int id = chessboard.needsPromotion(!chessboard.getTurn());
+
+        if (id >= 0) {
+            display.update();
+
+            String s = in.nextLine();
+            chessboard.promote(id, s.charAt(0));
+
+            display.update();
+            return;
+        }
+
         String s = in.nextLine();
 
         // Exit command
