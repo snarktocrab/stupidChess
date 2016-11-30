@@ -68,4 +68,6 @@ public class TextDisplay implements View {
         s += "wins!";
         System.out.println(s);
     }
+
+    public void promotionHandler() { System.out.println("You can promote your pawn! Type 'Q' for Queen, 'R' for Rook, 'N' for Knight and 'B' for Bishop"); }
 }

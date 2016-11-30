@@ -29,24 +29,21 @@ public class BasicController implements Controller {
     public void getCommand() {
 
         // Ends the game if checkmate
-        if (chessboard.isMate(chessboard.getTurn()))
-        {
+        if (chessboard.isMate(chessboard.getTurn())) {
             display.mateHandler();
             quit();
             return;
         }
 
         // Informs the current player of check
-        if (chessboard.isCheck(chessboard.getTurn()))
-        {
+        if (chessboard.isCheck(chessboard.getTurn())) {
             display.checkHandler();
         }
 
         int id = chessboard.needsPromotion(!chessboard.getTurn());
 
         if (id >= 0) {
-            display.update();
-
+            display.promotionHandler();
             String s = in.nextLine();
             chessboard.promote(id, s.charAt(0));
 

@@ -7,4 +7,5 @@ public interface View {
     void update();
     void checkHandler();
     void mateHandler();
+    void promotionHandler();
 }
