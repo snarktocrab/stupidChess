@@ -31,8 +31,8 @@ public class Rook extends Piece {
                 }
             }
         }
-        if (y == newX) {
-            if (x > newY) {
+        if (y == newY) {
+            if (x > newX) {
                 for (int i = x - 1; i > newX; --i) {
                     try {
                         if (Board.INSTANCE.getPiece(i, y).get().isAlive()) return false;
@@ -59,7 +59,7 @@ public class Rook extends Piece {
             if (Board.INSTANCE.getPiece(newX, newY).get().getColour() == colour) {
                 return false;
             }
-        } catch (NullPointerException e) { return false; }
+        } catch (NullPointerException e) { /*System.err.println("Attacking empty tile");*/ }
         return checkInBetween(newX, newY);
     }
 

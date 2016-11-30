@@ -2,32 +2,37 @@ package Piece; /**
  * Created by daniel on 21.11.16.
  */
 
-import Controller.BasicController;
-
 import java.lang.ref.WeakReference;
+import java.util.Stack;
 
 public class Board {
+
     boolean whiteTurn;
 
-    String lastTurn;
+    //String lastTurn;
 
     // Singleton
     public static final Board INSTANCE = new Board();
+    //public static final Board INSTANCE = new Board(new Piece[]{new Pawn(0, 6, true, true, true), new King(0, 0, true, true, true),
+    //new King(7, 7, false, true, true)}, true);
+
 
     // Фигуры
     public Piece[] pieces;
+
+    public Stack<Turn> log = new Stack<>();
 
     // newPieces - состояние доски, turn - принадлежность хода
     public Board(Piece[] newPieces, boolean turn) {
         pieces = newPieces;
         whiteTurn = turn;
-        lastTurn = "-";
+        //lastTurn = "-";
     }
 
     public Board() {
         whiteTurn = true;
         pieces = new Piece[32];
-        lastTurn = "-";
+        //lastTurn = "-";
         // Пешки
         for (int i = 0; i < 8; ++i)
             pieces[i] = new Pawn(i, 1, true, true, false);
@@ -65,6 +70,7 @@ public class Board {
         return new WeakReference<Piece>(null);
     }
 
+    // Returns a reference to a piece by id
     public WeakReference<Piece> getPiece(int id) {
         return new WeakReference<Piece>(pieces[id]);
     }
@@ -78,51 +84,77 @@ public class Board {
         return false;
     }
 
+    // Moves piece from (x1, y1) to (x2, y2), returns true if successful
     public boolean move(int x1, int y1, int x2, int y2) {
         try {
             Piece p = getPiece(x1,y1).get();
+            if (p.getType() == 'K' && x1 - x2 == 2 && p.checkMove(x2, y2)) {
+                p.move(x2, y2);
+                whiteTurn = !whiteTurn;
+                log.push(new Turn('O', x1, y1, p.getID(), false));
+                return true;
+            }
+            if (p.getType() == 'K' && x1 - x2 == -2 && p.checkMove(x2, y2)) {
+                p.move(x2, y2);
+                whiteTurn = !whiteTurn;
+                log.push(new Turn('o', x1, y1, p.getID(), false));
+                return true;
+            }
             if (p.checkMove(x2, y2) && p.getColour() == whiteTurn) {
                 p.move(x2, y2);
-                if (isCheck(!whiteTurn)) // Мы уже передали ход
-                    BasicController.INSTANCE.checkHandler();
-                if (!p.getHasMoved()) {
+                whiteTurn = !whiteTurn;
+
+                // Generating move signature
+                log.push(new Turn('m', x1, y1, p.getID(), p.getHasMoved()));
+                /*if (!p.getHasMoved()) {
                     p.setHasMoved(true);
                     lastTurn = "m" + x1 + y1 + x2 + y2 + "@";
                 }
                 else
-                    lastTurn = "m" + x1 + y1 + x2 + y2 + "$";
+                    lastTurn = "m" + x1 + y1 + x2 + y2 + "$";*/
+                if (isCheck(!whiteTurn)) {
+                    System.err.println("Moving into check");
+                    undo();
+                    return false;
+                }
                 return true;
             }
-        } catch (NullPointerException e) { System.out.println("NOPE");}
+        } catch (NullPointerException e) { System.err.println("Attempted to move from empty tile " + x2 + " " + y2);}
         return false;
     }
 
+    // Attempt to take (x2, y2) with (x1, y1), returns true if successful
     public boolean take(int x1, int y1, int x2, int y2) {
         try {
             Piece p = getPiece(x1,y1).get();
-            if (p.checkAttack(x2, y2)) {
+            if (p.checkAttack(x2, y2) && p.getColour() == whiteTurn) {
                 int id = getPiece(x2, y2).get().getID();
                 getPiece(x2, y2).get().die();
                 p.move(x2, y2);
-                if (isCheck(!whiteTurn)) // Мы уже передали ход
-                    BasicController.INSTANCE.checkHandler();
-                if (!p.getHasMoved()) {
+                whiteTurn = !whiteTurn;
+
+                // Generates move for undo
+                log.push(new Turn('t', x1, y1, p.getID(), getPiece(x2, y2).get().getID(), p.getHasMoved()));
+                /*if (!p.getHasMoved()) {
                     p.setHasMoved(true);
-                    lastTurn = "m" + x1 + y1 + x2 + y2 + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
+                    lastTurn = "t" + x1 + y1 + x2 + y2 + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
                 }
                 else
-                    lastTurn = "m" + x1 + y1 + x2 + y2 + "$" + id;
+                    lastTurn = "t" + x1 + y1 + x2 + y2 + "$" + id;*/
+                if (isCheck(!whiteTurn)) {
+                    System.err.println("Moving into check");
+                    undo();
+                }
+                return true;
             }
-            else
-                return false;
         } catch (NullPointerException e) {}
-        return true;
+        return false;
     }
 
     public boolean isCheck(boolean curr_colour) {
         Piece king = null;
-        for (Piece p : pieces) { // Ищем короля чужого
-            if (p.getType() == 'K' && p.colour != curr_colour) {
+        for (Piece p : pieces) { // Ищем своего короля
+            if (p.getType() == 'K' && p.colour == curr_colour) {
                 king = p;
                 break;
             }
@@ -132,9 +164,104 @@ public class Board {
         return false;
     }
 
+    public boolean isMate(boolean curr_colour) {
+        if (!isCheck(curr_colour)) return false;
+        //String oldTurn = lastTurn;
+        // Checks all living loyal pieces, attempts to move them to all possible tiles - if at least one move can
+        // prevent check, then returns false
+        for (Piece p : pieces) {
+            if (p.getColour() == curr_colour && p.isAlive()) {
+                for (int i = 0; i < 8; ++i) {
+                    for (int j = 0; j < 8; ++j) {
+                        if (p.checkMove(i, j)) {
+                            log.push(new Turn('m', p.getX(), p.getY(), p.getID(), p.getHasMoved()));
+                            /*if (!p.getHasMoved()) {
+                                p.setHasMoved(true);
+                                lastTurn = "m" + p.getX() + p.getY() + i + j + "@";
+                            }
+                            else
+                                lastTurn = "m" + p.getX() + p.getY() + i + j + "$";*/
+                            p.move(i, j);
+                            whiteTurn = !whiteTurn;
+                            if (!isCheck(!whiteTurn)) {
+                                undo();
+                                //lastTurn = oldTurn;
+                                return false;
+                            }
+                            undo();
+                        }
+                        try {
+                            if (p.checkAttack(i, j)) {
+                                log.push(new Turn('t', p.getX(), p.getY(), p.getID(), getPiece(i, j).get().getID(), p.getHasMoved()));
+                                //int id = getPiece(i, j).get().getID();
+                                /*if (!p.getHasMoved()) {
+                                    p.setHasMoved(true);
+                                    lastTurn = "t" + p.getX() + p.getY() + i + j + "@" + id;
+                                } else
+                                    lastTurn = "t" + p.getX() + p.getY() + i + j + "$" + id;*/
+                                getPiece(i, j).get().die();
+                                p.move(i, j);
+                                whiteTurn = !whiteTurn;
+                                if (!isCheck(!whiteTurn)) {
+                                    undo();
+                                    //lastTurn = oldTurn;
+                                    return false;
+                                }
+                                undo();
+                            }
+                        } catch (NullPointerException e) {}
+                    }
+                }
+            }
+        }
+        //lastTurn = oldTurn;
+        return true;
+    }
+
     public void undo()
     {
-        if (lastTurn.equals("-")) {
+        if (log.empty()) {
+            System.err.println("Nothing to undo!");
+            return;
+        }
+
+        Turn lastMove = log.pop();
+
+        if (lastMove.type == 'o') {
+            Piece king = getPiece(lastMove.pieceID).get();
+            Piece rook = getPiece(king.getX() - 1, king.getY()).get();
+            rook.move(king.getX() + 1, king.getY());
+            king.move(king.getX() - 2, king.getY());
+            whiteTurn = !whiteTurn;
+            return;
+        }
+
+        if (lastMove.type == 'O') {
+            Piece king = getPiece(lastMove.pieceID).get();
+            Piece rook = getPiece(king.getX() + 1, king.getY()).get();
+            rook.move(king.getX() - 2, king.getY());
+            king.move(king.getX() + 2, king.getY());
+            rook.setHasMoved(false);
+            king.setHasMoved(false);
+            whiteTurn = !whiteTurn;
+            return;
+        }
+
+        try {
+            Piece p = getPiece(lastMove.pieceID).get();
+            p.move(lastMove.x, lastMove.y);
+            p.setHasMoved(lastMove.moved);
+        } catch (NullPointerException e) { System.err.println("Cannot undo, invalid move signature."); }
+
+        if (lastMove.type == 't') {
+            try {
+                getPiece(lastMove.targID).get().respawn();
+            } catch (NullPointerException e) {
+                System.err.println("Cannot undo, attempting to respawn nonexistent piece.");
+            }
+        }
+        whiteTurn = !whiteTurn;
+        /*if (lastTurn.equals("-")) {
             System.err.println("Nothing to undo!");
             return;
         }
@@ -143,14 +270,62 @@ public class Board {
             p.move(lastTurn.charAt(1) - '0', lastTurn.charAt(2) - '0');
             if (lastTurn.charAt(5) == '@')
                 p.setHasMoved(false);
-        } catch (NullPointerException e) { System.err.println("Can't move backward!" + lastTurn); }
+        } catch (NullPointerException e) { System.err.println("Can't undo, the turn must be fucked up! " + lastTurn); }
 
         if (lastTurn.charAt(0) == 't') {
             int id = Integer.parseInt(lastTurn.substring(6));
             try {
                 getPiece(id).get().respawn();
-            } catch (NullPointerException e) { System.err.println("We aren't Gods. We can't resurrect figures!"); }
+            } catch (NullPointerException e) { System.err.println("Attempt to respawn nonexistent piece"); }
 
+        }*/
+    }
+
+    public int needsPromotion(boolean colour) {
+        if (colour) {
+            for (Piece p : pieces)
+                if (p.getType() == 'p' && p.isAlive() && p.colour == colour && p.y == 7)
+                    return p.getID();
+        }
+        else {
+            for (Piece p : pieces)
+                if (p.getType() == 'p' && p.isAlive() && p.colour == colour && p.y == 0)
+                    return p.getID();
+        }
+        return -1;
+    }
+
+    public void promote(int id, char type) {
+        int i;
+        for (i = 0; i < pieces.length; ++i) {
+            if (pieces[i].getID() == id) break;
+        }
+
+        if (i == pieces.length) {
+            System.err.println("Attempted to promote nonexistent piece at id " + id);
+            return;
+        }
+
+        switch (type) {
+            case 'R':
+                pieces[i] = new Rook(pieces[i].getX(), pieces[i].getY(), pieces[i].colour, true, true);
+                pieces[i].setId(id);
+                break;
+            case 'N':
+                pieces[i] = new Knight(pieces[i].getX(), pieces[i].getY(), pieces[i].colour, true, true);
+                pieces[i].setId(id);
+                break;
+            case 'B':
+                pieces[i] = new Bishop(pieces[i].getX(), pieces[i].getY(), pieces[i].colour, true, true);
+                pieces[i].setId(id);
+                break;
+            case 'Q':
+                pieces[i] = new Queen(pieces[i].getX(), pieces[i].getY(), pieces[i].colour, true, true);
+                pieces[i].setId(id);
+                break;
+            default:
+                System.err.println("Illegal promotion, use RNBQ");
         }
     }
+    public boolean getTurn() { return whiteTurn; }
 }

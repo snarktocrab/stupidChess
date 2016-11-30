@@ -25,7 +25,7 @@ public abstract class Piece {
     public void move(int newX, int newY) {
         x = newX;
         y = newY;
-        Board.INSTANCE.whiteTurn = !Board.INSTANCE.whiteTurn;
+        hasMoved = true;
     }
 
     // Проверяет, может ли фигура сходить в клетку x, y
@@ -46,4 +46,6 @@ public abstract class Piece {
     // Мой любимый метод
     public void die() { alive = false; }
     public void respawn() { alive = true; }
+
+    public void setId(int newID) { thisID = newID; }
 }

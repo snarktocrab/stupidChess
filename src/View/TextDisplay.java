@@ -3,33 +3,26 @@ package View;
 /**
  * Created by yury on 23.11.16.
  */
-
 import Piece.Piece;
 import Piece.Board;
 
-import java.io.Console;
-
 public class TextDisplay implements View {
     public static TextDisplay INSTANCE = new TextDisplay();
-    //Console c;
 
-    public TextDisplay() {
-        this.init();
-    }
-
-    public void init() {
-        //c = System.console();
-    }
+    Board chessboard = Board.INSTANCE;
 
     public void update() {
-        /*for (int i = 0; i < 32; ++i) {
-            Piece p = Board.INSTANCE.pieces[i];
-            System.out.println(p.getX() + " " + p.getY() + " " + p.getType());
-        }*/ // Раскоментировать это если нужен отладочный вывод состояния всех фигур
+        // Activate this to monitor the state of every board piece
+        /*for (int i = 0; i < chessboard.pieces.length; ++i) {
+            Piece p = chessboard.pieces[i];
+            System.out.println(p.getX() + " " + p.getY() + " " + p.getType() + " " + p.isAlive());
+        }
+        System.out.println(chessboard.getTurn());*/
+
         for (int j = 7; j >= 0; --j) {
             for (int i = 0; i < 8; ++i) {
                 try {
-                    Piece p = Board.INSTANCE.getPiece(i, j).get();
+                    Piece p = chessboard.getPiece(i, j).get();
                     switch (p.getType()) {
                         case 'K':
                             if (p.getColour()) System.out.print((char)0x2654);
@@ -60,5 +53,19 @@ public class TextDisplay implements View {
             }
             System.out.print("\n");
         }
+    }
+
+    public void checkHandler() {
+        System.out.println("Check!");
+    }
+
+    public void mateHandler() {
+        String s = "Checkmate!\n";
+        if (!chessboard.getTurn())
+            s += "White ";
+        else
+            s += "Black ";
+        s += "wins!";
+        System.out.println(s);
     }
 }

@@ -12,7 +12,7 @@ public class Queen extends Piece {
     }
 
     private boolean checkInBetween(int newX, int newY) {
-        if (x - y != newX - newY && x + y != newX + newY && x != newX && y != newY || x == newX && y == newY) {
+        if ((x - y != newX - newY && x + y != newX + newY && x != newX && y != newY) || (x == newX && y == newY)) {
             return false;
         }
         if (x == newX) {
@@ -31,8 +31,8 @@ public class Queen extends Piece {
                 }
             }
         }
-        if (y == newX) {
-            if (x > newY) {
+        if (y == newY) {
+            if (x > newX) {
                 for (int i = x - 1; i > newX; --i) {
                     try {
                         if (Board.INSTANCE.getPiece(i, y).get().isAlive()) return false;
@@ -91,7 +91,9 @@ public class Queen extends Piece {
             if (Board.INSTANCE.getPiece(newX, newY).get().getColour() == colour) {
                 return false;
             }
-        } catch (NullPointerException e) { return false; }
+        } catch (NullPointerException e) {
+            //System.err.println("Attacking empty tile");
+        }
         return checkInBetween(newX, newY);
     }
 

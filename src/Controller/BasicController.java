@@ -1,42 +1,75 @@
 package Controller;
 
 import Piece.Board;
-import View.TextDisplay;
-import Piece.Piece;
-
-import java.io.Console;
-import java.lang.ref.WeakReference;
+import View.View;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class BasicController implements Controller {
     private boolean running;
+
+    Board chessboard = Board.INSTANCE;
 
     // Singleton
     public static BasicController INSTANCE = new BasicController();
     public Scanner in = new Scanner(System.in);
 
+    View display;
+
+    // For the runtime loop
     public BasicController() {
         running = true;
     }
 
-    public void getMove() {
+    // Tells the controller what display to use
+    public void init(View v) {
+        display = v;
+    }
+
+    // Receives a move from input
+    public void getCommand() {
+
+        // Ends the game if checkmate
+        if (chessboard.isMate(chessboard.getTurn()))
+        {
+            display.mateHandler();
+            quit();
+            return;
+        }
+
+        // Informs the current player of check
+        if (chessboard.isCheck(chessboard.getTurn()))
+        {
+            display.checkHandler();
+        }
+
+        int id = chessboard.needsPromotion(!chessboard.getTurn());
+
+        if (id >= 0) {
+            display.update();
+
+            String s = in.nextLine();
+            chessboard.promote(id, s.charAt(0));
+
+            display.update();
+            return;
+        }
+
         String s = in.nextLine();
+
+        // Exit command
         if (s.equals("exit") || s.equals("quit") || s.equals("stop")) {
             this.quit();
             return;
         }
 
+        // Undo command
         if (s.equals("undo")) {
-            Board.INSTANCE.undo();
+            chessboard.undo();
+            display.update();
             return;
         }
 
-        if (s.equals("show")) {
-            TextDisplay.INSTANCE.update();
-            return;
-        }
-
+        // Control input format
         if (s.length() != 5) {
             System.err.println("Invalid command.");
             return;
@@ -49,20 +82,15 @@ public class BasicController implements Controller {
             System.err.println("Invalid command.");
             return;
         }
-        // Сначала выполняем проверку может ли взять, если нет то может ли сходить
-        if (!Board.INSTANCE.take(x1, y1, x2, y2)) {
-            if (!makeMove(x1, y1, x2, y2)) {
+
+        // Attempts to move, then take the target tile
+        if (!chessboard.move(x1, y1, x2, y2)) {
+            if (!chessboard.take(x1, y1, x2, y2)) {
                 System.err.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
+                return;
             }
         }
-    }
-
-    public boolean makeMove(int x1, int y1, int x2, int y2) {
-        return Board.INSTANCE.move(x1, y1, x2, y2);
-    }
-
-    public void checkHandler() {
-        System.out.println("Check!");
+        display.update();
     }
 
     public boolean isRunning() { return running; } // Вместо бесконечного цикла
