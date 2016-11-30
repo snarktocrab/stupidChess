@@ -13,7 +13,6 @@ public class Main {
 
         // Tell the board and controller where to output
         controller.init(display);
-        //chessboard.init(display);
 
         //Run the game
         while (BasicController.INSTANCE.isRunning()) {

@@ -31,8 +31,8 @@ public class Rook extends Piece {
                 }
             }
         }
-        if (y == newX) {
-            if (x > newY) {
+        if (y == newY) {
+            if (x > newX) {
                 for (int i = x - 1; i > newX; --i) {
                     try {
                         if (Board.INSTANCE.getPiece(i, y).get().isAlive()) return false;

@@ -3,7 +3,6 @@ package View;
 /**
  * Created by yury on 23.11.16.
  */
-import Controller.Controller;
 import Piece.Piece;
 import Piece.Board;
 

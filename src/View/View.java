@@ -1,7 +1,5 @@
 package View;
 
-import Controller.Controller;
-
 /**
  * Created by yury on 23.11.16.
  */
