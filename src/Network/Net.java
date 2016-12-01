@@ -7,7 +7,7 @@ import java.io.*;
  */
 public abstract class Net {
     String ServerIP;
-    public abstract void init();
+    public abstract void init(String ip);
     public abstract void quit();
     public abstract ObjectInputStream getInStream() throws IOException;
     public abstract ObjectOutputStream getOutStream() throws IOException;

@@ -85,19 +85,21 @@ public class Board {
     }
 
     // Moves piece from (x1, y1) to (x2, y2), returns true if successful
-    public boolean move(int x1, int y1, int x2, int y2) {
+    public boolean move(Turn t) {
+        if (t == null) return false;
+        int x1 = t.x, y1 = t.y, x2 = t.x2, y2 = t.y2, id = t.pieceID;
         try {
-            Piece p = getPiece(x1,y1).get();
+            Piece p = getPiece(id).get();
             if (p.getType() == 'K' && x1 - x2 == 2 && p.checkMove(x2, y2)) {
                 p.move(x2, y2);
                 whiteTurn = !whiteTurn;
-                log.push(new Turn('O', x1, y1, p.getID(), false));
+                log.push(new Turn('O', x1, y1, x2, y2, p.getID(), false));
                 return true;
             }
             if (p.getType() == 'K' && x1 - x2 == -2 && p.checkMove(x2, y2)) {
                 p.move(x2, y2);
                 whiteTurn = !whiteTurn;
-                log.push(new Turn('o', x1, y1, p.getID(), false));
+                log.push(new Turn('o', x1, y1, x2, y2, p.getID(), false));
                 return true;
             }
             if (p.checkMove(x2, y2) && p.getColour() == whiteTurn) {
@@ -105,13 +107,8 @@ public class Board {
                 whiteTurn = !whiteTurn;
 
                 // Generating move signature
-                log.push(new Turn('m', x1, y1, p.getID(), p.getHasMoved()));
-                /*if (!p.getHasMoved()) {
-                    p.setHasMoved(true);
-                    lastTurn = "m" + x1 + y1 + x2 + y2 + "@";
-                }
-                else
-                    lastTurn = "m" + x1 + y1 + x2 + y2 + "$";*/
+                log.push(t);
+
                 if (isCheck(!whiteTurn)) {
                     System.err.println("Moving into check");
                     undo();
@@ -124,23 +121,19 @@ public class Board {
     }
 
     // Attempt to take (x2, y2) with (x1, y1), returns true if successful
-    public boolean take(int x1, int y1, int x2, int y2) {
+    public boolean take(Turn t) {
+        if (t == null) return false;
+        int x1 = t.x, y1 = t.y, x2 = t.x2, y2 = t.y2, id = t.pieceID, targid = t.targID;
         try {
-            Piece p = getPiece(x1,y1).get();
+            Piece p = getPiece(id).get();
             if (p.checkAttack(x2, y2) && p.getColour() == whiteTurn) {
-                int id = getPiece(x2, y2).get().getID();
                 getPiece(x2, y2).get().die();
                 p.move(x2, y2);
                 whiteTurn = !whiteTurn;
 
                 // Generates move for undo
-                log.push(new Turn('t', x1, y1, p.getID(), getPiece(x2, y2).get().getID(), p.getHasMoved()));
-                /*if (!p.getHasMoved()) {
-                    p.setHasMoved(true);
-                    lastTurn = "t" + x1 + y1 + x2 + y2 + "@" + id; // "@ - фигура подвинулась в этом ходу, $ - нет"
-                }
-                else
-                    lastTurn = "t" + x1 + y1 + x2 + y2 + "$" + id;*/
+                log.push(t);
+
                 if (isCheck(!whiteTurn)) {
                     System.err.println("Moving into check");
                     undo();
@@ -173,7 +166,7 @@ public class Board {
                 for (int i = 0; i < 8; ++i) {
                     for (int j = 0; j < 8; ++j) {
                         if (p.checkMove(i, j)) {
-                            log.push(new Turn('m', p.getX(), p.getY(), p.getID(), p.getHasMoved()));
+                            log.push(new Turn('m', p.getX(), p.getY(), i, j, p.getID(), p.getHasMoved()));
                             p.move(i, j);
                             whiteTurn = !whiteTurn;
                             if (!isCheck(!whiteTurn)) {
@@ -184,7 +177,7 @@ public class Board {
                         }
                         try {
                             if (p.checkAttack(i, j)) {
-                                log.push(new Turn('t', p.getX(), p.getY(), p.getID(), getPiece(i, j).get().getID(), p.getHasMoved()));
+                                log.push(new Turn('t', p.getX(), p.getY(), i, j, p.getID(), getPiece(i, j).get().getID(), p.getHasMoved()));
                                 getPiece(i, j).get().die();
                                 p.move(i, j);
                                 whiteTurn = !whiteTurn;
@@ -210,6 +203,18 @@ public class Board {
         }
 
         Turn lastMove = log.pop();
+
+        if (lastMove.type == 'p') {
+            Piece p = getPiece(lastMove.pieceID).get();
+            if (p.getColour()) {
+                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() - 1, p.getColour(), true, true);
+            }
+            else {
+                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() + 1, p.getColour(), true, true);
+            }
+            undo();
+            return;
+        }
 
         if (lastMove.type == 'o') {
             Piece king = getPiece(lastMove.pieceID).get();

@@ -7,15 +7,16 @@ import java.net.*;
  * Created by yury on 01.12.16.
  */
 public class Server extends Net{
+    public static Server INSTANCE = new Server();
+
     Socket s;
     private ServerSocket server;
 
-    public Server(String ip) { ServerIP = ip; this.init(); }
-
-    public void init() {
+    public void init(String ip) {
+        ServerIP = ip;
         s = null;
         try {
-            ServerSocket server = new ServerSocket(8030);
+            server = new ServerSocket(8030);
             s = server.accept();
         } catch (IOException e) { System.err.println("Error: " + e); }
     }

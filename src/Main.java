@@ -14,11 +14,13 @@ public class Main {
     public static void main(String[] args) {
 
         // Tell the board and controller where to output
-        net = controller.init(display);
+        controller.init(display);
+
+        String[] gameParams = controller.gameType();
 
         //Run the game
-        while (BasicController.INSTANCE.isRunning()) {
-            BasicController.INSTANCE.getCommand();
+        while (controller.isRunning()) {
+            controller.getCommand();
         }
 
         if (net != null) net.quit();

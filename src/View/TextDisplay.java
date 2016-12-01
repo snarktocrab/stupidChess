@@ -70,7 +70,7 @@ public class TextDisplay implements View {
     }
 
     public void netPrompt() { System.out.println("Type 'L' to play local game, 'H' to become a host and 'C' to become a client." +
-            " And then, type server ip in next line (if you are a server type 'server'\nPlease init the server first!"); }
+            " And then, type server ip in next line\nPlease init the server first!"); }
 
     public void promotionHandler() { System.out.println("You can promote your pawn! Type 'Q' for Queen, 'R' for Rook, 'N' for Knight and 'B' for Bishop"); }
 }

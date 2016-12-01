@@ -1,6 +1,8 @@
 package Controller;
 
 import Piece.Board;
+import Piece.Piece;
+import Piece.Turn;
 import View.View;
 import java.util.Scanner;
 import Network.*;
@@ -22,38 +24,31 @@ public class BasicController implements Controller {
     }
 
     // Tells the controller what display to use
-    public Net init(View v) {
+    public void init(View v) {
         display = v;
+    }
 
-        v.netPrompt();
-        String s = in.nextLine();
-        char ch = s.charAt(0);
-
-        switch (ch)
-        {
-            case 'L':
-                return null;
-            case 'H':
-                s = in.nextLine();
-                return new Server(s);
-            case 'C':
-                s = in.nextLine();
-                return new Client(s);
-            default:
-                System.err.println("Invalid command!");
-                break;
+    public String[] gameType() {
+        display.netPrompt();
+        String s, params[] = new String[2];
+        s = in.nextLine().toLowerCase();
+        params[0] = s;
+        if (s.equals("local") || s.equals("server")) {
+            params[1] = "";
         }
-        return null;
+        else if (s.equals("client")) {
+            params[1] = in.nextLine();
+        }
+        return params;
     }
 
     // Receives a move from input
-    public void getCommand() {
+    public Turn getCommand() {
 
         // Ends the game if checkmate
         if (chessboard.isMate(chessboard.getTurn())) {
             display.mateHandler();
-            quit();
-            return;
+            return new Turn('q');
         }
 
         // Informs the current player of check
@@ -69,28 +64,27 @@ public class BasicController implements Controller {
             chessboard.promote(id, s.charAt(0));
 
             display.update();
-            return;
+            return new Turn('p', id, s.charAt(0));
         }
 
         String s = in.nextLine();
 
         // Exit command
         if (s.equals("exit") || s.equals("quit") || s.equals("stop")) {
-            this.quit();
-            return;
+            return new Turn('q');
         }
 
         // Undo command
         if (s.equals("undo")) {
             chessboard.undo();
             display.update();
-            return;
+            return new Turn('u');
         }
 
         // Control input format
         if (s.length() != 5) {
             System.err.println("Invalid command.");
-            return;
+            return null;
         }
 
         int x1 = s.charAt(0) - 'a', y1 = s.charAt(1) - '1',
@@ -98,17 +92,21 @@ public class BasicController implements Controller {
 
         if (x1 > 7 || x2 > 7 || y1 > 7 || y2 > 7 || x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0) {
             System.err.println("Invalid command.");
-            return;
+            return null;
         }
 
         // Attempts to move, then take the target tile
-        if (!chessboard.move(x1, y1, x2, y2)) {
-            if (!chessboard.take(x1, y1, x2, y2)) {
+        Piece p = chessboard.getPiece(x1, y1).get();
+        if (p == null) return null;
+        Turn t = new Turn ('m', x1, y1, x2, y2, p.getID(), p.getHasMoved());
+        if (!chessboard.move(t)) {
+            if (!chessboard.take(t)) {
                 System.err.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
-                return;
             }
         }
         display.update();
+
+        return chessboard.log.peek();
     }
 
     public boolean isRunning() { return running; } // Вместо бесконечного цикла

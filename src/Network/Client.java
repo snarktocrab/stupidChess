@@ -7,11 +7,12 @@ import java.net.*;
  * Created by yury on 01.12.16.
  */
 public class Client extends Net{
+    public static Client INSTANCE = new Client();
+
     Socket s;
 
-    public Client(String ip) { ServerIP = ip; this.init(); }
-
-    public void init() {
+    public void init(String ip) {
+        ServerIP = ip;
         try {
             s = new Socket(InetAddress.getByName(ServerIP), 8030);
 
