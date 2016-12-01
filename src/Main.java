@@ -20,5 +20,7 @@ public class Main {
         while (BasicController.INSTANCE.isRunning()) {
             BasicController.INSTANCE.getCommand();
         }
+
+        if (net != null) net.quit();
     }
 }
