@@ -2,6 +2,7 @@ package Network;
 
 import java.io.*;
 import java.net.*;
+import Piece.Turn;
 
 /**
  * Created by yury on 01.12.16.
@@ -9,13 +10,16 @@ import java.net.*;
 public class Client extends Net{
     public static Client INSTANCE = new Client();
 
-    Socket s;
+    private Socket s;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
 
     public void init(String ip) {
         ServerIP = ip;
         try {
             s = new Socket(InetAddress.getByName(ServerIP), 8030);
-
+            in = new ObjectInputStream(s.getInputStream());
+            out = new ObjectOutputStream(s.getOutputStream());
         } catch (UnknownHostException e) { System.err.println("Host error: " + e); }
         catch (IOException e) { System.err.println("Error: " + e); }
     }
@@ -26,6 +30,22 @@ public class Client extends Net{
         } catch (IOException e) { System.err.println("Error: " + e); }
     }
 
-    public ObjectOutputStream getOutStream() throws IOException { return new ObjectOutputStream(s.getOutputStream()); }
-    public ObjectInputStream getInStream() throws IOException { return new ObjectInputStream(s.getInputStream()); }
+    public ObjectOutputStream getOutStream() { return out; }
+    public ObjectInputStream getInStream() { return in; }
+
+    public void sendTurn(Turn t) {
+        try {
+            out.writeObject(t);
+            out.flush();
+        } catch (IOException e) { System.err.println("Error: " + e); }
+    }
+
+    public Turn receiveTurn() {
+        try {
+            Turn t = (Turn)in.readObject();
+            return t;
+        } catch (IOException e) { System.err.println("Error: " + e); }
+        catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); }
+        return null;
+    }
 }

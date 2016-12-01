@@ -48,4 +48,6 @@ public class Turn implements Serializable {
         pieceID = id;
         newPiece = title;
     }
+
+    public char getType() { return type; }
 }

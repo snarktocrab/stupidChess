@@ -1,5 +1,7 @@
 package Network;
 
+import Piece.Turn;
+
 import java.io.*;
 import java.net.*;
 
@@ -9,8 +11,10 @@ import java.net.*;
 public class Server extends Net{
     public static Server INSTANCE = new Server();
 
-    Socket s;
+    private Socket s;
     private ServerSocket server;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
 
     public void init(String ip) {
         ServerIP = ip;
@@ -18,6 +22,8 @@ public class Server extends Net{
         try {
             server = new ServerSocket(8030);
             s = server.accept();
+            in = new ObjectInputStream(s.getInputStream());
+            out = new ObjectOutputStream(s.getOutputStream());
         } catch (IOException e) { System.err.println("Error: " + e); }
     }
 
@@ -28,6 +34,22 @@ public class Server extends Net{
         } catch (IOException e) { System.err.println("Error: " + e); }
     }
 
-    public ObjectOutputStream getOutStream() throws IOException { return new ObjectOutputStream(s.getOutputStream()); }
-    public ObjectInputStream getInStream() throws IOException { return new ObjectInputStream(s.getInputStream()); }
+    public ObjectOutputStream getOutStream() { return out; }
+    public ObjectInputStream getInStream() { return in; }
+
+    public void sendTurn(Turn t) {
+        try {
+            out.writeObject(t);
+            out.flush();
+        } catch (IOException e) { System.err.println("Error: " + e); }
+    }
+
+    public Turn receiveTurn() {
+        try {
+            Turn t = (Turn)in.readObject();
+            return t;
+        } catch (IOException e) { System.err.println("Error: " + e); }
+        catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); }
+        return null;
+    }
 }

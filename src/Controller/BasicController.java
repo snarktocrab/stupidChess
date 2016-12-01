@@ -71,6 +71,7 @@ public class BasicController implements Controller {
 
         // Exit command
         if (s.equals("exit") || s.equals("quit") || s.equals("stop")) {
+            quit();
             return new Turn('q');
         }
 
@@ -109,6 +110,6 @@ public class BasicController implements Controller {
         return chessboard.log.peek();
     }
 
-    public boolean isRunning() { return running; } // Вместо бесконечного цикла
-    public void quit() { running = false; } // Завершает программу
+    public boolean isRunning() { return running; } // Instead of infinity loop
+    public void quit() { running = false; } // Quits the program
 }
