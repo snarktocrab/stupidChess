@@ -1,10 +1,11 @@
 package Controller;
 
+import Network.*;
 import View.View;
 
 public interface Controller {
     // Tell the controller where to output
-    void init(View v);
+    Net init(View v);
 
     // Input a command, relay it to Board
     void getCommand();

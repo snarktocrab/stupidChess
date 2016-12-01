@@ -3,6 +3,7 @@ package Controller;
 import Piece.Board;
 import View.View;
 import java.util.Scanner;
+import Network.*;
 
 public class BasicController implements Controller {
     private boolean running;
@@ -21,8 +22,28 @@ public class BasicController implements Controller {
     }
 
     // Tells the controller what display to use
-    public void init(View v) {
+    public Net init(View v) {
         display = v;
+
+        v.netPrompt();
+        String s = in.nextLine();
+        char ch = s.charAt(0);
+
+        switch (ch)
+        {
+            case 'L':
+                return null;
+            case 'H':
+                s = in.nextLine();
+                return new Server(s);
+            case 'C':
+                s = in.nextLine();
+                return new Client(s);
+            default:
+                System.err.println("Invalid command!");
+                break;
+        }
+        return null;
     }
 
     // Receives a move from input

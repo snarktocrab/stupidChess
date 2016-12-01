@@ -8,4 +8,5 @@ public interface View {
     void checkHandler();
     void mateHandler();
     void promotionHandler();
+    void netPrompt();
 }
