@@ -137,6 +137,7 @@ public class BasicController implements Controller {
             default:
                 return;
         }
+        display.update();
     }
 
     public boolean isRunning() { return running; } // Instead of infinity loop

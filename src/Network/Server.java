@@ -22,8 +22,11 @@ public class Server extends Net{
         try {
             server = new ServerSocket(8030);
             s = server.accept();
-            in = new ObjectInputStream(s.getInputStream());
-            out = new ObjectOutputStream(s.getOutputStream());
+            ObjectOutputStream outt = new ObjectOutputStream(s.getOutputStream());
+            out = outt;
+            InputStream i = s.getInputStream();
+            ObjectInputStream inn = new ObjectInputStream(i);
+            in = inn;
         } catch (IOException e) { System.err.println("Error: " + e); }
     }
 

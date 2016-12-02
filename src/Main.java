@@ -22,11 +22,13 @@ public class Main {
         if (gameParams[0].equals("server")) {
             net = Server.INSTANCE;
             net.init(gameParams[1]);
+            System.out.println("Game started!");
             colour = true;
         }
         else if (gameParams[0].equals("client")) {
             net = Client.INSTANCE;
             net.init(gameParams[1]);
+            System.out.println("Game started!");
             colour = false;
         }
 
@@ -43,6 +45,7 @@ public class Main {
                     net.sendTurn(currTurn);
             }
             else {
+                display.waitHandler();
                 currTurn = net.receiveTurn();
                 controller.turnHandler(currTurn);
             }
