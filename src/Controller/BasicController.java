@@ -10,16 +10,16 @@ import Network.*;
 public class BasicController implements Controller {
     private boolean running;
 
-    Board chessboard = Board.INSTANCE;
+    private Board chessboard = Board.INSTANCE;
 
     // Singleton
     public static BasicController INSTANCE = new BasicController();
-    public Scanner in = new Scanner(System.in);
+    private Scanner in = new Scanner(System.in);
 
-    View display;
+    private View display;
 
     // For the runtime loop
-    public BasicController() {
+    private BasicController() {
         running = true;
     }
 

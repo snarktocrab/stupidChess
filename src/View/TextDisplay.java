@@ -9,7 +9,7 @@ import Piece.Board;
 public class TextDisplay implements View {
     public static TextDisplay INSTANCE = new TextDisplay();
 
-    Board chessboard = Board.INSTANCE;
+    private Board chessboard = Board.INSTANCE;
 
     public void update() {
         // Activate this to monitor the state of every board piece

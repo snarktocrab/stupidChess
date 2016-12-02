@@ -8,10 +8,10 @@ import View.*;
  * Created by daniel on 22.11.16.
  */
 public class Main {
-    static View display = TextDisplay.INSTANCE;
-    static Controller controller = BasicController.INSTANCE;
-    static Board chessboard = Board.INSTANCE;
-    static Net net = null;
+    private static View display = TextDisplay.INSTANCE;
+    private static Controller controller = BasicController.INSTANCE;
+    private static Board chessboard = Board.INSTANCE;
+    private static Net net = null;
     public static void main(String[] args) {
         boolean colour = true;
 
