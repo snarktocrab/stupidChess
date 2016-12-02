@@ -12,6 +12,7 @@ public interface Controller {
 
     // Input a command, relay it to Board
     Turn getCommand();
+    void turnHandler(Turn t);
 
     boolean isRunning();
 

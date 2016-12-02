@@ -56,17 +56,6 @@ public class BasicController implements Controller {
             display.checkHandler();
         }
 
-        int id = chessboard.needsPromotion(!chessboard.getTurn());
-
-        if (id >= 0) {
-            display.promotionHandler();
-            String s = in.nextLine();
-            chessboard.promote(id, s.charAt(0));
-
-            display.update();
-            return new Turn('p', id, s.charAt(0));
-        }
-
         String s = in.nextLine();
 
         // Exit command
@@ -107,7 +96,47 @@ public class BasicController implements Controller {
         }
         display.update();
 
+        int id = chessboard.needsPromotion(!chessboard.getTurn());
+
+        if (id >= 0) {
+            display.promotionHandler();
+            String ss = in.nextLine();
+            chessboard.promote(id, ss.charAt(0));
+
+            display.update();
+            Turn prevt = chessboard.log.pop();
+            if (prevt.type == 'm')
+                return new Turn('p', prevt.x, prevt.y, prevt.x2, prevt.y2, prevt.pieceID, ss.charAt(0));
+            return new Turn('P', prevt.x, prevt.y, prevt.x2, prevt.y2, prevt.pieceID, prevt.targID, ss.charAt(0));
+        }
+
         return chessboard.log.peek();
+    }
+
+    public void turnHandler(Turn t) {
+        switch (t.type) {
+            case 'q':
+                quit();
+                return;
+            case 'p':
+                chessboard.move(t);
+                chessboard.promote(t.pieceID, t.newPiece);
+                break;
+            case 'P':
+                chessboard.take(t);
+                chessboard.promote(t.pieceID, t.newPiece);
+            case 'm':case 'o':case 'O':
+                chessboard.move(t);
+                break;
+            case 't':
+                chessboard.take(t);
+                break;
+            case 'u':
+                chessboard.undo();
+                break;
+            default:
+                return;
+        }
     }
 
     public boolean isRunning() { return running; } // Instead of infinity loop

@@ -204,6 +204,18 @@ public class Board {
 
         Turn lastMove = log.pop();
 
+        if (lastMove.type == 'P') {
+            Piece p = getPiece(lastMove.pieceID).get();
+            if (p.getColour()) {
+                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true);
+            }
+            else {
+                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true);
+            }
+            getPiece(lastMove.targID).get().respawn();
+            return;
+        }
+
         if (lastMove.type == 'p') {
             Piece p = getPiece(lastMove.pieceID).get();
             if (p.getColour()) {
@@ -212,7 +224,6 @@ public class Board {
             else {
                 pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() + 1, p.getColour(), true, true);
             }
-            undo();
             return;
         }
 

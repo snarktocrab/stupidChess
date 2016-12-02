@@ -13,6 +13,7 @@ public class Main {
     static Board chessboard = Board.INSTANCE;
     static Net net = null;
     public static void main(String[] args) {
+        boolean colour = true;
 
         // Tell the board and controller where to output
         controller.init(display);
@@ -21,10 +22,12 @@ public class Main {
         if (gameParams[0].equals("server")) {
             net = Server.INSTANCE;
             net.init(gameParams[1]);
+            colour = true;
         }
         else if (gameParams[0].equals("client")) {
             net = Client.INSTANCE;
             net.init(gameParams[1]);
+            colour = false;
         }
 
         //Run the game
@@ -34,21 +37,15 @@ public class Main {
             if (net == null) {
                 controller.getCommand();
             }
-            else if (gameParams[0].equals("server")) {
-                // Firstly we move, secondly we receive turn from client
+            else if (chessboard.getTurn() == colour) {
                 currTurn = controller.getCommand();
-                // TODO: Add normal handler of out moves (if we don't move or take don't pass the turn!)
-                currTurn = net.receiveTurn();
-                // TODO: Add turn handler here
+                if (currTurn != null)
+                    net.sendTurn(currTurn);
             }
-            else { // gameParams[0] -> "client"
-                // Firstly we receive turn from server, secondly we move
+            else {
                 currTurn = net.receiveTurn();
-                // TODO: Add turn handler here
-                currTurn = controller.getCommand();
-                // TODO: Add normal handler of out moves (if we don't move or take don't pass the turn!)
+                controller.turnHandler(currTurn);
             }
-
         }
 
         if (net != null) net.quit();
