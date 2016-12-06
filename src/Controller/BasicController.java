@@ -90,8 +90,10 @@ public class BasicController implements Controller {
         if (p == null) return null;
         Turn t = new Turn ('m', x1, y1, x2, y2, p.getID(), p.getHasMoved());
         if (!chessboard.move(t)) {
+            t = new Turn ('t', x1, y1, x2, y2, p.getID(), p.getHasMoved());
             if (!chessboard.take(t)) {
                 System.err.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
+                return null;
             }
         }
         display.update();

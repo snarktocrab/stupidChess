@@ -48,6 +48,7 @@ public class Logger {
                 out.write("Turn received\n");
             }
         } catch (IOException e) { System.err.println("Log Error: " + e); }
+        catch (NullPointerException e) {}
     }
 
     public void quit() {
