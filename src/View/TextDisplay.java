@@ -11,6 +11,9 @@ public class TextDisplay implements View {
 
     private Board chessboard = Board.INSTANCE;
 
+    // This sets default colour for white figures (this needs for dark backgrounds, where white is black actually)
+    private boolean white = false;
+
     public void update() {
         // Activate this to monitor the state of every board piece
         /*for (int i = 0; i < chessboard.pieces.length; ++i) {
@@ -25,27 +28,27 @@ public class TextDisplay implements View {
                     Piece p = chessboard.getPiece(i, j).get();
                     switch (p.getType()) {
                         case 'K':
-                            if (p.getColour()) System.out.print((char)0x2654);
+                            if (p.getColour() == white) System.out.print((char)0x2654);
                             else System.out.print((char)0x265A);
                             break;
                         case 'N':
-                            if (p.getColour()) System.out.print((char)0x2658);
+                            if (p.getColour() == white) System.out.print((char)0x2658);
                             else System.out.print((char)0x265E);
                             break;
                         case 'B':
-                            if (p.getColour()) System.out.print((char)0x2657);
+                            if (p.getColour() == white) System.out.print((char)0x2657);
                             else System.out.print((char)0x265D);
                             break;
                         case 'p':
-                            if (p.getColour()) System.out.print((char)0x2659);
+                            if (p.getColour() == white) System.out.print((char)0x2659);
                             else System.out.print((char)0x265F);
                             break;
                         case 'Q':
-                            if (p.getColour()) System.out.print((char)0x2655);
+                            if (p.getColour() == white) System.out.print((char)0x2655);
                             else System.out.print((char)0x265B);
                             break;
                         case 'R':
-                            if (p.getColour()) System.out.print((char)0x2656);
+                            if (p.getColour() == white) System.out.print((char)0x2656);
                             else System.out.print((char)0x265C);
                             break;
                     }
