@@ -23,19 +23,83 @@ x2: 3; y2: 3
 moved: false
 ----------------------
 Received turn (from opponent) :
-type: m
-pieceID: 11
+type: t
+pieceID: 12
 targID: 0
-x: 3; y: 6
-x2: 3; y2: 4
+x: 4; y: 4
+x2: 3; y2: 3
+moved: true
+----------------------
+Received turn (our) :
+type: t
+pieceID: 24
+targID: 0
+x: 3; y: 0
+x2: 3; y2: 3
+moved: false
+----------------------
+Received turn (from opponent) :
+type: m
+pieceID: 25
+targID: 0
+x: 3; y: 7
+x2: 4; y2: 6
+moved: false
+----------------------
+Received turn (our) :
+type: m
+pieceID: 16
+targID: 0
+x: 2; y: 0
+x2: 6; y2: 4
+moved: false
+----------------------
+Received turn (from opponent) :
+type: m
+pieceID: 25
+targID: 0
+x: 4; y: 6
+x2: 3; y2: 5
+moved: true
+----------------------
+Received turn (our) :
+type: t
+pieceID: 24
+targID: 0
+x: 3; y: 3
+x2: 3; y2: 5
+moved: true
+----------------------
+Received turn (from opponent) :
+type: m
+pieceID: 31
+targID: 0
+x: 6; y: 7
+x2: 7; y2: 5
+moved: false
+----------------------
+Received turn (our) :
+type: m
+pieceID: 0
+targID: 0
+x: 0; y: 1
+x2: 0; y2: 2
+moved: false
+----------------------
+Received turn (from opponent) :
+type: m
+pieceID: 19
+targID: 0
+x: 5; y: 7
+x2: 4; y2: 6
 moved: false
 ----------------------
 Received turn (our) :
 type: t
-pieceID: 3
+pieceID: 24
 targID: 0
-x: 3; y: 3
-x2: 4; y2: 4
+x: 3; y: 5
+x2: 4; y2: 6
 moved: true
 ----------------------
 Received turn (from opponent) :

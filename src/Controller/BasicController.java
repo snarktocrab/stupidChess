@@ -48,6 +48,7 @@ public class BasicController implements Controller {
         // Ends the game if checkmate
         if (chessboard.isMate(chessboard.getTurn())) {
             display.mateHandler();
+            quit();
             return new Turn('q');
         }
 
