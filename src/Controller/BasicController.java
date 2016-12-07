@@ -1,11 +1,8 @@
 package Controller;
 
-import Piece.Board;
-import Piece.Piece;
-import Piece.Turn;
+import Piece.*;
 import View.View;
 import java.util.Scanner;
-import Network.*;
 
 public class BasicController implements Controller {
     private boolean running;
@@ -65,16 +62,17 @@ public class BasicController implements Controller {
             return new Turn('q');
         }
 
-        // Undo command
+        // Activate this if you want to allow users to make undo
+        /*// Undo command
         if (s.equals("undo")) {
             chessboard.undo();
             display.update();
             return new Turn('u');
-        }
+        }*/
 
         // Control input format
         if (s.length() != 5) {
-            System.err.println("Invalid command.");
+            System.err.println("ERROR: Invalid command.");
             return null;
         }
 
@@ -82,7 +80,7 @@ public class BasicController implements Controller {
                 x2 = s.charAt(3) - 'a', y2 = s.charAt(4) - '1';
 
         if (x1 > 7 || x2 > 7 || y1 > 7 || y2 > 7 || x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0) {
-            System.err.println("Invalid command.");
+            System.err.println("ERROR: Invalid command.");
             return null;
         }
 
@@ -93,7 +91,7 @@ public class BasicController implements Controller {
         if (!chessboard.move(t)) {
             t = new Turn ('t', x1, y1, x2, y2, p.getID(), p.getHasMoved());
             if (!chessboard.take(t)) {
-                System.err.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
+                System.err.println("ERROR: Illegal move." + (char)(x1 + 'a') + (y1 + 1) + "-" + (char)(x2 + 'a') + (y2 + 1));
                 return null;
             }
         }

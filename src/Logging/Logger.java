@@ -45,7 +45,30 @@ public class Logger {
                 out.write("\n----------------------\n");
             }
             else {
-                out.write("Turn received\n");
+                switch (t.type) {
+                    case 'o':
+                        out.write("O-O\n");
+                        break;
+                    case 'O':
+                        out.write("O-O-O\n");
+                        break;
+                    case 't':
+                        out.write("" + (char)(t.x + 'a') + (t.y + 1) + "x" + (char)(t.x2 + 'a') + (t.y2 + 1) + "\n");
+                        break;
+                    case 'm':
+                        out.write("" + (char)(t.x + 'a') + (t.y + 1) + "-" + (char)(t.x2 + 'a') + (t.y2 + 1) + "\n");
+                        break;
+                    case 'p':
+                        out.write("" + (char)(t.x + 'a') + (t.y + 1) + "-" + (char)(t.x2 + 'a') + (t.y2 + 1) + "\n");
+                        out.write("Promote to: " + t.newPiece + "\n");
+                        break;
+                    case 'P':
+                        out.write("" + (char)(t.x + 'a') + (t.y + 1) + "x" + (char)(t.x2 + 'a') + (t.y2 + 1) + "\n");
+                        out.write("Promote to: " + t.newPiece + "\n");
+                        break;
+                    default:
+                        break;
+                }
             }
         } catch (IOException e) { System.err.println("Log Error: " + e); }
         catch (NullPointerException e) {}

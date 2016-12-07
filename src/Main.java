@@ -18,7 +18,7 @@ public class Main {
 
         // Tell the board and controller where to output
         controller.init(display);
-        logger.init("debug");
+        logger.init("logging");
 
         String[] gameParams = controller.gameType();
         if (gameParams[0].equals("server")) {

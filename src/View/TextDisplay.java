@@ -22,7 +22,15 @@ public class TextDisplay implements View {
         }
         System.out.println(chessboard.getTurn());*/
 
-        for (int j = 7; j >= 0; --j) {
+        int start_j, inc;
+        if (chessboard.getTurn()) {
+            start_j = 7; inc = -1;
+        }
+        else {
+            start_j = 0; inc = 1;
+        }
+        for (int j = start_j; (chessboard.getTurn() && j >= 0) || (!chessboard.getTurn() && j <= 7); j += inc) {
+            System.out.print((j + 1) + "|");
             for (int i = 0; i < 8; ++i) {
                 try {
                     Piece p = chessboard.getPiece(i, j).get();
@@ -56,6 +64,7 @@ public class TextDisplay implements View {
             }
             System.out.print("\n");
         }
+        System.out.println("  abcdefgh");
     }
 
     public void checkHandler() {
