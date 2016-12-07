@@ -86,8 +86,8 @@ public class TextDisplay implements View {
         System.out.println(s);
     }
 
-    public void netPrompt() { System.out.println("Type 'L' to play local game, 'S' to become a host and 'C' to become a client." +
-            " And then, type server ip in next line\nPlease init the server first!"); }
+    public void netPrompt() { System.out.println("Do you like to play 'local' or to become 'server' or 'client'?" +
+            " Type server ip in next line\nPlease init the server first!"); }
 
     public void waitHandler() { System.out.println("Waiting for opponent..."); }
 
