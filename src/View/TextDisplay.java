@@ -14,6 +14,11 @@ public class TextDisplay implements View {
     // This sets default colour for white figures (this needs for dark backgrounds, where white is black actually)
     private boolean white = false;
 
+    public void startHandler() {
+        System.out.println("Game started!");
+        update();
+    }
+
     public void update() {
         // Activate this to monitor the state of every board piece
         /*for (int i = 0; i < chessboard.pieces.length; ++i) {
