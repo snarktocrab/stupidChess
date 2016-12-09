@@ -65,7 +65,9 @@ public class TextDisplay implements View {
                             else System.out.print((char)0x265C);
                             break;
                     }
-                } catch (NullPointerException e) { System.out.print("."); }
+                } catch (NullPointerException e) {
+                    System.out.print(".");
+                }
             }
             System.out.print("\n");
         }

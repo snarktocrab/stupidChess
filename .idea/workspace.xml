@@ -7,14 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb8ef0e5-8598-45ab-87d8-52d1ca04e48d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StupidChessJava/Controller/BasicController.class" afterPath="$PROJECT_DIR$/out/production/StupidChessJava/Controller/BasicController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StupidChessJava/Logging/Logger.class" afterPath="$PROJECT_DIR$/out/production/StupidChessJava/Logging/Logger.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/StupidChessJava_jar/StupidChessJava.jar" afterPath="$PROJECT_DIR$/out/artifacts/StupidChessJava_jar/StupidChessJava.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StupidChessJava/View/TextDisplay.class" afterPath="$PROJECT_DIR$/out/production/StupidChessJava/View/TextDisplay.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StupidChessJava/View/View.class" afterPath="$PROJECT_DIR$/out/production/StupidChessJava/View/View.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/BasicController.java" afterPath="$PROJECT_DIR$/src/Controller/BasicController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Piece/Turn.java" afterPath="$PROJECT_DIR$/src/Piece/Turn.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/View/TextDisplay.java" afterPath="$PROJECT_DIR$/src/View/TextDisplay.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/View/View.java" afterPath="$PROJECT_DIR$/src/View/View.java" />
     </list>
     <ignored path="StupidChessJava.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -70,11 +67,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TextDisplay.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TextDisplay.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/View/TextDisplay.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.8037825">
-              <caret line="88" column="55" selection-start-line="88" selection-start-column="55" selection-end-line="88" selection-end-column="55" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="73" column="41" selection-start-line="73" selection-start-column="41" selection-end-line="73" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -116,12 +113,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Turn.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Turn.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Piece/Turn.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
-              <folding />
+            <state vertical-scroll-proportion="0.87234044">
+              <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+              <folding>
+                <element signature="e#1591#1592#0" expanded="true" />
+                <element signature="e#1615#1616#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -193,12 +193,12 @@
         <option value="$PROJECT_DIR$/src/Piece/Board.java" />
         <option value="$PROJECT_DIR$/src/Network/Server.java" />
         <option value="$PROJECT_DIR$/src/Controller/Controller.java" />
-        <option value="$PROJECT_DIR$/src/Piece/Turn.java" />
         <option value="$PROJECT_DIR$/src/Logging/Logger.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/View/View.java" />
         <option value="$PROJECT_DIR$/src/Controller/BasicController.java" />
         <option value="$PROJECT_DIR$/src/View/TextDisplay.java" />
+        <option value="$PROJECT_DIR$/src/Piece/Turn.java" />
       </list>
     </option>
   </component>
@@ -807,12 +807,12 @@
       <workItem from="1481017720129" duration="5880000" />
       <workItem from="1481027149085" duration="4147000" />
       <workItem from="1481128660684" duration="5578000" />
-      <workItem from="1481270706719" duration="628000" />
+      <workItem from="1481270706719" duration="4734000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="111770000" />
+    <option name="totallyTimeSpent" value="115876000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1535" height="876" extended-state="6" />
@@ -1230,14 +1230,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Piece/Turn.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Logging/Logger.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1253,14 +1245,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/View/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1282,12 +1266,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/View/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/View/TextDisplay.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.8037825">
-          <caret line="88" column="55" selection-start-line="88" selection-start-column="55" selection-end-line="88" selection-end-column="55" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="73" column="41" selection-start-line="73" selection-start-column="41" selection-end-line="73" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Piece/Turn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.87234044">
+          <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+          <folding>
+            <element signature="e#1591#1592#0" expanded="true" />
+            <element signature="e#1615#1616#0" expanded="true" />
           </folding>
         </state>
       </provider>

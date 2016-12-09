@@ -12,6 +12,24 @@ public class Turn implements Serializable {
     public int x, y, x2, y2;
     public boolean moved;
 
+    /*
+    WARNING: the following code is very, very bad and may hurt your eyes and/or brain. Here is a safety pig for safety purposes.
+                         _
+ _._ _..._ .-',     _.._(`))
+'-. `     '  /-._.-'    ',/
+   )         \            '.
+  / _    _    |             \
+ |  a    a    /              |
+ \   .-.                     ;
+  '-('' ).-'       ,'       ;
+     '-;           |      .'
+        \           \    /
+        | 7  .__  _.-\   \
+        | |  |  ``/  /`  /
+       /,_|  |   /,_/   /
+          /,_/      '`-'
+     */
+
     public Turn() {}
 
     // Move
