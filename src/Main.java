@@ -3,6 +3,7 @@ import Network.*;
 import Piece.*;
 import View.*;
 import Logging.*;
+import java.io.*;
 
 /**
  * Created by daniel on 22.11.16.
@@ -16,9 +17,15 @@ public class Main {
     public static void main(String[] args) {
         boolean colour = true;
 
+        File f = new File(System.getProperty("java.class.path"));
+        File dir = f.getAbsoluteFile().getParentFile();
+        System.out.println("Your current path is: " + dir.toString());
+        String path = dir.toString();
+        //path = "src"; //For running in IntelliJ not in terminal
+
         // Tell the board and controller where to output
         controller.init(display);
-        logger.init("logging");
+        logger.init("logging", path);
 
         String[] gameParams = controller.gameType();
         if (gameParams[0].equals("server")) {

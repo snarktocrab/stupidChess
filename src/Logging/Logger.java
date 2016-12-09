@@ -16,14 +16,14 @@ public class Logger {
 
     private boolean isDebug;
 
-    public void init(String s) {
+    public void init(String mode, String path) {
         try {
-            if (s.toLowerCase().equals("debug")) {
-                out = new FileWriter("debug.txt", false);
+            if (mode.toLowerCase().equals("debug")) {
+                out = new FileWriter(path + "/debug.txt", false);
                 isDebug = true;
             }
             else {
-                out = new FileWriter("log.txt", false);
+                out = new FileWriter(path + "/log.txt", false);
                 isDebug = false;
             }
 
