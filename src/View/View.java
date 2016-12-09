@@ -10,5 +10,6 @@ public interface View {
     void promotionHandler();
     void waitHandler();
     void netPrompt();
+    void clientPrompt();
     void startHandler();
 }

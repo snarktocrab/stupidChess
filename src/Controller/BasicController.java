@@ -34,6 +34,7 @@ public class BasicController implements Controller {
             params[1] = "";
         }
         else if (s.equals("client")) {
+            display.clientPrompt();
             params[1] = in.nextLine();
         }
         return params;
