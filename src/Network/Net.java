@@ -10,6 +10,7 @@ public abstract class Net {
     String ServerIP;
     public abstract void init(String ip);
     public abstract void quit();
+    public abstract String getIP();
     public abstract ObjectInputStream getInStream();
     public abstract ObjectOutputStream getOutStream();
     public abstract void sendTurn(Turn t);

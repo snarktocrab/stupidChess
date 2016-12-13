@@ -4,10 +4,8 @@ import Piece.Turn;
 
 import java.io.*;
 import java.net.*;
+import java.util.Enumeration;
 
-/**
- * Created by yury on 01.12.16.
- */
 public class Server extends Net{
     public static Server INSTANCE = new Server();
 
@@ -35,6 +33,21 @@ public class Server extends Net{
             if (s != null) s.close();
             if (server != null) server.close();
         } catch (IOException e) { System.err.println("Error: " + e); }
+    }
+
+    public String getIP() {
+        try {
+            Enumeration e = NetworkInterface.getNetworkInterfaces();
+            while (e.hasMoreElements()) {
+                NetworkInterface n = (NetworkInterface) e.nextElement();
+                Enumeration ee = n.getInetAddresses();
+                while (ee.hasMoreElements()) {
+                    InetAddress i = (InetAddress) ee.nextElement();
+                    if (i.getHostAddress().contains("192.168")) return i.getHostAddress();
+                }
+            }
+        } catch (SocketException e) { return null; }
+        return null;
     }
 
     public ObjectOutputStream getOutStream() { return out; }

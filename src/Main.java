@@ -5,9 +5,6 @@ import View.*;
 import Logging.*;
 import java.io.*;
 
-/**
- * Created by daniel on 22.11.16.
- */
 public class Main {
     private static View display = TextDisplay.INSTANCE;
     private static Controller controller = BasicController.INSTANCE;
@@ -19,9 +16,8 @@ public class Main {
 
         File f = new File(System.getProperty("java.class.path"));
         File dir = f.getAbsoluteFile().getParentFile();
-        System.out.println("Your current path is: " + dir.toString());
         String path = dir.toString();
-        //path = "src"; //For running in IntelliJ not in terminal
+        path = "src"; //For running in IntelliJ not in terminal
 
         // Tell the board and controller where to output
         controller.init(display);
@@ -30,8 +26,11 @@ public class Main {
         String[] gameParams = controller.gameType();
         if (gameParams[0].equals("server")) {
             net = Server.INSTANCE;
+            String ip = net.getIP();
+            display.serverPrompt(ip);
             net.init(gameParams[1]);
             colour = true;
+
         }
         else if (gameParams[0].equals("client")) {
             net = Client.INSTANCE;

@@ -1,8 +1,5 @@
 package View;
 
-/**
- * Created by yury on 23.11.16.
- */
 import Piece.Piece;
 import Piece.Board;
 
@@ -12,7 +9,7 @@ public class TextDisplay implements View {
     private Board chessboard = Board.INSTANCE;
 
     // This sets default colour for white figures (this needs for dark backgrounds, where white is black actually)
-    private boolean white = false;
+    protected boolean white = false;
 
     public void startHandler() {
         System.out.println("Game started!");
@@ -66,11 +63,13 @@ public class TextDisplay implements View {
                             break;
                     }
                 } catch (NullPointerException e) {
+                    // This exception means that the tile is empty
                     System.out.print(".");
                 }
             }
             System.out.print("\n");
         }
+        // Printing the grid
         System.out.println("  abcdefgh");
     }
 
@@ -88,10 +87,19 @@ public class TextDisplay implements View {
         System.out.println(s);
     }
 
-    public void netPrompt() { System.out.println("Would you like to play 'local' or to become 'server' or 'client'?" +
-            "\nPlease init the server first!"); }
+    public void netPrompt() {
+        System.out.println("Welcome to the Super Amazing Chess Emulator XXL Deluxe!!!");
+        System.out.println("To play offline, enter 'local'. ");
+        System.out.println("To become the host, enter 'server'.");
+        System.out.println("To connect to a host, enter 'client'.");
+    }
 
-    public void clientPrompt() { System.out.println("Enter server ip:"); }
+    public void clientPrompt() { System.out.print("Enter server ip: "); }
+
+    public void serverPrompt(String ip) {
+        System.out.println("Your ip address is " + ip);
+        System.out.println("Your client player must enter this ip to connect to you and begin the game.");
+    }
 
     public void waitHandler() { System.out.println("Waiting for opponent..."); }
 

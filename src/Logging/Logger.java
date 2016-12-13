@@ -6,9 +6,6 @@ import java.io.*;
 import java.lang.*;
 import java.lang.reflect.Field;
 
-/**
- * Created by yury on 03.12.16.
- */
 public class Logger {
     public static Logger INSTANCE = new Logger();
 

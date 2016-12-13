@@ -4,9 +4,6 @@ import java.io.*;
 import java.net.*;
 import Piece.Turn;
 
-/**
- * Created by yury on 01.12.16.
- */
 public class Client extends Net{
     public static Client INSTANCE = new Client();
 
@@ -29,6 +26,8 @@ public class Client extends Net{
             if (s != null) s.close();
         } catch (IOException e) { System.err.println("Error: " + e); }
     }
+
+    public String getIP() { return null; }
 
     public ObjectOutputStream getOutStream() { return out; }
     public ObjectInputStream getInStream() { return in; }

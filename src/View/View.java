@@ -11,5 +11,6 @@ public interface View {
     void waitHandler();
     void netPrompt();
     void clientPrompt();
+    void serverPrompt(String ip);
     void startHandler();
 }

@@ -1,6 +1,4 @@
-package Piece; /**
- * Created by daniel on 21.11.16.
- */
+package Piece;
 
 import java.lang.ref.WeakReference;
 import java.util.Stack;
@@ -13,6 +11,8 @@ public class Board {
 
     // Singleton
     public static final Board INSTANCE = new Board();
+
+    // Test board please ignore
     //public static final Board INSTANCE = new Board(new Piece[]{new Pawn(0, 6, true, true, true), new King(0, 0, true, true, true),
     //new King(7, 7, false, true, true)}, true);
 
@@ -26,7 +26,6 @@ public class Board {
     public Board(Piece[] newPieces, boolean turn) {
         pieces = newPieces;
         whiteTurn = turn;
-        //lastTurn = "-";
     }
 
     public Board() {
@@ -158,7 +157,9 @@ public class Board {
     }
 
     public boolean isMate(boolean curr_colour) {
+        // No point checking for mate if not in check
         if (!isCheck(curr_colour)) return false;
+
         // Checks all living loyal pieces, attempts to move them to all possible tiles - if at least one move can
         // prevent check, then returns false
         for (Piece p : pieces) {
@@ -278,16 +279,6 @@ public class Board {
     }
 
     public void promote(int id, char type) {
-        /*int i;
-        for (i = 0; i < pieces.length; ++i) {
-            if (pieces[i].getID() == id) break;
-        }
-
-        if (i == pieces.length) {
-            System.err.println("Attempted to promote nonexistent piece at id " + id);
-            return;
-        }*/
-
         switch (type) {
             case 'R':
                 pieces[id] = new Rook(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true);
