@@ -1,20 +1,51 @@
 package Controller;
 
-import Piece.Turn;
-import View.View;
+import Piece.*;
+import View.*;
 
-public interface Controller {
+public abstract class Controller {
+    protected boolean running;
+
+    protected Board chessboard = Board.INSTANCE;
+    protected View display;
+
     // Tell the controller where to output
-    void init(View v);
+    public void init(View v) { display = v; }
 
-    String[] gameType();
+    abstract public String[] gameType();
 
     // Input a command, relay it to Board
-    Turn getCommand();
-    void turnHandler(Turn t);
+    abstract public Turn getCommand();
+    public void turnHandler(Turn t) {
+        switch (t.type) {
+            case 'q':
+                quit();
+                return;
+            case 'p':
+                chessboard.move(t);
+                chessboard.promote(t.pieceID, t.newPiece);
+                break;
+            case 'P':
+                chessboard.take(t);
+                chessboard.promote(t.pieceID, t.newPiece);
+            case 'm':case 'o':case 'O':
+                chessboard.move(t);
+                break;
+            case 't':
+                chessboard.take(t);
+                break;
+            case 'u':
+                chessboard.undo();
+                break;
+            default:
+                return;
+        }
+        display.update();
+    }
 
-    boolean isRunning();
+    // Instead of infinity loop
+    public boolean isRunning() { return running; }
 
-    // End the game
-    void quit();
+    // Quits the program
+    public void quit() { running = false; }
 }

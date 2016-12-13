@@ -5,6 +5,7 @@ import Piece.Board;
 
 public class TextDisplay implements View {
     public static TextDisplay INSTANCE = new TextDisplay();
+    private TextDisplay() {}
 
     private Board chessboard = Board.INSTANCE;
 
