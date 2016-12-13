@@ -46,6 +46,4 @@ public abstract class Piece {
     // Мой любимый метод
     public void die() { alive = false; }
     public void respawn() { alive = true; }
-
-    public void setId(int newID) { thisID = newID; }
 }

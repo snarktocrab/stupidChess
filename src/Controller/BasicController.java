@@ -1,22 +1,22 @@
 package Controller;
 
-import Piece.Board;
+import Piece.*;
 import View.View;
 import java.util.Scanner;
 
 public class BasicController implements Controller {
     private boolean running;
 
-    Board chessboard = Board.INSTANCE;
+    private Board chessboard = Board.INSTANCE;
 
     // Singleton
     public static BasicController INSTANCE = new BasicController();
-    public Scanner in = new Scanner(System.in);
+    private Scanner in = new Scanner(System.in);
 
-    View display;
+    private View display;
 
     // For the runtime loop
-    public BasicController() {
+    private BasicController() {
         running = true;
     }
 
@@ -25,74 +25,123 @@ public class BasicController implements Controller {
         display = v;
     }
 
+    public String[] gameType() {
+        display.netPrompt();
+        String s, params[] = new String[2];
+        s = in.nextLine().toLowerCase();
+        params[0] = s;
+        if (s.equals("local") || s.equals("server")) {
+            params[1] = "";
+        }
+        else if (s.equals("client")) {
+            display.clientPrompt();
+            params[1] = in.nextLine();
+        }
+        return params;
+    }
+
     // Receives a move from input
-    public void getCommand() {
+    public Turn getCommand() {
 
         // Ends the game if checkmate
-        if (chessboard.isMate(chessboard.getTurn()))
-        {
+        if (chessboard.isMate(chessboard.getTurn())) {
             display.mateHandler();
             quit();
-            return;
+            return new Turn('q');
         }
 
         // Informs the current player of check
-        if (chessboard.isCheck(chessboard.getTurn()))
-        {
+        if (chessboard.isCheck(chessboard.getTurn())) {
             display.checkHandler();
-        }
-
-        int id = chessboard.needsPromotion(!chessboard.getTurn());
-
-        if (id >= 0) {
-            display.update();
-
-            String s = in.nextLine();
-            chessboard.promote(id, s.charAt(0));
-
-            display.update();
-            return;
         }
 
         String s = in.nextLine();
 
         // Exit command
         if (s.equals("exit") || s.equals("quit") || s.equals("stop")) {
-            this.quit();
-            return;
+            quit();
+            return new Turn('q');
         }
 
-        // Undo command
+        // Activate this if you want to allow users to make undo
+        /*// Undo command
         if (s.equals("undo")) {
             chessboard.undo();
             display.update();
-            return;
-        }
+            return new Turn('u');
+        }*/
 
         // Control input format
         if (s.length() != 5) {
-            System.err.println("Invalid command.");
-            return;
+            System.err.println("ERROR: Invalid command.");
+            return null;
         }
 
         int x1 = s.charAt(0) - 'a', y1 = s.charAt(1) - '1',
                 x2 = s.charAt(3) - 'a', y2 = s.charAt(4) - '1';
 
         if (x1 > 7 || x2 > 7 || y1 > 7 || y2 > 7 || x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0) {
-            System.err.println("Invalid command.");
-            return;
+            System.err.println("ERROR: Invalid command.");
+            return null;
         }
 
         // Attempts to move, then take the target tile
-        if (!chessboard.move(x1, y1, x2, y2)) {
-            if (!chessboard.take(x1, y1, x2, y2)) {
-                System.err.println("Illegal move." + x1 + " " + y1 + " " + x2 + " " + y2);
-                return;
+        Piece p = chessboard.getPiece(x1, y1).get();
+        if (p == null) return null;
+        Turn t = new Turn ('m', x1, y1, x2, y2, p.getID(), p.getHasMoved());
+        if (!chessboard.move(t)) {
+            t = new Turn ('t', x1, y1, x2, y2, p.getID(), p.getHasMoved());
+            if (!chessboard.take(t)) {
+                System.err.println("ERROR: Illegal move." + (char)(x1 + 'a') + (y1 + 1) + "-" + (char)(x2 + 'a') + (y2 + 1));
+                return null;
             }
+        }
+        display.update();
+
+        int id = chessboard.needsPromotion(!chessboard.getTurn());
+
+        if (id >= 0) {
+            display.promotionHandler();
+            String ss = in.nextLine();
+            chessboard.promote(id, ss.charAt(0));
+
+            display.update();
+            Turn prevt = chessboard.log.pop();
+            if (prevt.type == 'm')
+                return new Turn('p', prevt.x, prevt.y, prevt.x2, prevt.y2, prevt.pieceID, ss.charAt(0));
+            return new Turn('P', prevt.x, prevt.y, prevt.x2, prevt.y2, prevt.pieceID, prevt.targID, ss.charAt(0));
+        }
+
+        return chessboard.log.peek();
+    }
+
+    public void turnHandler(Turn t) {
+        switch (t.type) {
+            case 'q':
+                quit();
+                return;
+            case 'p':
+                chessboard.move(t);
+                chessboard.promote(t.pieceID, t.newPiece);
+                break;
+            case 'P':
+                chessboard.take(t);
+                chessboard.promote(t.pieceID, t.newPiece);
+            case 'm':case 'o':case 'O':
+                chessboard.move(t);
+                break;
+            case 't':
+                chessboard.take(t);
+                break;
+            case 'u':
+                chessboard.undo();
+                break;
+            default:
+                return;
         }
         display.update();
     }
 
-    public boolean isRunning() { return running; } // Вместо бесконечного цикла
-    public void quit() { running = false; } // Завершает программу
+    public boolean isRunning() { return running; } // Instead of infinity loop
+    public void quit() { running = false; } // Quits the program
 }

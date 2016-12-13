@@ -7,4 +7,10 @@ public interface View {
     void update();
     void checkHandler();
     void mateHandler();
+    void promotionHandler();
+    void waitHandler();
+    void netPrompt();
+    void clientPrompt();
+    void serverPrompt(String ip);
+    void startHandler();
 }

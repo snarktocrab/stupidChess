@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="StupidChessJava:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/StupidChessJava_jar</output-path>
+    <root id="archive" name="StupidChessJava.jar">
+      <element id="module-output" name="StupidChessJava" />
+    </root>
+  </artifact>
+</component>
