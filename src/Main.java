@@ -6,7 +6,7 @@ import Logging.*;
 import java.io.*;
 
 public class Main {
-    private static View display = TextDisplay.INSTANCE;
+    private static View display = ScreenDisplay.INSTANCE;
     private static Controller controller = BasicController.INSTANCE;
     private static Board chessboard = Board.INSTANCE;
     private static Net net = null;
