@@ -66,6 +66,7 @@ public class Logger {
                     default:
                         break;
                 }
+                out.flush();
             }
         } catch (IOException e) { System.err.println("Log Error: " + e); }
         catch (NullPointerException e) {}
