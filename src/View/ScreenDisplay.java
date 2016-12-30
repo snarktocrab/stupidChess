@@ -56,11 +56,11 @@ public class ScreenDisplay extends JFrame implements View {
     public void update() {
         boardPane.repaint();
         // Activate this to monitor the state of every board piece
-        /*for (int i = 0; i < chessboard.pieces.length; ++i) {
+        for (int i = 0; i < chessboard.pieces.length; ++i) {
             Piece p = chessboard.pieces[i];
             System.out.println(p.getX() + " " + p.getY() + " " + p.getType() + " " + p.isAlive());
         }
-        System.out.println(chessboard.getTurn());*/
+        //System.out.println("turn");
 
         for (int i = 0; i < 32; ++i) {
             Piece p = chessboard.getPiece(i).get();
