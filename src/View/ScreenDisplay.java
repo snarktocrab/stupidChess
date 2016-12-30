@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -54,19 +56,22 @@ public class ScreenDisplay extends JFrame implements View {
     }
 
     public void update() {
-        boardPane.repaint();
         // Activate this to monitor the state of every board piece
-        for (int i = 0; i < chessboard.pieces.length; ++i) {
+        /*for (int i = 0; i < chessboard.pieces.length; ++i) {
             Piece p = chessboard.pieces[i];
             System.out.println(p.getX() + " " + p.getY() + " " + p.getType() + " " + p.isAlive());
-        }
+        }*/
         //System.out.println("turn");
+
+        boardPane.resetBoard();
 
         for (int i = 0; i < 32; ++i) {
             Piece p = chessboard.getPiece(i).get();
             if (!p.isAlive()) continue;
             boardPane.drawFigure(p.getType(), p.getColour(), p.getX(), p.getY());
         }
+
+        boardPane.repaint();
     }
 
     public void checkHandler() {
@@ -127,46 +132,54 @@ class ChessPanel extends JPanel {
 
     public ChessPanel() {
         try {
-            currentBoard = ImageIO.read(new File("images/board.jpg"));
+            boardImg = ImageIO.read(new File("images/board.jpg"));
         } catch (IOException e) {}
 
         loadImages();
     }
 
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        //super.paintComponent(g);
         g.drawImage(currentBoard, 0, 0, null);
+    }
+
+    public void resetBoard() {
+        ColorModel cm = boardImg.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = boardImg.copyData(null);
+        currentBoard = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
     public void drawFigure(char type, boolean colour, int x, int y) {
         int startX = 27 + 60 * x + x, startY = 27 + 60 * (7 - y) + (7 - y);
 
         if (g == null) g = getGraphics();
+        Graphics2D g2 = currentBoard.createGraphics();
 
         switch (type) {
             case 'K':
-                if (colour) g.drawImage(figuresImg[10], startX, startY, null);
-                else g.drawImage(figuresImg[11], startX, startY, null);
+                if (colour) g2.drawImage(figuresImg[10], startX, startY, null);
+                else g2.drawImage(figuresImg[11], startX, startY, null);
                 break;
             case 'N':
-                if (colour) g.drawImage(figuresImg[4], startX, startY, null);
-                else g.drawImage(figuresImg[5], startX, startY, null);
+                if (colour) g2.drawImage(figuresImg[4], startX, startY, null);
+                else g2.drawImage(figuresImg[5], startX, startY, null);
                 break;
             case 'B':
-                if (colour) g.drawImage(figuresImg[6], startX, startY, null);
-                else g.drawImage(figuresImg[7], startX, startY, null);
+                if (colour) g2.drawImage(figuresImg[6], startX, startY, null);
+                else g2.drawImage(figuresImg[7], startX, startY, null);
                 break;
             case 'p':
-                if (colour) g.drawImage(figuresImg[0], startX, startY, null);
-                else g.drawImage(figuresImg[1], startX, startY, null);
+                if (colour) g2.drawImage(figuresImg[0], startX, startY, null);
+                else g2.drawImage(figuresImg[1], startX, startY, null);
                 break;
             case 'Q':
-                if (colour) g.drawImage(figuresImg[8], startX, startY, null);
-                else g.drawImage(figuresImg[9], startX, startY, null);
+                if (colour) g2.drawImage(figuresImg[8], startX, startY, null);
+                else g2.drawImage(figuresImg[9], startX, startY, null);
                 break;
             case 'R':
-                if (colour) g.drawImage(figuresImg[2], startX, startY, null);
-                else g.drawImage(figuresImg[3], startX, startY, null);
+                if (colour) g2.drawImage(figuresImg[2], startX, startY, null);
+                else g2.drawImage(figuresImg[3], startX, startY, null);
                 break;
         }
     }
