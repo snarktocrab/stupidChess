@@ -62,13 +62,10 @@ public class ScreenDisplay extends JFrame implements View {
         }
         System.out.println(chessboard.getTurn());*/
 
-        for (int j = 7; j >= 0; --j) {
-            for (int i = 0; i < 8; ++i) {
-                Piece p = chessboard.getPiece(i, j).get();
-                if (p != null) {
-                    boardPane.drawFigure(p.getType(), p.getColour(), i, j);
-                }
-            }
+        for (int i = 0; i < 32; ++i) {
+            Piece p = chessboard.getPiece(i).get();
+            if (!p.isAlive()) continue;
+            boardPane.drawFigure(p.getType(), p.getColour(), p.getX(), p.getY());
         }
     }
 
@@ -138,7 +135,7 @@ class ChessPanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //g.drawImage(currentBoard, 0, 0, null);
+        g.drawImage(currentBoard, 0, 0, null);
     }
 
     public void drawFigure(char type, boolean colour, int x, int y) {
