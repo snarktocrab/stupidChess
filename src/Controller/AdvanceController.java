@@ -1,5 +1,6 @@
 package Controller;
 
+import Logging.Logger;
 import Piece.*;
 import View.*;
 
@@ -14,7 +15,10 @@ public class AdvanceController extends Controller {
     private AdvanceController() { running = true; }
 
     public String[] gameType() {
+        logger.log("Entered Controller - 'gameType'", true);
+        logger.log("Some text");
         // TODO: Add code here
+        logger.log("Exited", false);
         return null;
     }
 

@@ -1,7 +1,6 @@
 package Controller;
 
 import Piece.*;
-import View.View;
 import java.util.Scanner;
 
 public class BasicController extends Controller {
@@ -15,6 +14,8 @@ public class BasicController extends Controller {
     }
 
     public String[] gameType() {
+        logger.log("Entered Controller - 'gameType'", true);
+
         display.netPrompt();
         String s, params[] = new String[2];
         s = in.nextLine().toLowerCase();
@@ -26,11 +27,14 @@ public class BasicController extends Controller {
             display.clientPrompt();
             params[1] = in.nextLine();
         }
+
+        logger.log("Exited", false);
         return params;
     }
 
     // Receives a move from input
     public Turn getCommand() {
+        logger.log("Entered Controller - 'getCommand'");
 
         // Ends the game if checkmate
         if (chessboard.isMate(chessboard.getTurn())) {

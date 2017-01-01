@@ -1,5 +1,6 @@
 package Controller;
 
+import Logging.Logger;
 import Piece.*;
 import View.*;
 
@@ -8,6 +9,7 @@ public abstract class Controller {
 
     protected Board chessboard = Board.INSTANCE;
     protected View display;
+    protected Logger logger = Logger.INSTANCE;
 
     // Tell the controller where to output
     public void init(View v) { display = v; }

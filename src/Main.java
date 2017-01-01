@@ -6,22 +6,24 @@ import Logging.*;
 import java.io.*;
 
 public class Main {
+    private static Logger logger = Logger.INSTANCE;
     private static View display = ScreenDisplay.INSTANCE;
     private static Controller controller = BasicController.INSTANCE;
     private static Board chessboard = Board.INSTANCE;
     private static Net net = null;
-    private static Logger logger = Logger.INSTANCE;
     public static void main(String[] args) {
         boolean colour = true;
 
         File f = new File(System.getProperty("java.class.path"));
         File dir = f.getAbsoluteFile().getParentFile();
         String path = dir.toString();
-        path = "src"; //For running in IntelliJ not in terminal
+        path = ""; //For running in IntelliJ not in terminal
 
         // Tell the board and controller where to output
+        logger.init(path);
         controller.init(display);
-        logger.init("logging", path);
+
+        logger.log("Entered 'main'", true);
 
         String[] gameParams = controller.gameType();
         if (gameParams[0].equals("server")) {
@@ -46,18 +48,18 @@ public class Main {
 
             if (net == null) {
                 currTurn = controller.getCommand();
-                logger.log(currTurn, "(our)");
+                logger.log(currTurn);
             }
             else if (chessboard.getTurn() == colour) {
                 currTurn = controller.getCommand();
-                logger.log(currTurn, "(our)");
+                logger.log(currTurn);
                 if (currTurn != null)
                     net.sendTurn(currTurn);
             }
             else {
                 display.waitHandler();
                 currTurn = net.receiveTurn();
-                logger.log(currTurn, "(from opponent)");
+                logger.log(currTurn);
                 controller.turnHandler(currTurn);
             }
         }
