@@ -23,7 +23,7 @@ public class Main {
         logger.init(path);
         controller.init(display);
 
-        logger.log("Entered 'main'", true);
+        logger.log("Starting main function", true);
 
         String[] gameParams = controller.gameType();
         if (gameParams[0].equals("server")) {
@@ -64,6 +64,7 @@ public class Main {
             }
         }
 
+        logger.log("Exiting our program", false);
         if (net != null) net.quit();
         logger.quit();
     }

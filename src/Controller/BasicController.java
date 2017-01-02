@@ -14,7 +14,7 @@ public class BasicController extends Controller {
     }
 
     public String[] gameType() {
-        logger.log("Entered Controller - 'gameType'", true);
+        logger.log("Collecting information about game type...", true);
 
         display.netPrompt();
         String s, params[] = new String[2];
@@ -28,13 +28,13 @@ public class BasicController extends Controller {
             params[1] = in.nextLine();
         }
 
-        logger.log("Exited", false);
+        logger.log("Collected!", false);
         return params;
     }
 
     // Receives a move from input
     public Turn getCommand() {
-        logger.log("Entered Controller - 'getCommand'");
+        logger.log("Getting command...");
 
         // Ends the game if checkmate
         if (chessboard.isMate(chessboard.getTurn())) {

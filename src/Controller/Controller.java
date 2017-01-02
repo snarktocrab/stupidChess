@@ -19,6 +19,7 @@ public abstract class Controller {
     // Input a command, relay it to Board
     abstract public Turn getCommand();
     public void turnHandler(Turn t) {
+        logger.log("Handling turn...");
         switch (t.type) {
             case 'q':
                 quit();
