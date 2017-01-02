@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -21,8 +23,6 @@ public class ScreenDisplay extends JFrame implements View {
     private int width = 545, height = 545 + 26;
     private ChessPanel boardPane;
     private JPanel settingsPane;
-
-    private MessageDialog out;
 
     private Board chessboard = Board.INSTANCE;
 
@@ -44,15 +44,12 @@ public class ScreenDisplay extends JFrame implements View {
         settingsPane = new JPanel();
         contentPane.add(boardPane);
         boardPane.setBounds(0, 0, width, height);
+        boardPane.setVisible(false);
         contentPane.add(settingsPane);
-        settingsPane.setVisible(false);
+        settingsPane.setBounds(0, 0, width, height);
+        settingsPane.setVisible(true);
 
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {}
         this.setVisible(true);
-
-        update();
     }
 
     public void update() {
@@ -75,24 +72,11 @@ public class ScreenDisplay extends JFrame implements View {
     }
 
     public void checkHandler() {
-        if (out == null)
-            out = new MessageDialog(this, "Check!");
-        out.setMessage("Check!");
-        out.setVisible(true);
+        //TODO: Add code here
     }
 
     public void mateHandler() {
-        String s = "Checkmate!\n";
-        if (!chessboard.getTurn())
-            s += "White ";
-        else
-            s += "Black ";
-        s += "wins!";
-
-        if (out == null)
-            out = new MessageDialog(this, s);
-        out.setMessage(s);
-        out.setVisible(true);
+        //TODO: Add code here
     }
 
     public void promotionHandler() {
@@ -121,6 +105,9 @@ public class ScreenDisplay extends JFrame implements View {
         boardPane.setVisible(true);
         update();
     }
+
+    public JPanel getSettingsPanel() { return settingsPane; }
+    public ChessPanel getChessPanel() { return boardPane; }
 }
 
 class ChessPanel extends JPanel {
@@ -129,6 +116,9 @@ class ChessPanel extends JPanel {
     private BufferedImage[] figuresImg = new BufferedImage[12];
 
     private Graphics g;
+
+    private static final int tileWidth = 60, tileHeight = 60;
+    private static final Point startPoint = new Point(27, 27);
 
     public ChessPanel() {
         try {
@@ -151,7 +141,7 @@ class ChessPanel extends JPanel {
     }
 
     public void drawFigure(char type, boolean colour, int x, int y) {
-        int startX = 27 + 60 * x + x, startY = 27 + 60 * (7 - y) + (7 - y);
+        int startX = startPoint.x + tileWidth * x + x, startY = startPoint.y + tileHeight * (7 - y) + (7 - y);
 
         if (g == null) g = getGraphics();
         Graphics2D g2 = currentBoard.createGraphics();
@@ -199,32 +189,5 @@ class ChessPanel extends JPanel {
             figuresImg[10] = ImageIO.read(new File("images/king-w.png"));
             figuresImg[11] = ImageIO.read(new File("images/king-b.png"));
         } catch (IOException e) {}
-    }
-}
-
-class MessageDialog extends JDialog {
-    private int w = 260, h = 160 + 26;
-    private String message;
-
-    public void setMessage(String s) { message = s; }
-
-    public MessageDialog(JFrame owner, String s) {
-        super(owner, "Message", true);
-
-        message = s;
-
-        add(new JLabel("<html><h1><b>" + message + "</b></h1></html>"), BorderLayout.CENTER);
-
-        JButton ok = new JButton("OK");
-        ok.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                setVisible(false);
-            }
-        });
-
-        JPanel panel = new JPanel();
-        panel.add(ok);
-        add(panel, BorderLayout.SOUTH);
-        setSize(w, h);
     }
 }

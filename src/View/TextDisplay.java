@@ -3,6 +3,8 @@ package View;
 import Piece.Piece;
 import Piece.Board;
 
+import javax.swing.*;
+
 public class TextDisplay implements View {
     public static TextDisplay INSTANCE = new TextDisplay();
     private TextDisplay() {}
@@ -105,4 +107,7 @@ public class TextDisplay implements View {
     public void waitHandler() { System.out.println("Waiting for opponent..."); }
 
     public void promotionHandler() { System.out.println("You can promote your pawn! Type 'Q' for Queen, 'R' for Rook, 'N' for Knight and 'B' for Bishop"); }
+
+    public JPanel getSettingsPanel() { return null; }
+    public ChessPanel getChessPanel() { return  null; }
 }
