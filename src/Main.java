@@ -8,9 +8,10 @@ import java.io.*;
 public class Main {
     private static Logger logger = Logger.INSTANCE;
     private static View display = ScreenDisplay.INSTANCE;
-    private static Controller controller = BasicController.INSTANCE;
+    private static Controller controller = AdvanceController.INSTANCE;
     private static Board chessboard = Board.INSTANCE;
     private static Net net = null;
+
     public static void main(String[] args) {
         boolean colour = true;
 
