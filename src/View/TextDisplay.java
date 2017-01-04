@@ -90,14 +90,15 @@ public class TextDisplay implements View {
         System.out.println(s);
     }
 
-    public void netPrompt() {
+    public String netPrompt() {
         System.out.println("Welcome to the Super Amazing Chess Emulator XXL Deluxe!!!");
         System.out.println("To play offline, enter 'local'. ");
         System.out.println("To become the host, enter 'server'.");
         System.out.println("To connect to a host, enter 'client'.");
+        return "";
     }
 
-    public void clientPrompt() { System.out.print("Enter server ip: "); }
+    public String clientPrompt() { System.out.print("Enter server ip: "); return "";}
 
     public void serverPrompt(String ip) {
         System.out.println("Your ip address is " + ip);
@@ -106,7 +107,10 @@ public class TextDisplay implements View {
 
     public void waitHandler() { System.out.println("Waiting for opponent..."); }
 
-    public void promotionHandler() { System.out.println("You can promote your pawn! Type 'Q' for Queen, 'R' for Rook, 'N' for Knight and 'B' for Bishop"); }
+    public String promotionHandler() {
+        System.out.println("You can promote your pawn! Type 'Q' for Queen, 'R' for Rook, 'N' for Knight and 'B' for Bishop");
+        return "";
+    }
 
     public JPanel getSettingsPanel() { return null; }
     public ChessPanel getChessPanel() { return  null; }

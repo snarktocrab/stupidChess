@@ -38,7 +38,7 @@ public class ScreenDisplay extends JFrame implements View {
         contentPane.setLayout(null);
 
         setContentPane(contentPane);
-        setBounds(20, 20, width, height);
+        setBounds(200, 100, width, height);
 
         boardPane = new ChessPanel();
         settingsPane = new JPanel();
@@ -72,32 +72,60 @@ public class ScreenDisplay extends JFrame implements View {
     }
 
     public void checkHandler() {
-        //TODO: Add code here
+        JOptionPane.showMessageDialog(this, "Check!", "Watch out!", JOptionPane.WARNING_MESSAGE);
     }
 
     public void mateHandler() {
-        //TODO: Add code here
+        String s = "Checkmate!\n";
+        if (!chessboard.getTurn())
+            s += "White ";
+        else
+            s += "Black ";
+        s += "wins!";
+        JOptionPane.showMessageDialog(this, s, "Game over!", JOptionPane.WARNING_MESSAGE);
     }
 
-    public void promotionHandler() {
-        // TODO: Add code here
+    public String promotionHandler() {
+        Object[] possibilities = {"Queen", "Rook", "Knight", "Bishop"};
+        String s = (String)JOptionPane.showInputDialog(this, "Please, choose figure, you want your pawn to be promoted:",
+                "Promotion!", JOptionPane.PLAIN_MESSAGE, null, possibilities, possibilities[0]);
+        if (s == null) s = "Queen";
+        if (s.equals("Knight")) s = "NKnight"; // Костыль (у коня в обозначении первый символ N)
+        return s;
     }
 
     public void waitHandler() {
-        // TODO: Add code here
+        int style = Font.BOLD, size = 14;
+        int x = width / 2 - 30, y = 20;
+        Graphics g = boardPane.getGraphics();
+        Font f = new Font("Dialog", style, size);
+        g.setFont(f);
+        g.drawString("Waiting...", x, y);
     }
 
-    public void netPrompt() {
-        // TODO: Add code here
-        // Here we will use settingsPane
+    public String netPrompt() {
+        Object[] possibilities = {"Local game", "Become a server", "Become a client"};
+        String s = (String)JOptionPane.showInputDialog(this, "Choose the type of game:", "Welcome!",
+                JOptionPane.PLAIN_MESSAGE, null, possibilities, possibilities[0]);
+        if (s == null) return null;
+        if (s.equals(possibilities[0])) s = "local";
+        else if (s.equals(possibilities[1])) s = "server";
+        else s = "client";
+
+        return s;
     }
 
-    public void clientPrompt() {
-        // TODO: Add code here
+    public String clientPrompt() {
+        String ip;
+        do {
+            ip = (String) JOptionPane.showInputDialog(this, "Enter server IP address:", "Connecting to a server",
+                    JOptionPane.PLAIN_MESSAGE, null, null, "192.168.");
+        } while (ip == null);
+        return ip;
     }
 
     public void serverPrompt(String ip) {
-        // TODO: Add code here
+        JOptionPane.showMessageDialog(this, "Your ip address is:\n" + ip);
     }
 
     public void startHandler() {

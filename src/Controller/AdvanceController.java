@@ -17,6 +17,7 @@ public class AdvanceController extends Controller {
     private static final Point startPoint = new Point(27, 27);
 
     private Stack<String> tiles = new Stack<>();
+    private boolean currPlayer, wasInformed, hasMateChecked, isFirstClick;
 
     //Singleton
     public static AdvanceController INSTANCE = new AdvanceController();
@@ -27,17 +28,11 @@ public class AdvanceController extends Controller {
     public void init(View v) {
         super.init(v);
 
-        JPanel settingsPane = v.getSettingsPanel();
-        settingsPane.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent mouseEvent) {
+        wasInformed = false;
+        hasMateChecked = false;
+        isFirstClick = true;
 
-            }
-
-            public void mousePressed(MouseEvent mouseEvent) {}
-            public void mouseReleased(MouseEvent mouseEvent) {}
-            public void mouseEntered(MouseEvent mouseEvent) {}
-            public void mouseExited(MouseEvent mouseEvent) {}
-        });
+        currPlayer = chessboard.getTurn();
 
         JPanel boardPane = v.getChessPanel();
         boardPane.addMouseListener(new MouseListener() {
@@ -50,9 +45,18 @@ public class AdvanceController extends Controller {
 
                 x -= startPoint.x;
                 y -= startPoint.y;
-                int borderX = x / (tileWidth + 1), borderY = y / (tileHeight + 1);
+                int boardX = x / (tileWidth + 1), boardY = 7 - y / (tileHeight + 1);
 
-                String s = "" + (char)(borderX + 'a') + (8 - borderY);
+                if (isFirstClick) {
+                    // If we first click on empty tile
+                    if (chessboard.getPiece(boardX, boardY).get() == null) return;
+                    isFirstClick = false;
+                }
+                else {
+                    isFirstClick = true;
+                }
+
+                String s = "" + (char)(boardX + 'a') + (boardY + 1);
 
                 tiles.push(s);
 
@@ -71,14 +75,46 @@ public class AdvanceController extends Controller {
     public String[] gameType() {
         logger.log("Collecting information about game type...", true);
 
-        String params[] = new String[2];
-        params[0] = "local";
+        String s = display.netPrompt();
+        String[] params = new String[2];
+        if (s == null) {
+            quit();
+            params[0] = "null";
+            return params;
+        }
+        params[0] = s;
+        if (params[0].equals("client")) {
+            params[1] = display.clientPrompt();
+        }
+        else {
+            params[1] = "";
+        }
 
         logger.log("Collected!", false);
         return params;
     }
 
     public Turn getCommand() {
+        if (chessboard.getTurn() != currPlayer) {
+            currPlayer = chessboard.getTurn();
+            wasInformed = false;
+            hasMateChecked = false;
+        }
+
+        // Ends the game if checkmate
+        if (!hasMateChecked && chessboard.isMate(chessboard.getTurn())) {
+            display.mateHandler();
+            super.quit();
+            return new Turn('q');
+        }
+        hasMateChecked = true;
+
+        // Informs the current player of check
+        if (!wasInformed && chessboard.isCheck(chessboard.getTurn())) {
+            display.checkHandler();
+            wasInformed = true;
+        }
+
         // Getting command from screen
         if (tiles.size() < 2)
             return null;
@@ -95,18 +131,6 @@ public class AdvanceController extends Controller {
         // Control input format
         if (s.length() != 5) {
             return null;
-        }
-
-        // Ends the game if checkmate
-        if (chessboard.isMate(chessboard.getTurn())) {
-            display.mateHandler();
-            super.quit();
-            return new Turn('q');
-        }
-
-        // Informs the current player of check
-        if (chessboard.isCheck(chessboard.getTurn())) {
-            display.checkHandler();
         }
 
         int x1 = s.charAt(0) - 'a', y1 = s.charAt(1) - '1',
@@ -133,8 +157,7 @@ public class AdvanceController extends Controller {
         int id = chessboard.needsPromotion(!chessboard.getTurn());
 
         if (id >= 0) {
-            display.promotionHandler();
-            String ss = "Q"; // TODO: Add possibility to chose figure
+            String ss = display.promotionHandler();
             chessboard.promote(id, ss.charAt(0));
 
             display.update();
