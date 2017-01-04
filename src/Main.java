@@ -68,5 +68,6 @@ public class Main {
         logger.log("Exiting our program", false);
         if (net != null) net.quit();
         logger.quit();
+        System.exit(0);
     }
 }
