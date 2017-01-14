@@ -6,6 +6,8 @@ import java.util.Stack;
 public class Board {
 
     boolean whiteTurn;
+    private Piece selectedFigure;
+    private char[][] boardState = new char[8][8];
 
     //String lastTurn;
 
@@ -31,6 +33,7 @@ public class Board {
     public Board() {
         whiteTurn = true;
         pieces = new Piece[32];
+        setBoardState();
         //lastTurn = "-";
         // Пешки
         for (int i = 0; i < 8; ++i)
@@ -296,5 +299,32 @@ public class Board {
                 System.err.println("Illegal promotion, use RNBQ");
         }
     }
+
+    public void setSelectedFigure(Piece p) {
+        selectedFigure = p;
+
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                if (p.x == i && p.y == 7 - j) {
+                    boardState[i][j] = 's';
+                } else if (p.checkAttack(i, 7 - j)) {
+                    boardState[i][j] = 'a';
+                } else if (p.checkMove(i, j - 7)) {
+                    boardState[i][j] = 'm';
+                }
+            }
+        }
+    }
+
+    public void setBoardState() {
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                boardState[i][j] = '.';
+            }
+        }
+    }
+
     public boolean getTurn() { return whiteTurn; }
+    public Piece getSelectedFigure() { return selectedFigure; }
+    public char[][] getBoardState() { return boardState; }
 }

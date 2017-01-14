@@ -48,8 +48,11 @@ public class AdvanceController extends Controller {
                 int boardX = x / (tileWidth + 1), boardY = 7 - y / (tileHeight + 1);
 
                 if (isFirstClick) {
+                    Piece p = chessboard.getPiece(boardX, boardY).get();
+
                     // If we first click on empty tile
-                    if (chessboard.getPiece(boardX, boardY).get() == null) return;
+                    if (p == null) return;
+                    chessboard.setSelectedFigure(p);
                     isFirstClick = false;
                 }
                 else {
@@ -148,7 +151,8 @@ public class AdvanceController extends Controller {
         if (!chessboard.move(t)) {
             t = new Turn ('t', x1, y1, x2, y2, p.getID(), p.getHasMoved());
             if (!chessboard.take(t)) {
-                System.err.println("ERROR: Illegal move." + (char)(x1 + 'a') + (y1 + 1) + "-" + (char)(x2 + 'a') + (y2 + 1));
+                chessboard.setBoardState();
+                //System.err.println("ERROR: Illegal move." + (char)(x1 + 'a') + (y1 + 1) + "-" + (char)(x2 + 'a') + (y2 + 1));
                 return null;
             }
         }

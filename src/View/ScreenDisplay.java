@@ -141,7 +141,10 @@ public class ScreenDisplay extends JFrame implements View {
 class ChessPanel extends JPanel {
     private BufferedImage currentBoard;
     private BufferedImage boardImg;
+    private BufferedImage attack, move, select;
     private BufferedImage[] figuresImg = new BufferedImage[12];
+
+    private Board chessboard = Board.INSTANCE;
 
     private Graphics g;
 
@@ -158,6 +161,7 @@ class ChessPanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         //super.paintComponent(g);
+        drawFrames();
         g.drawImage(currentBoard, 0, 0, null);
     }
 
@@ -202,6 +206,26 @@ class ChessPanel extends JPanel {
         }
     }
 
+    public void drawFrames() {
+        char[][] boardState = chessboard.getBoardState();
+
+        Graphics2D g2 = (Graphics2D)currentBoard.getGraphics();
+
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                char ch = boardState[i][j];
+                int startX = startPoint.x + tileWidth * i + i, startY = startPoint.y + tileHeight * (7 - i) + (7 - i);
+                if (ch == 'a') {
+                    g2.drawImage(attack, startX, startY, null);
+                } else if (ch == 'm') {
+                    g2.drawImage(move, startX, startY, null);
+                } else if (ch == 's') {
+                    g2.drawImage(select, startX, startY, null);
+                }
+            }
+        }
+    }
+
     private void loadImages() {
         try {
             figuresImg[0] = ImageIO.read(new File("images/pawn-w.png"));
@@ -216,6 +240,10 @@ class ChessPanel extends JPanel {
             figuresImg[9] = ImageIO.read(new File("images/queen-b.png"));
             figuresImg[10] = ImageIO.read(new File("images/king-w.png"));
             figuresImg[11] = ImageIO.read(new File("images/king-b.png"));
+
+            attack = ImageIO.read(new File("images/red-sqr.png"));
+            move = ImageIO.read(new File("images/blue-sqr.png"));
+            select = ImageIO.read(new File("images/yellow-sqr.png"));
         } catch (IOException e) {}
     }
 }
