@@ -302,15 +302,16 @@ public class Board {
 
     public void setSelectedFigure(Piece p) {
         selectedFigure = p;
+        if (p == null) return;
 
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
-                if (p.x == i && p.y == 7 - j) {
-                    boardState[i][j] = 's';
-                } else if (p.checkAttack(i, 7 - j)) {
-                    boardState[i][j] = 'a';
-                } else if (p.checkMove(i, j - 7)) {
-                    boardState[i][j] = 'm';
+                if (p.x == i && p.y == j) {
+                    boardState[i][7 - j] = 's';
+                } else if (p.checkAttack(i, j)) {
+                    boardState[i][7 - j] = 'a';
+                } else if (p.checkMove(i, j)) {
+                    boardState[i][7 - j] = 'm';
                 }
             }
         }

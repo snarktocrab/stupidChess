@@ -163,6 +163,8 @@ class ChessPanel extends JPanel {
         //super.paintComponent(g);
         drawFrames();
         g.drawImage(currentBoard, 0, 0, null);
+        chessboard.setSelectedFigure(null);
+        chessboard.setBoardState();
     }
 
     public void resetBoard() {
@@ -207,8 +209,9 @@ class ChessPanel extends JPanel {
     }
 
     public void drawFrames() {
-        char[][] boardState = chessboard.getBoardState();
+        if (chessboard.getSelectedFigure() == null) return;
 
+        char[][] boardState = chessboard.getBoardState();
         Graphics2D g2 = (Graphics2D)currentBoard.getGraphics();
 
         for (int i = 0; i < 8; ++i) {

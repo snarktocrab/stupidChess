@@ -7,10 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb8ef0e5-8598-45ab-87d8-52d1ca04e48d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/blue-sqr.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/red-sqr.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/yellow-sqr.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/AdvanceController.java" afterPath="$PROJECT_DIR$/src/Controller/AdvanceController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Piece/Board.java" afterPath="$PROJECT_DIR$/src/Piece/Board.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/View/ScreenDisplay.java" afterPath="$PROJECT_DIR$/src/View/ScreenDisplay.java" />
@@ -46,11 +42,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ScreenDisplay.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ScreenDisplay.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/View/ScreenDisplay.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="216" column="43" selection-start-line="216" selection-start-column="43" selection-end-line="216" selection-end-column="43" />
+            <state relative-caret-position="373">
+              <caret line="166" column="35" selection-start-line="166" selection-start-column="35" selection-end-line="166" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -59,8 +55,8 @@
       <file leaf-file-name="AdvanceController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller/AdvanceController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="54" column="20" selection-start-line="54" selection-start-column="20" selection-end-line="54" selection-end-column="20" />
+            <state relative-caret-position="892">
+              <caret line="154" column="40" selection-start-line="154" selection-start-column="40" selection-end-line="154" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -114,11 +110,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Board.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Board.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Piece/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="308" column="43" selection-start-line="308" selection-start-column="43" selection-end-line="308" selection-end-column="43" />
+            <state relative-caret-position="222">
+              <caret line="312" column="47" selection-start-line="312" selection-start-column="47" selection-end-line="312" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -127,8 +123,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
-              <caret line="28" column="52" selection-start-line="28" selection-start-column="52" selection-end-line="28" selection-end-column="52" />
+            <state relative-caret-position="107">
+              <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -174,9 +170,9 @@
         <option value="$PROJECT_DIR$/src/View/View.java" />
         <option value="$PROJECT_DIR$/src/View/TextDisplay.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
+        <option value="$PROJECT_DIR$/src/View/ScreenDisplay.java" />
         <option value="$PROJECT_DIR$/src/Controller/AdvanceController.java" />
         <option value="$PROJECT_DIR$/src/Piece/Board.java" />
-        <option value="$PROJECT_DIR$/src/View/ScreenDisplay.java" />
       </list>
     </option>
   </component>
@@ -297,25 +293,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="View" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="StupidChessJava" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="StupidChessJava" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Logging" />
+              <option name="myItemId" value="Piece" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -811,12 +789,12 @@
       <workItem from="1483182539982" duration="7406000" />
       <workItem from="1483359458736" duration="27550000" />
       <workItem from="1483722928115" duration="1226000" />
-      <workItem from="1484416427752" duration="2766000" />
+      <workItem from="1484416427752" duration="5061000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="193227000" />
+    <option name="totallyTimeSpent" value="195522000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1366" height="743" extended-state="6" />
@@ -859,9 +837,9 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39130434" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -869,11 +847,11 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41223833" sideWeight="0.4969697" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4074074" sideWeight="0.4969697" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.093939394" sideWeight="0.48602486" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.093939394" sideWeight="0.48602486" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13939394" sideWeight="0.51397514" order="2" side_tool="true" content_ui="tabs" />
     </layout-to-restore>
@@ -918,20 +896,16 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Controller/AdvanceController.java</url>
-          <line>47</line>
+          <line>50</line>
           <properties />
-          <option name="timeStamp" value="247" />
+          <option name="timeStamp" value="250" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="248" />
+      <option name="time" value="251" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="piece.getColour()" language="JAVA" />
-        <watch expression="piece.getType()" language="JAVA" />
-        <watch expression="piece.getX()" language="JAVA" />
-        <watch expression="piece.getY()" language="JAVA" />
-        <watch expression="chessboard.getPiece(boardX, boardY).get()" language="JAVA" />
+        <watch expression="p" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
@@ -1134,13 +1108,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Piece/Pawn.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="2" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///opt/java/jdk1.8.0_73/src.zip!/java/util/Stack.java" />
     <entry file="file://$PROJECT_DIR$/src/Piece/Turn.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1260,18 +1227,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Piece/Pawn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="36" column="64" selection-start-line="36" selection-start-column="64" selection-end-line="36" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="28" column="52" selection-start-line="28" selection-start-column="52" selection-end-line="28" selection-end-column="52" />
+        <state relative-caret-position="107">
+          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/View/ScreenDisplay.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="166" column="35" selection-start-line="166" selection-start-column="35" selection-end-line="166" selection-end-column="35" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/AdvanceController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="54" column="20" selection-start-line="54" selection-start-column="20" selection-end-line="54" selection-end-column="20" />
+        <state relative-caret-position="892">
+          <caret line="154" column="40" selection-start-line="154" selection-start-column="40" selection-end-line="154" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1280,16 +1263,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Piece/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="308" column="43" selection-start-line="308" selection-start-column="43" selection-end-line="308" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/View/ScreenDisplay.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="216" column="43" selection-start-line="216" selection-start-column="43" selection-end-line="216" selection-end-column="43" />
+        <state relative-caret-position="222">
+          <caret line="312" column="47" selection-start-line="312" selection-start-column="47" selection-end-line="312" selection-end-column="47" />
           <folding />
         </state>
       </provider>

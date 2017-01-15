@@ -53,9 +53,12 @@ public class AdvanceController extends Controller {
                     // If we first click on empty tile
                     if (p == null) return;
                     chessboard.setSelectedFigure(p);
+                    display.update();
                     isFirstClick = false;
                 }
                 else {
+                    chessboard.setBoardState();
+                    chessboard.setSelectedFigure(null);
                     isFirstClick = true;
                 }
 
@@ -152,6 +155,7 @@ public class AdvanceController extends Controller {
             t = new Turn ('t', x1, y1, x2, y2, p.getID(), p.getHasMoved());
             if (!chessboard.take(t)) {
                 chessboard.setBoardState();
+                chessboard.setSelectedFigure(null);
                 //System.err.println("ERROR: Illegal move." + (char)(x1 + 'a') + (y1 + 1) + "-" + (char)(x2 + 'a') + (y2 + 1));
                 return null;
             }
