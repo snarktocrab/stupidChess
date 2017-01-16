@@ -16,7 +16,7 @@ public class AdvanceController extends Controller {
     private static final int tileWidth = 60, tileHeight = 60;
     private static final Point startPoint = new Point(27, 27);
 
-    private Stack<String> tiles = new Stack<>();
+    private String newCommand = "";
     private boolean currPlayer, wasInformed, hasMateChecked, isFirstClick;
 
     //Singleton
@@ -60,11 +60,12 @@ public class AdvanceController extends Controller {
                     chessboard.setBoardState();
                     chessboard.setSelectedFigure(null);
                     isFirstClick = true;
+                    newCommand += "-";
                 }
 
                 String s = "" + (char)(boardX + 'a') + (boardY + 1);
 
-                tiles.push(s);
+                newCommand += s;
 
                 try {
                     Thread.sleep(100);
@@ -121,23 +122,18 @@ public class AdvanceController extends Controller {
             wasInformed = true;
         }
 
-        // Getting command from screen
-        if (tiles.size() < 2)
-            return null;
-        String s2 = tiles.pop(), s1 = tiles.pop();
-        String s = s1 + "-" + s2;
-        tiles.clear();
-
-        // Exit command
-        if (s.equals("exit") || s.equals("quit") || s.equals("stop")) {
-            super.quit();
-            return new Turn('q');
-        }
-
         // Control input format
-        if (s.length() != 5) {
+        if (newCommand.length() != 5) {
             return null;
         }
+
+        // Getting command from screen
+        // System.out.println(newCommand);
+        // Эту строку не удалять - она создаёт копию строки newCommand в s вместо того, чтобы
+        // создавать на неё ссылку.
+        String s = new String(newCommand);
+        newCommand = "";
+
 
         int x1 = s.charAt(0) - 'a', y1 = s.charAt(1) - '1',
                 x2 = s.charAt(3) - 'a', y2 = s.charAt(4) - '1';
