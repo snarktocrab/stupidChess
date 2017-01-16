@@ -50,8 +50,8 @@ public class AdvanceController extends Controller {
                 if (isFirstClick) {
                     Piece p = chessboard.getPiece(boardX, boardY).get();
 
-                    // If we first click on empty tile
-                    if (p == null) return;
+                    // If we first click on empty tile or this figure isn't ours
+                    if (p == null || p.getColour() != chessboard.getTurn()) return;
                     chessboard.setSelectedFigure(p);
                     display.update();
                     isFirstClick = false;
@@ -59,6 +59,7 @@ public class AdvanceController extends Controller {
                 else {
                     chessboard.setBoardState();
                     chessboard.setSelectedFigure(null);
+                    display.update();
                     isFirstClick = true;
                 }
 

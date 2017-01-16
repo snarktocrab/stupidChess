@@ -15,6 +15,7 @@ public interface View {
     String  clientPrompt();
     void serverPrompt(String ip);
     void startHandler();
+    boolean colourPrompt();
 
     JPanel getSettingsPanel();
     ChessPanel getChessPanel();

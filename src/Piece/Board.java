@@ -308,10 +308,11 @@ public class Board {
             for (int j = 0; j < 8; ++j) {
                 if (p.x == i && p.y == j) {
                     boardState[i][j] = 's';
-                } else if (p.checkAttack(i, j)) {
-                    boardState[i][j] = 'a';
                 } else if (p.checkMove(i, j)) {
                     boardState[i][j] = 'm';
+                } else if (p.checkAttack(i, j)) {
+                    if (p.getType() == 'p' && getPiece(i, j).get() == null) continue;
+                    boardState[i][j] = 'a';
                 }
             }
         }

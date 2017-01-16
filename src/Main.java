@@ -7,8 +7,8 @@ import java.io.*;
 
 public class Main {
     private static Logger logger = Logger.INSTANCE;
-    private static View display = TextDisplay.INSTANCE;
-    private static Controller controller = BasicController.INSTANCE;
+    private static View display = ScreenDisplay.INSTANCE;
+    private static Controller controller = AdvanceController.INSTANCE;
     private static Board chessboard = Board.INSTANCE;
     private static Net net = null;
 
@@ -32,13 +32,21 @@ public class Main {
             String ip = net.getIP();
             display.serverPrompt(ip);
             net.init(gameParams[1]);
-            colour = true;
+            colour = display.colourPrompt();
 
+            try {
+                net.getOutStream().writeObject(colour);
+                net.getOutStream().flush();
+            } catch (IOException e) { System.err.println("Error: " + e); }
         }
         else if (gameParams[0].equals("client")) {
             net = Client.INSTANCE;
             net.init(gameParams[1]);
-            colour = false;
+
+            try {
+                colour = !(boolean)net.getInStream().readObject();
+            } catch (IOException e) { System.err.println("Error: " + e); }
+            catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); }
         }
 
         display.startHandler();

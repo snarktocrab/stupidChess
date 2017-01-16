@@ -134,6 +134,14 @@ public class ScreenDisplay extends JFrame implements View {
         update();
     }
 
+    public boolean colourPrompt() {
+        Object[] possibilities = {"White", "Black"};
+        String s = (String)JOptionPane.showInputDialog(this, "Choose your color:", "Welcome!",
+                JOptionPane.PLAIN_MESSAGE, null, possibilities, possibilities[0]);
+        if (s == null) return true;
+        return s.equals(possibilities[0]);
+    }
+
     public JPanel getSettingsPanel() { return settingsPane; }
     public ChessPanel getChessPanel() { return boardPane; }
 }
