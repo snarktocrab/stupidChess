@@ -22,6 +22,14 @@ public abstract class Piece {
         alive = _alive;
     }
 
+    public Piece(int _x, int _y, boolean _colour, boolean _alive, int _id) {
+        x = _x;
+        y = _y;
+        thisID = _id;
+        colour = _colour;
+        alive = _alive;
+    }
+
     public void move(int newX, int newY) {
         x = newX;
         y = newY;

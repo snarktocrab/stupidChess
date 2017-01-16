@@ -162,7 +162,9 @@ class ChessPanel extends JPanel {
     public ChessPanel() {
         try {
             boardImg = ImageIO.read(new File("images/board.jpg"));
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            System.err.println(e);
+        }
 
         loadImages();
     }
@@ -176,6 +178,7 @@ class ChessPanel extends JPanel {
     }
 
     public void resetBoard() {
+        if (boardImg == null) System.out.println("yep");
         ColorModel cm = boardImg.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = boardImg.copyData(null);

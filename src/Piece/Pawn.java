@@ -5,6 +5,11 @@ package Piece;
  */
 public class Pawn extends Piece {
     char TYPE = 'p';
+    public Pawn(int _x, int _y, boolean _colour, boolean _alive, boolean moved, int _id) {
+        super(_x, _y, _colour, _alive, _id);
+        hasMoved = moved;
+    }
+
     public Pawn(int _x, int _y, boolean _colour, boolean _alive, boolean moved) {
         super(_x, _y, _colour, _alive);
         hasMoved = moved;

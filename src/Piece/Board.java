@@ -34,6 +34,7 @@ public class Board {
         whiteTurn = true;
         pieces = new Piece[32];
         setBoardState();
+        int cnt = 0;
         //lastTurn = "-";
         // Пешки
         for (int i = 0; i < 8; ++i)
@@ -211,10 +212,10 @@ public class Board {
         if (lastMove.type == 'P') {
             Piece p = getPiece(lastMove.pieceID).get();
             if (p.getColour()) {
-                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true);
+                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true, lastMove.pieceID);
             }
             else {
-                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true);
+                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true, lastMove.pieceID);
             }
             getPiece(lastMove.targID).get().respawn();
             return;
@@ -223,10 +224,10 @@ public class Board {
         if (lastMove.type == 'p') {
             Piece p = getPiece(lastMove.pieceID).get();
             if (p.getColour()) {
-                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() - 1, p.getColour(), true, true);
+                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() - 1, p.getColour(), true, true, lastMove.pieceID);
             }
             else {
-                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() + 1, p.getColour(), true, true);
+                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() + 1, p.getColour(), true, true, lastMove.pieceID);
             }
             return;
         }
@@ -284,16 +285,16 @@ public class Board {
     public void promote(int id, char type) {
         switch (type) {
             case 'R':
-                pieces[id] = new Rook(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true);
+                pieces[id] = new Rook(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true, id);
                 break;
             case 'N':
-                pieces[id] = new Knight(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true);
+                pieces[id] = new Knight(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true, id);
                 break;
             case 'B':
-                pieces[id] = new Bishop(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true);
+                pieces[id] = new Bishop(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true, id);
                 break;
             case 'Q':
-                pieces[id] = new Queen(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true);
+                pieces[id] = new Queen(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true, id);
                 break;
             default:
                 System.err.println("Illegal promotion, use RNBQ");
