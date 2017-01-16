@@ -307,11 +307,11 @@ public class Board {
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
                 if (p.x == i && p.y == j) {
-                    boardState[i][7 - j] = 's';
+                    boardState[i][j] = 's';
                 } else if (p.checkAttack(i, j)) {
-                    boardState[i][7 - j] = 'a';
+                    boardState[i][j] = 'a';
                 } else if (p.checkMove(i, j)) {
-                    boardState[i][7 - j] = 'm';
+                    boardState[i][j] = 'm';
                 }
             }
         }

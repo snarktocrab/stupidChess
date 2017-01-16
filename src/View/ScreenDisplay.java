@@ -217,7 +217,7 @@ class ChessPanel extends JPanel {
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
                 char ch = boardState[i][j];
-                int startX = startPoint.x + tileWidth * i + i, startY = startPoint.y + tileHeight * (7 - i) + (7 - i);
+                int startX = startPoint.x + tileWidth * i + i, startY = startPoint.y + tileHeight * (7 - j) + (7 - j);
                 if (ch == 'a') {
                     g2.drawImage(attack, startX, startY, null);
                 } else if (ch == 'm') {
