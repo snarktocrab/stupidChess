@@ -12,13 +12,13 @@ public class Pawn extends Piece {
 
     public boolean checkMove(int newX, int newY) {
         if (colour) {
-            return newX == x && (
-                    !hasMoved && newY - y == 2 && Board.INSTANCE.getPiece(x, y + 1).get() == null || newY - y == 1
+            return newX == x && Board.INSTANCE.getPiece(x, y + 1).get() == null && (
+                    !hasMoved && newY - y == 2 && Board.INSTANCE.getPiece(x, y + 2).get() == null || newY - y == 1
             );
         }
         else {
-            return newX == x && (
-                    !hasMoved && newY - y == -2 && Board.INSTANCE.getPiece(x, y - 1).get() == null || newY - y == -1
+            return newX == x && Board.INSTANCE.getPiece(x, y - 1).get() == null && (
+                    !hasMoved && newY - y == -2 && Board.INSTANCE.getPiece(x, y - 2).get() == null || newY - y == -1
             );
         }
     }
@@ -33,10 +33,7 @@ public class Pawn extends Piece {
                         Board.INSTANCE.getPiece(newX, newY).get().getColour() != colour;
         } catch (NullPointerException e) {
             //System.err.println("Attacking empty tile");
-            if (colour)
-                return Math.abs(newX - x) == 1 && newY - y == 1;
-            else
-                return Math.abs(newX - x) == 1 && newY - y == -1;
+            return checkMove(newX, newY);
         }
     }
 
