@@ -1,37 +1,40 @@
 package Logging;
 
+import Piece.Board;
+import Piece.Piece;
 import Piece.Turn;
 
 import java.io.*;
 import java.lang.*;
-import java.lang.reflect.Field;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Stack;
 
 public class Logger {
     public static Logger INSTANCE = new Logger();
 
     private FileWriter out, l;
     private int tabs;
+    private String curr_path;
 
     public void init(String path) {
         tabs = 0;
 
-        /*Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR), month = calendar.get(Calendar.MONTH) + 1, day = calendar.get(Calendar.DAY_OF_MONTH),
-                hour = calendar.get(Calendar.HOUR_OF_DAY), min = calendar.get(Calendar.MINUTE);
+        if (!path.equals("")) {
+            path += "/chessLogs";
+            File folder = new File(path);
+            if (!folder.exists())
+                folder.mkdir();
+        }
 
-        String fileName = year + "-" + (month / 10) + (month % 10) + "-" + (day / 10) + (day % 10) + "_" +
-                (hour / 10) + (hour % 10) + ":" + (min / 10) + (min % 10) + ".txt";
-
-        path = path + "/logs/" + fileName;*/
+        curr_path = new String(path); // Copies the string
 
         try {
-            //l = new FileWriter(path, false);
-            out = new FileWriter("gamelog.txt", false);
+            l = new FileWriter(path + "/log.txt", false);
+            out = new FileWriter(path + "/gamelog.txt", false);
+            l.write("Path to JAR file: " + path + "\n");
+            l.flush();
         } catch (IOException e) { System.err.println("Log Error: " + e); }
 
-        //if (out == null || l == null) { System.err.println("Unable to open file"); }
+        if (out == null || l == null) { System.err.println("Unable to open file"); }
     }
 
     public void log (Turn t) {
@@ -66,17 +69,17 @@ public class Logger {
     }
 
     public void log(String msg) {
-        /*try {
+        try {
             for(int i = 0; i < tabs; ++i) l.write("\t");
             l.write(msg + "\n");
             l.flush();
         } catch (IOException e) { System.err.println("Log Error: " + e); }
-        catch (NullPointerException e) {}*/
-        System.out.println(msg);
+        catch (NullPointerException e) {}
+        //System.out.println(msg);
     }
 
     public void log(String msg, boolean entered) {
-        /*if (!entered) tabs--;
+        if (!entered) tabs--;
 
         try {
             for(int i = 0; i < tabs; ++i) l.write("\t");
@@ -85,8 +88,8 @@ public class Logger {
         } catch (IOException e) { System.err.println("Log Error: " + e); }
         catch (NullPointerException e) {}
 
-        if (entered) tabs++;*/
-        System.out.println(msg);
+        if (entered) tabs++;
+        //System.out.println(msg);
     }
 
     public void quit() {
@@ -94,5 +97,50 @@ public class Logger {
             if (out != null) out.close();
             if (l != null) l.close();
         } catch (IOException e) { System.err.println("Log Error: " + e); }
+    }
+
+    public void save(String filename) {
+        log("Saving game...", true);
+        String path = curr_path + "/saves";
+        File folder = new File(path);
+        if (!folder.exists()) folder.mkdir();
+
+        Board b = Board.INSTANCE;
+
+        try {
+            FileOutputStream fs = new FileOutputStream(curr_path + "/saves/" + filename + ".sav");
+            ObjectOutputStream sv = new ObjectOutputStream(fs);
+            for (int i = 0; i < 32; ++i) {
+                sv.writeObject(b.getPiece(i).get());
+            }
+            sv.writeObject(b.log);
+        } catch (IOException e) { System.err.println("Save Error: " + e); }
+        log("Successfully!", false);
+    }
+
+    public void load(String filename) {
+        log("Loading game...", true);
+        String path = curr_path + "/saves";
+        File folder = new File(path);
+        if (!folder.exists()) {
+            System.err.println("Can't find any saved game!");
+            log("Error: Can't find any saved game!", false);
+            return;
+        }
+
+        Board b = Board.INSTANCE;
+
+        path += "/" + filename;
+        try {
+            FileInputStream fs = new FileInputStream(path);
+            ObjectInputStream ld = new ObjectInputStream(fs);
+            Piece p;
+            for (int i = 0; i < 32; ++i) {
+                p = (Piece)ld.readObject();
+                b.getPiece(i).get().changeParams(p);
+            }
+            b.log = (Stack<Turn>)ld.readObject();
+        } catch (IOException e) { System.err.println("Load Error: " + e); }
+        catch (ClassNotFoundException e) { System.err.println("Class not found Error: " + e); }
     }
 }

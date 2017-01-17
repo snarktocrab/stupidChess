@@ -9,18 +9,11 @@ public class Board {
     private Piece selectedFigure;
     private char[][] boardState = new char[8][8];
 
-    //String lastTurn;
-
     // Singleton
     public static final Board INSTANCE = new Board();
 
-    // Test board please ignore
-    //public static final Board INSTANCE = new Board(new Piece[]{new Pawn(0, 6, true, true, true), new King(0, 0, true, true, true),
-    //new King(7, 7, false, true, true)}, true);
-
-
     // Фигуры
-    public Piece[] pieces;
+    private Piece[] pieces;
 
     public Stack<Turn> log = new Stack<>();
 
@@ -313,6 +306,7 @@ public class Board {
                     boardState[i][j] = 'm';
                 } else if (p.checkAttack(i, j)) {
                     if (p.getType() == 'p' && getPiece(i, j).get() == null) continue;
+                    if (p.getType() == 'K' && isThreatened(i, j, p.getColour())) continue;
                     boardState[i][j] = 'a';
                 }
             }

@@ -60,7 +60,7 @@ public class Server extends Net{
     public ObjectInputStream getInStream() { return in; }
 
     public void sendTurn(Turn t) {
-        logger.log("Preparing to sent turn...", true);
+        logger.log("Preparing to send turn...", true);
         try {
             out.writeObject(t);
             out.flush();

@@ -1,9 +1,11 @@
 package Piece;
 
+import java.io.Serializable;
+
 /**
  * Created by daniel on 21.11.16.
  */
-public abstract class Piece {
+public abstract class Piece implements Serializable{
     boolean hasMoved = true;
     protected int x, y, thisID;
     protected static int id = 0;
@@ -28,6 +30,15 @@ public abstract class Piece {
         thisID = _id;
         colour = _colour;
         alive = _alive;
+    }
+
+    public void changeParams(Piece p) {
+        x = p.x;
+        y = p.y;
+        thisID = p.thisID;
+        colour = p.colour;
+        alive = p.alive;
+        hasMoved = p.hasMoved;
     }
 
     public void move(int newX, int newY) {

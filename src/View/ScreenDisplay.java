@@ -4,14 +4,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
 import java.io.IOException;
 
 import Piece.*;
@@ -125,7 +120,7 @@ public class ScreenDisplay extends JFrame implements View {
     }
 
     public void serverPrompt(String ip) {
-        JOptionPane.showMessageDialog(this, "Your ip address is:\n" + ip);
+        JOptionPane.showMessageDialog(this, "Your ip address is:\n" + ip + "\n(Please, close this window before connecting to a client)");
     }
 
     public void startHandler() {

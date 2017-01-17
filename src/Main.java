@@ -15,16 +15,17 @@ public class Main {
     public static void main(String[] args) {
         boolean colour = true;
 
+        // Uncomment this if you want to get path to your .jar file
         File f = new File(System.getProperty("java.class.path"));
         File dir = f.getAbsoluteFile().getParentFile();
         String path = dir.toString();
-        path = ""; //For running in IntelliJ not in terminal
+        //path = ""; //For running in IntelliJ not in terminal
 
         // Tell the board and controller where to output
         logger.init(path);
         controller.init(display);
 
-        logger.log("Starting main function", true);
+        logger.log("Starting main function");
 
         String[] gameParams = controller.gameType();
         if (gameParams[0].equals("server")) {
@@ -73,7 +74,7 @@ public class Main {
             }
         }
 
-        logger.log("Exiting our program", false);
+        logger.log("Exiting our program");
         if (net != null) net.quit();
         logger.quit();
         System.exit(0);
