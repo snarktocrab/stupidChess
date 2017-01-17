@@ -161,7 +161,7 @@ class ChessPanel extends JPanel {
 
     public ChessPanel() {
         try {
-            boardImg = ImageIO.read(new File("images/board.jpg"));
+            boardImg = ImageIO.read(getClass().getResourceAsStream("/res/images/board.jpg"));
         } catch (IOException e) {
             System.err.println(e);
         }
@@ -242,22 +242,22 @@ class ChessPanel extends JPanel {
 
     private void loadImages() {
         try {
-            figuresImg[0] = ImageIO.read(new File("images/pawn-w.png"));
-            figuresImg[1] = ImageIO.read(new File("images/pawn-b.png"));
-            figuresImg[2] = ImageIO.read(new File("images/rook-w.png"));
-            figuresImg[3] = ImageIO.read(new File("images/rook-b.png"));
-            figuresImg[4] = ImageIO.read(new File("images/knight-w.png"));
-            figuresImg[5] = ImageIO.read(new File("images/knight-b.png"));
-            figuresImg[6] = ImageIO.read(new File("images/bishop-w.png"));
-            figuresImg[7] = ImageIO.read(new File("images/bishop-b.png"));
-            figuresImg[8] = ImageIO.read(new File("images/queen-w.png"));
-            figuresImg[9] = ImageIO.read(new File("images/queen-b.png"));
-            figuresImg[10] = ImageIO.read(new File("images/king-w.png"));
-            figuresImg[11] = ImageIO.read(new File("images/king-b.png"));
+            figuresImg[0] = ImageIO.read(getClass().getResourceAsStream("/res/images/pawn-w.png"));
+            figuresImg[1] = ImageIO.read(getClass().getResourceAsStream("/res/images/pawn-b.png"));
+            figuresImg[2] = ImageIO.read(getClass().getResourceAsStream("/res/images/rook-w.png"));
+            figuresImg[3] = ImageIO.read(getClass().getResourceAsStream("/res/images/rook-b.png"));
+            figuresImg[4] = ImageIO.read(getClass().getResourceAsStream("/res/images/knight-w.png"));
+            figuresImg[5] = ImageIO.read(getClass().getResourceAsStream("/res/images/knight-b.png"));
+            figuresImg[6] = ImageIO.read(getClass().getResourceAsStream("/res/images/bishop-w.png"));
+            figuresImg[7] = ImageIO.read(getClass().getResourceAsStream("/res/images/bishop-b.png"));
+            figuresImg[8] = ImageIO.read(getClass().getResourceAsStream("/res/images/queen-w.png"));
+            figuresImg[9] = ImageIO.read(getClass().getResourceAsStream("/res/images/queen-b.png"));
+            figuresImg[10] = ImageIO.read(getClass().getResourceAsStream("/res/images/king-w.png"));
+            figuresImg[11] = ImageIO.read(getClass().getResourceAsStream("/res/images/king-b.png"));
 
-            attack = ImageIO.read(new File("images/red-sqr.png"));
-            move = ImageIO.read(new File("images/blue-sqr.png"));
-            select = ImageIO.read(new File("images/yellow-sqr.png"));
+            attack = ImageIO.read(getClass().getResourceAsStream("/res/images/red-sqr.png"));
+            move = ImageIO.read(getClass().getResourceAsStream("/res/images/blue-sqr.png"));
+            select = ImageIO.read(getClass().getResourceAsStream("/res/images/yellow-sqr.png"));
         } catch (IOException e) {}
     }
 }
