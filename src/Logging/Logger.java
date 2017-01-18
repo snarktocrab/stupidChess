@@ -18,12 +18,11 @@ public class Logger {
     public void init(String path) {
         tabs = 0;
 
-        if (!path.equals("")) {
-            path += "/chessLogs";
-            File folder = new File(path);
-            if (!folder.exists())
-                folder.mkdir();
-        }
+        if (path.equals("")) path = "chessLogs";
+        else path += "/chessLogs";
+        File folder = new File(path);
+        if (!folder.exists())
+            folder.mkdir();
 
         curr_path = new String(path); // Copies the string
 
@@ -121,12 +120,6 @@ public class Logger {
     public void load(String filename) {
         log("Loading game...", true);
         String path = curr_path + "/saves";
-        File folder = new File(path);
-        if (!folder.exists()) {
-            System.err.println("Can't find any saved game!");
-            log("Error: Can't find any saved game!", false);
-            return;
-        }
 
         Board b = Board.INSTANCE;
 
@@ -143,4 +136,6 @@ public class Logger {
         } catch (IOException e) { System.err.println("Load Error: " + e); }
         catch (ClassNotFoundException e) { System.err.println("Class not found Error: " + e); }
     }
+
+    public String getCurr_path() { return curr_path; }
 }

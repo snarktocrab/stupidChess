@@ -4,11 +4,17 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.io.File;
 import java.io.IOException;
 
+import Logging.Logger;
 import Piece.*;
 
 /**
@@ -20,6 +26,7 @@ public class ScreenDisplay extends JFrame implements View {
     private JPanel settingsPane;
 
     private Board chessboard = Board.INSTANCE;
+    private Logger logger = Logger.INSTANCE;
 
     // Singleton
     public static ScreenDisplay INSTANCE = new ScreenDisplay();
@@ -43,6 +50,50 @@ public class ScreenDisplay extends JFrame implements View {
         contentPane.add(settingsPane);
         settingsPane.setBounds(0, 0, width, height);
         settingsPane.setVisible(true);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu gameMenu = new JMenu("Game");
+        menuBar.add(gameMenu);
+
+        JMenu saveItem = new JMenu("Save");
+        gameMenu.add(saveItem);
+        JMenu loadItem = new JMenu("Load");
+        gameMenu.add(loadItem);
+        gameMenu.addSeparator();
+        JMenu exitItem = new JMenu("Exit");
+        gameMenu.add(exitItem);
+
+        saveItem.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                saveHandler();
+            }
+            public void mousePressed(MouseEvent mouseEvent) {}
+            public void mouseReleased(MouseEvent mouseEvent) {}
+            public void mouseEntered(MouseEvent mouseEvent) {}
+            public void mouseExited(MouseEvent mouseEvent) {}
+        });
+
+        loadItem.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                loadHandler();
+            }
+            public void mousePressed(MouseEvent mouseEvent) {}
+            public void mouseReleased(MouseEvent mouseEvent) {}
+            public void mouseEntered(MouseEvent mouseEvent) {}
+            public void mouseExited(MouseEvent mouseEvent) {}
+        });
+
+        exitItem.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                // TODO: Do smth to exit game
+            }
+            public void mousePressed(MouseEvent mouseEvent) {}
+            public void mouseReleased(MouseEvent mouseEvent) {}
+            public void mouseEntered(MouseEvent mouseEvent) {}
+            public void mouseExited(MouseEvent mouseEvent) {}
+        });
+
+        boardPane.add(menuBar);
 
         this.setVisible(true);
     }
@@ -139,6 +190,55 @@ public class ScreenDisplay extends JFrame implements View {
 
     public JPanel getSettingsPanel() { return settingsPane; }
     public ChessPanel getChessPanel() { return boardPane; }
+
+    private void saveHandler() {
+        String filename;
+        do {
+            filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
+                    JOptionPane.PLAIN_MESSAGE, null, null, "");
+        } while (filename == null);
+        logger.save(filename);
+    }
+
+    private void loadHandler() {
+        String path = logger.getCurr_path() + "/saves";
+        File folder = new File(path);
+        if (!folder.exists()) {
+            System.err.println("Can't find any saved game!");
+            logger.log("Error: Can't find any saved game!", false);
+            return;
+        }
+
+        File[] flist = folder.listFiles();
+        if (flist == null || flist.length == 0) {
+            System.err.println("ERROR: There are no saved games!");
+            logger.log("Error: Can't find any saved games");
+            return;
+        }
+
+        int cnt = 0;
+        for (int i = 0; i < flist.length; ++i)
+            if (flist[i].isFile()) cnt++;
+        if (cnt == 0) {
+            System.err.println("ERROR: There are no saved games!");
+            logger.log("Error: Can't find any saved games");
+            return;
+        }
+
+        Object[] files = new Object[cnt];
+        int id = 0;
+        for (int i = 0; i < flist.length; ++i) {
+            if (flist[i].isFile()) {
+                files[id] = flist[i].getName();
+                id++;
+            }
+        }
+        String filename = (String)JOptionPane.showInputDialog(this, "Choose saved game:", "Loading",
+                JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
+        if (filename == null) return;
+        logger.load(filename);
+        update();
+    }
 }
 
 class ChessPanel extends JPanel {
