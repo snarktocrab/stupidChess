@@ -94,6 +94,7 @@ public class ScreenDisplay extends JFrame implements View {
         });
 
         boardPane.add(menuBar);
+        //this.setJMenuBar(menuBar); // This sets menuBar at the top of the window
 
         this.setVisible(true);
     }

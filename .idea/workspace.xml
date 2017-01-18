@@ -7,15 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed4e10b1-4a4e-4101-b84c-d5a97d8266e7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/StupidChessJava_jar/StupidChessJava.jar" afterPath="$PROJECT_DIR$/out/artifacts/StupidChessJava_jar/StupidChessJava.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StupidChessJava/Logging/Logger.class" afterPath="$PROJECT_DIR$/out/production/StupidChessJava/Logging/Logger.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StupidChessJava/Network/Server.class" afterPath="$PROJECT_DIR$/out/production/StupidChessJava/Network/Server.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StupidChessJava/Piece/Board.class" afterPath="$PROJECT_DIR$/out/production/StupidChessJava/Piece/Board.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StupidChessJava/View/ScreenDisplay.class" afterPath="$PROJECT_DIR$/out/production/StupidChessJava/View/ScreenDisplay.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Logging/Logger.java" afterPath="$PROJECT_DIR$/src/Logging/Logger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Network/Server.java" afterPath="$PROJECT_DIR$/src/Network/Server.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Piece/Board.java" afterPath="$PROJECT_DIR$/src/Piece/Board.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/View/ScreenDisplay.java" afterPath="$PROJECT_DIR$/src/View/ScreenDisplay.java" />
     </list>
     <ignored path="StupidChessJava.iws" />
@@ -64,8 +55,8 @@
       <file leaf-file-name="ScreenDisplay.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/View/ScreenDisplay.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="327">
-              <caret line="239" column="39" selection-start-line="239" selection-start-column="39" selection-end-line="239" selection-end-column="39" />
+            <state relative-caret-position="120">
+              <caret line="96" column="74" selection-start-line="96" selection-start-column="74" selection-end-line="96" selection-end-column="74" />
               <folding />
             </state>
           </provider>
@@ -656,12 +647,12 @@
       <workItem from="1484653455846" duration="757000" />
       <workItem from="1484655403226" duration="17584000" />
       <workItem from="1484763998188" duration="40000" />
-      <workItem from="1484764373286" duration="531000" />
+      <workItem from="1484764373286" duration="1504000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29569000" />
+    <option name="totallyTimeSpent" value="30542000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1366" height="743" extended-state="6" />
@@ -669,7 +660,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32850242" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -744,7 +735,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/View/ScreenDisplay.java</url>
-          <line>203</line>
+          <line>204</line>
           <properties />
           <option name="timeStamp" value="19" />
         </line-breakpoint>
@@ -1134,8 +1125,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/View/ScreenDisplay.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="239" column="39" selection-start-line="239" selection-start-column="39" selection-end-line="239" selection-end-column="39" />
+        <state relative-caret-position="120">
+          <caret line="96" column="74" selection-start-line="96" selection-start-column="74" selection-end-line="96" selection-end-column="74" />
           <folding />
         </state>
       </provider>
