@@ -46,7 +46,7 @@ public class Server extends Net{
                 Enumeration ee = n.getInetAddresses();
                 while (ee.hasMoreElements()) {
                     InetAddress i = (InetAddress) ee.nextElement();
-                    if (i.getHostAddress().contains("192.168")) {
+                    if (i.getHostAddress().startsWith("192.168")) {
                         logger.log("Got it!", false);
                         return i.getHostAddress();
                     }

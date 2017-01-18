@@ -109,6 +109,7 @@ public class Logger {
         try {
             FileOutputStream fs = new FileOutputStream(curr_path + "/saves/" + filename + ".sav");
             ObjectOutputStream sv = new ObjectOutputStream(fs);
+            sv.writeObject(b.getTurn());
             for (int i = 0; i < 32; ++i) {
                 sv.writeObject(b.getPiece(i).get());
             }
@@ -119,6 +120,7 @@ public class Logger {
 
     public void load(String filename) {
         log("Loading game...", true);
+        Board.INSTANCE.setSelectedFigure(null);
         String path = curr_path + "/saves";
 
         Board b = Board.INSTANCE;
@@ -127,6 +129,7 @@ public class Logger {
         try {
             FileInputStream fs = new FileInputStream(path);
             ObjectInputStream ld = new ObjectInputStream(fs);
+            b.setTurn((boolean)ld.readObject());
             Piece p;
             for (int i = 0; i < 32; ++i) {
                 p = (Piece)ld.readObject();

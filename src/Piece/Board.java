@@ -322,6 +322,7 @@ public class Board {
     }
 
     public boolean getTurn() { return whiteTurn; }
+    public void setTurn(boolean turn) { whiteTurn = turn; }
     public Piece getSelectedFigure() { return selectedFigure; }
     public char[][] getBoardState() { return boardState; }
 }

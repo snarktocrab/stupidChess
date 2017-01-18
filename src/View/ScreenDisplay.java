@@ -218,7 +218,7 @@ public class ScreenDisplay extends JFrame implements View {
 
         int cnt = 0;
         for (int i = 0; i < flist.length; ++i)
-            if (flist[i].isFile()) cnt++;
+            if (flist[i].isFile() && flist[i].getName().endsWith(".sav")) cnt++;
         if (cnt == 0) {
             System.err.println("ERROR: There are no saved games!");
             logger.log("Error: Can't find any saved games");
@@ -228,15 +228,16 @@ public class ScreenDisplay extends JFrame implements View {
         Object[] files = new Object[cnt];
         int id = 0;
         for (int i = 0; i < flist.length; ++i) {
-            if (flist[i].isFile()) {
-                files[id] = flist[i].getName();
+            if (flist[i].isFile() && flist[i].getName().endsWith(".sav")) {
+                String name = flist[i].getName();
+                files[id] = name.substring(0, name.length() - 4); // Delete ".sav" at the end of the filename
                 id++;
             }
         }
         String filename = (String)JOptionPane.showInputDialog(this, "Choose saved game:", "Loading",
                 JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
         if (filename == null) return;
-        logger.load(filename);
+        logger.load(filename + ".sav");
         update();
     }
 }
