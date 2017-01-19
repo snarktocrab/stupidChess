@@ -86,6 +86,7 @@ public class ScreenDisplay extends JFrame implements View {
         exitItem.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {
                 // TODO: Do smth to exit game
+                System.exit(0);
             }
             public void mousePressed(MouseEvent mouseEvent) {}
             public void mouseReleased(MouseEvent mouseEvent) {}
