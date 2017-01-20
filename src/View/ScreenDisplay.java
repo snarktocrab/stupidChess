@@ -14,7 +14,7 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
-import Logging.Logger;
+import Logging.*;
 import Piece.*;
 
 /**
@@ -27,6 +27,7 @@ public class ScreenDisplay extends JFrame implements View {
 
     private Board chessboard = Board.INSTANCE;
     private Logger logger = Logger.INSTANCE;
+    private Saver saver = Saver.INSTANCE;
 
     // Singleton
     public static ScreenDisplay INSTANCE = new ScreenDisplay();
@@ -199,7 +200,7 @@ public class ScreenDisplay extends JFrame implements View {
             filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
                     JOptionPane.PLAIN_MESSAGE, null, null, "");
         } while (filename == null);
-        logger.save(filename);
+        saver.save(filename);
     }
 
     private void loadHandler() {
@@ -239,7 +240,7 @@ public class ScreenDisplay extends JFrame implements View {
         String filename = (String)JOptionPane.showInputDialog(this, "Choose saved game:", "Loading",
                 JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
         if (filename == null) return;
-        logger.load(filename + ".sav");
+        saver.load(filename + ".sav");
         update();
     }
 }

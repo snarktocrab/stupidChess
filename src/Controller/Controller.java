@@ -1,6 +1,7 @@
 package Controller;
 
 import Logging.Logger;
+import Logging.Saver;
 import Piece.*;
 import View.*;
 
@@ -10,6 +11,7 @@ public abstract class Controller {
     protected Board chessboard = Board.INSTANCE;
     protected View display;
     protected Logger logger = Logger.INSTANCE;
+    protected Saver saver = Saver.INSTANCE;
 
     // Tell the controller where to output
     public void init(View v) { display = v; }
@@ -39,6 +41,12 @@ public abstract class Controller {
                 break;
             case 'u':
                 chessboard.undo();
+                break;
+            case 's':
+                saver.save(t.filename);
+                break;
+            case 'l':
+                saver.load(t.filename);
                 break;
             default:
                 return;

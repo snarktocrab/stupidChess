@@ -11,6 +11,7 @@ public class Turn implements Serializable {
     public int pieceID, targID;
     public int x, y, x2, y2;
     public boolean moved;
+    public String filename;
 
     public Turn() {}
 
@@ -63,5 +64,25 @@ public class Turn implements Serializable {
         pieceID = id;
         targID = targId;
         newPiece = title;
+    }
+
+    // Save and load
+    public Turn(char t, String file) {
+        type = t;
+        filename = file;
+    }
+
+    // Copy turn
+    public Turn(Turn t) {
+        type = t.type;
+        x = t.x;
+        y = t.y;
+        x2 = t.x2;
+        y2 = t.y2;
+        pieceID = t.pieceID;
+        targID = t.targID;
+        newPiece = t.newPiece;
+        moved = t.moved;
+        if (t.filename != null) filename = new String(t.filename); // Copy string
     }
 }

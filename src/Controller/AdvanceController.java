@@ -2,6 +2,7 @@ package Controller;
 
 import Piece.*;
 import View.*;
+import Events.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +18,7 @@ public class AdvanceController extends Controller {
     private static final Point startPoint = new Point(27, 27);
 
     private String newCommand = "";
+    private Turn saveLoadTurn = null;
     private boolean currPlayer, wasInformed, hasMateChecked, isFirstClick;
 
     //Singleton
@@ -78,6 +80,16 @@ public class AdvanceController extends Controller {
             public void mouseEntered(MouseEvent mouseEvent) {}
             public void mouseExited(MouseEvent mouseEvent) {}
         });
+
+        saver.addSaveLoadListener(new SaveLoadListener() {
+            public void saveOpponent(SaveLoadEvent event) {
+                saveLoadTurn = new Turn('s', event.getFilename());
+            }
+
+            public void loadOpponent(SaveLoadEvent event) {
+                saveLoadTurn = new Turn('l', event.getFilename());
+            }
+        });
     }
 
     public String[] gameType() {
@@ -107,6 +119,12 @@ public class AdvanceController extends Controller {
             currPlayer = chessboard.getTurn();
             wasInformed = false;
             hasMateChecked = false;
+        }
+
+        if (saveLoadTurn != null) {
+            Turn t = new Turn(saveLoadTurn);
+            saveLoadTurn = null;
+            return t;
         }
 
         // Ends the game if checkmate
