@@ -31,7 +31,7 @@ public class Main {
         if (gameParams[0].equals("server")) {
             net = Server.INSTANCE;
             String ip = net.getIP();
-            display.serverPrompt(ip);
+            if (ip != null) display.serverPrompt(ip);
             net.init(gameParams[1]);
             colour = display.colourPrompt();
 
