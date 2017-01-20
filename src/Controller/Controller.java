@@ -47,6 +47,7 @@ public abstract class Controller {
                 break;
             case 'l':
                 saver.load(t.filename);
+                display.update();
                 break;
             default:
                 return;
