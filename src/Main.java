@@ -19,7 +19,7 @@ public class Main {
         File f = new File(System.getProperty("java.class.path"));
         File dir = f.getAbsoluteFile().getParentFile();
         String path = dir.toString();
-        path = ""; //For running in IntelliJ not in terminal
+        path = new String(); //For running in IntelliJ not in terminal
 
         // Tell the board and controller where to output
         logger.init(path);
