@@ -200,7 +200,7 @@ public class ScreenDisplay extends JFrame implements View {
             filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
                     JOptionPane.PLAIN_MESSAGE, null, null, "");
         } while (filename == null);
-        saver.save(filename);
+        saver.save(filename, false);
     }
 
     private void loadHandler() {
@@ -240,7 +240,7 @@ public class ScreenDisplay extends JFrame implements View {
         String filename = (String)JOptionPane.showInputDialog(this, "Choose saved game:", "Loading",
                 JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
         if (filename == null) return;
-        saver.load(filename + ".sav");
+        saver.load(filename + ".sav", false);
         update();
     }
 }

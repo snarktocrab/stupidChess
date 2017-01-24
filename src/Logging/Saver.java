@@ -29,7 +29,7 @@ public class Saver {
         listeners.remove(sll);
     }
 
-    public void save(String filename) {
+    public void save(String filename, boolean isRepeat) {
         logger.log("Saving game...", true);
         String path = logger.getCurr_path() + "/saves";
         File folder = new File(path);
@@ -46,11 +46,11 @@ public class Saver {
             }
             sv.writeObject(b.log);
         } catch (IOException e) { System.err.println("Save Error: " + e); }
-        if (isNetworkActive) throwEvent(new SaveLoadEvent(this, 's', filename));
+        if (isNetworkActive && !isRepeat) throwEvent(new SaveLoadEvent(this, 's', filename));
         logger.log("Successfully!", false);
     }
 
-    public void load(String filename) {
+    public void load(String filename, boolean isRepeat) {
         logger.log("Loading game...", true);
         Board.INSTANCE.setSelectedFigure(null);
         String path = logger.getCurr_path() + "/saves";
@@ -70,7 +70,7 @@ public class Saver {
             b.log = (Stack<Turn>)ld.readObject();
         } catch (IOException e) { System.err.println("Load Error: " + e); }
         catch (ClassNotFoundException e) { System.err.println("Class not found Error: " + e); }
-        if (isNetworkActive) throwEvent(new SaveLoadEvent(this, 'l', filename));
+        if (isNetworkActive && !isRepeat) throwEvent(new SaveLoadEvent(this, 'l', filename));
         logger.log("Successfully", false);
     }
 

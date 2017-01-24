@@ -43,10 +43,10 @@ public abstract class Controller {
                 chessboard.undo();
                 break;
             case 's':
-                saver.save(t.filename);
+                saver.save(t.filename, true);
                 break;
             case 'l':
-                saver.load(t.filename);
+                saver.load(t.filename, true);
                 display.update();
                 break;
             default:
