@@ -6,6 +6,11 @@ package Piece;
 public class Bishop extends Piece {
     char TYPE = 'B';
 
+    public Bishop(int _x, int _y, boolean _colour, boolean _alive, boolean moved, int _id) {
+        super(_x, _y, _colour, _alive, _id);
+        hasMoved = moved;
+    }
+
     public Bishop(int _x, int _y, boolean _colour, boolean _alive, boolean moved) {
         super(_x, _y, _colour, _alive);
         hasMoved = moved;

@@ -15,6 +15,7 @@ public class Server extends Net{
     private ObjectOutputStream out;
 
     public void init(String ip) {
+        logger.log("Initializing server...", true);
         ServerIP = ip;
         s = null;
         try {
@@ -25,6 +26,7 @@ public class Server extends Net{
             InputStream i = s.getInputStream();
             ObjectInputStream inn = new ObjectInputStream(i);
             in = inn;
+            logger.log("Client was successfully initialized!", false);
         } catch (IOException e) { System.err.println("Error: " + e); }
     }
 
@@ -36,6 +38,7 @@ public class Server extends Net{
     }
 
     public String getIP() {
+        logger.log("Getting IP address...", true);
         try {
             Enumeration e = NetworkInterface.getNetworkInterfaces();
             while (e.hasMoreElements()) {
@@ -43,7 +46,10 @@ public class Server extends Net{
                 Enumeration ee = n.getInetAddresses();
                 while (ee.hasMoreElements()) {
                     InetAddress i = (InetAddress) ee.nextElement();
-                    if (i.getHostAddress().contains("192.168")) return i.getHostAddress();
+                    if (i.getHostAddress().startsWith("192.168")) {
+                        logger.log("Got it!", false);
+                        return i.getHostAddress();
+                    }
                 }
             }
         } catch (SocketException e) { return null; }
@@ -54,15 +60,19 @@ public class Server extends Net{
     public ObjectInputStream getInStream() { return in; }
 
     public void sendTurn(Turn t) {
+        logger.log("Preparing to send turn...", true);
         try {
             out.writeObject(t);
             out.flush();
+            logger.log("Turn was successfully sent!", false);
         } catch (IOException e) { System.err.println("Error: " + e); }
     }
 
     public Turn receiveTurn() {
+        logger.log("Waiting for turn...", true);
         try {
             Turn t = (Turn)in.readObject();
+            logger.log("Turn was collected!", false);
             return t;
         } catch (IOException e) { System.err.println("Error: " + e); }
         catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); }

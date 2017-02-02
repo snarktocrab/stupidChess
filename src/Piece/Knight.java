@@ -8,6 +8,11 @@ import java.lang.Math;
 public class Knight extends Piece {
     char TYPE = 'N';
 
+    public Knight(int _x, int _y, boolean _colour, boolean _alive, boolean moved, int _id) {
+        super(_x, _y, _colour, _alive, _id);
+        hasMoved = moved;
+    }
+
     public Knight(int _x, int _y, boolean _colour, boolean _alive, boolean moved) {
         super(_x, _y, _colour, _alive);
         hasMoved = moved;

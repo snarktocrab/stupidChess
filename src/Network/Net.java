@@ -1,6 +1,8 @@
 package Network;
 
 import java.io.*;
+
+import Logging.Logger;
 import Piece.Turn;
 
 /**
@@ -8,6 +10,7 @@ import Piece.Turn;
  */
 public abstract class Net {
     String ServerIP;
+    protected Logger logger = Logger.INSTANCE;
     public abstract void init(String ip);
     public abstract void quit();
     public abstract String getIP();

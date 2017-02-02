@@ -6,19 +6,14 @@ import java.util.Stack;
 public class Board {
 
     boolean whiteTurn;
-
-    //String lastTurn;
+    private Piece selectedFigure;
+    private char[][] boardState = new char[8][8];
 
     // Singleton
     public static final Board INSTANCE = new Board();
 
-    // Test board please ignore
-    //public static final Board INSTANCE = new Board(new Piece[]{new Pawn(0, 6, true, true, true), new King(0, 0, true, true, true),
-    //new King(7, 7, false, true, true)}, true);
-
-
     // Фигуры
-    public Piece[] pieces;
+    private Piece[] pieces;
 
     public Stack<Turn> log = new Stack<>();
 
@@ -31,6 +26,8 @@ public class Board {
     public Board() {
         whiteTurn = true;
         pieces = new Piece[32];
+        setBoardState();
+        int cnt = 0;
         //lastTurn = "-";
         // Пешки
         for (int i = 0; i < 8; ++i)
@@ -208,10 +205,10 @@ public class Board {
         if (lastMove.type == 'P') {
             Piece p = getPiece(lastMove.pieceID).get();
             if (p.getColour()) {
-                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true);
+                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true, lastMove.pieceID);
             }
             else {
-                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true);
+                pieces[lastMove.pieceID] = new Pawn(lastMove.x, lastMove.y, p.getColour(), true, true, lastMove.pieceID);
             }
             getPiece(lastMove.targID).get().respawn();
             return;
@@ -220,10 +217,10 @@ public class Board {
         if (lastMove.type == 'p') {
             Piece p = getPiece(lastMove.pieceID).get();
             if (p.getColour()) {
-                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() - 1, p.getColour(), true, true);
+                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() - 1, p.getColour(), true, true, lastMove.pieceID);
             }
             else {
-                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() + 1, p.getColour(), true, true);
+                pieces[lastMove.pieceID] = new Pawn(p.getX(), p.getY() + 1, p.getColour(), true, true, lastMove.pieceID);
             }
             return;
         }
@@ -281,20 +278,51 @@ public class Board {
     public void promote(int id, char type) {
         switch (type) {
             case 'R':
-                pieces[id] = new Rook(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true);
+                pieces[id] = new Rook(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true, id);
                 break;
             case 'N':
-                pieces[id] = new Knight(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true);
+                pieces[id] = new Knight(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true, id);
                 break;
             case 'B':
-                pieces[id] = new Bishop(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true);
+                pieces[id] = new Bishop(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true, id);
                 break;
             case 'Q':
-                pieces[id] = new Queen(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true);
+                pieces[id] = new Queen(pieces[id].getX(), pieces[id].getY(), pieces[id].colour, true, true, id);
                 break;
             default:
                 System.err.println("Illegal promotion, use RNBQ");
         }
     }
+
+    public void setSelectedFigure(Piece p) {
+        selectedFigure = p;
+        if (p == null) return;
+
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                if (p.x == i && p.y == j) {
+                    boardState[i][j] = 's';
+                } else if (p.checkMove(i, j)) {
+                    boardState[i][j] = 'm';
+                } else if (p.checkAttack(i, j)) {
+                    if (p.getType() == 'p' && getPiece(i, j).get() == null) continue;
+                    if (p.getType() == 'K' && isThreatened(i, j, p.getColour())) continue;
+                    boardState[i][j] = 'a';
+                }
+            }
+        }
+    }
+
+    public void setBoardState() {
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                boardState[i][j] = '.';
+            }
+        }
+    }
+
     public boolean getTurn() { return whiteTurn; }
+    public void setTurn(boolean turn) { whiteTurn = turn; }
+    public Piece getSelectedFigure() { return selectedFigure; }
+    public char[][] getBoardState() { return boardState; }
 }

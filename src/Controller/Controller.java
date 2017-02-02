@@ -1,20 +1,63 @@
 package Controller;
 
-import Piece.Turn;
-import View.View;
+import Logging.Logger;
+import Logging.Saver;
+import Piece.*;
+import View.*;
 
-public interface Controller {
+public abstract class Controller {
+    protected boolean running;
+
+    protected Board chessboard = Board.INSTANCE;
+    protected View display;
+    protected Logger logger = Logger.INSTANCE;
+    protected Saver saver = Saver.INSTANCE;
+
     // Tell the controller where to output
-    void init(View v);
+    public void init(View v) { display = v; }
 
-    String[] gameType();
+    abstract public String[] gameType();
 
     // Input a command, relay it to Board
-    Turn getCommand();
-    void turnHandler(Turn t);
+    abstract public Turn getCommand();
+    public void turnHandler(Turn t) {
+        logger.log("Handling turn...");
+        switch (t.type) {
+            case 'q':
+                quit();
+                return;
+            case 'p':
+                chessboard.move(t);
+                chessboard.promote(t.pieceID, t.newPiece);
+                break;
+            case 'P':
+                chessboard.take(t);
+                chessboard.promote(t.pieceID, t.newPiece);
+            case 'm':case 'o':case 'O':
+                chessboard.move(t);
+                break;
+            case 't':
+                chessboard.take(t);
+                break;
+            case 'u':
+                chessboard.undo();
+                break;
+            case 's':
+                saver.save(t.filename, true);
+                break;
+            case 'l':
+                saver.load(t.filename, true);
+                display.update();
+                break;
+            default:
+                return;
+        }
+        display.update();
+    }
 
-    boolean isRunning();
+    // Instead of infinity loop
+    public boolean isRunning() { return running; }
 
-    // End the game
-    void quit();
+    // Quits the program
+    public void quit() { running = false; }
 }

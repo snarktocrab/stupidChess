@@ -1,31 +1,21 @@
 package Controller;
 
 import Piece.*;
-import View.View;
 import java.util.Scanner;
 
-public class BasicController implements Controller {
-    private boolean running;
-
-    private Board chessboard = Board.INSTANCE;
-
+public class BasicController extends Controller {
     // Singleton
     public static BasicController INSTANCE = new BasicController();
     private Scanner in = new Scanner(System.in);
-
-    private View display;
 
     // For the runtime loop
     private BasicController() {
         running = true;
     }
 
-    // Tells the controller what display to use
-    public void init(View v) {
-        display = v;
-    }
-
     public String[] gameType() {
+        logger.log("Collecting information about game type...", true);
+
         display.netPrompt();
         String s, params[] = new String[2];
         s = in.nextLine().toLowerCase();
@@ -37,16 +27,19 @@ public class BasicController implements Controller {
             display.clientPrompt();
             params[1] = in.nextLine();
         }
+
+        logger.log("Collected!", false);
         return params;
     }
 
     // Receives a move from input
     public Turn getCommand() {
+        logger.log("Getting command...");
 
         // Ends the game if checkmate
         if (chessboard.isMate(chessboard.getTurn())) {
             display.mateHandler();
-            quit();
+            super.quit();
             return new Turn('q');
         }
 
@@ -59,7 +52,7 @@ public class BasicController implements Controller {
 
         // Exit command
         if (s.equals("exit") || s.equals("quit") || s.equals("stop")) {
-            quit();
+            super.quit();
             return new Turn('q');
         }
 
@@ -114,34 +107,4 @@ public class BasicController implements Controller {
 
         return chessboard.log.peek();
     }
-
-    public void turnHandler(Turn t) {
-        switch (t.type) {
-            case 'q':
-                quit();
-                return;
-            case 'p':
-                chessboard.move(t);
-                chessboard.promote(t.pieceID, t.newPiece);
-                break;
-            case 'P':
-                chessboard.take(t);
-                chessboard.promote(t.pieceID, t.newPiece);
-            case 'm':case 'o':case 'O':
-                chessboard.move(t);
-                break;
-            case 't':
-                chessboard.take(t);
-                break;
-            case 'u':
-                chessboard.undo();
-                break;
-            default:
-                return;
-        }
-        display.update();
-    }
-
-    public boolean isRunning() { return running; } // Instead of infinity loop
-    public void quit() { running = false; } // Quits the program
 }
