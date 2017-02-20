@@ -72,7 +72,6 @@ public class Logger {
             l.write(msg + "\n");
             l.flush();
         } catch (IOException e) { System.err.println("Log Error: " + e); }
-        catch (NullPointerException e) {}
         //System.out.println(msg);
     }
 
@@ -84,10 +83,18 @@ public class Logger {
             l.write(msg + "\n");
             l.flush();
         } catch (IOException e) { System.err.println("Log Error: " + e); }
-        catch (NullPointerException e) {}
 
         if (entered) tabs++;
         //System.out.println(msg);
+    }
+
+    public void err(String msg, Exception ex) {
+        if (ex != null)
+            msg += " " + ex;
+        try {
+            l.write("\n" + msg + "\n");
+            l.flush();
+        } catch (IOException e) { System.err.println("Log Error: " + e); }
     }
 
     public void quit() {

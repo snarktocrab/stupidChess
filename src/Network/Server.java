@@ -1,22 +1,23 @@
 package Network;
 
+import Logging.Logger;
 import Piece.Turn;
 
 import java.io.*;
 import java.net.*;
 import java.util.Enumeration;
 
-public class Server extends Net{
+public class Server implements Net{
     public static Server INSTANCE = new Server();
 
     private Socket s;
     private ServerSocket server;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    private Logger logger = Logger.INSTANCE;
 
     public void init(String ip) {
         logger.log("Initializing server...", true);
-        ServerIP = ip;
         s = null;
         try {
             server = new ServerSocket(8030);

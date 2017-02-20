@@ -2,14 +2,18 @@ package Network;
 
 import java.io.*;
 import java.net.*;
+
+import Logging.Logger;
 import Piece.Turn;
 
-public class Client extends Net{
+public class Client implements Net{
     public static Client INSTANCE = new Client();
 
     private Socket s;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    private String ServerIP;
+    private Logger logger = Logger.INSTANCE;
 
     public void init(String ip) {
         logger.log("Initializing client...", true);
