@@ -115,5 +115,5 @@ public class TextDisplay implements View {
     public boolean colourPrompt() { return true; }
 
     public JPanel getSettingsPanel() { return null; }
-    public ChessPanel getChessPanel() { return  null; }
+    public ChessPanel getChessPanel() { return null; }
 }

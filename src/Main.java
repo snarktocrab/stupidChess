@@ -1,8 +1,13 @@
 import Controller.*;
+import Events.*;
 import Network.*;
 import Piece.*;
 import View.*;
 import Logging.*;
+
+import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.*;
 
 public class Main {
@@ -15,6 +20,41 @@ public class Main {
     public static void main(String[] args) {
         boolean colour = true;
 
+        JPanel boardPane = display.getChessPanel();
+        boardPane.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                controller.mouseClicked(mouseEvent);
+            }
+            public void mousePressed(MouseEvent mouseEvent) {}
+            public void mouseReleased(MouseEvent mouseEvent) {}
+            public void mouseEntered(MouseEvent mouseEvent) {}
+            public void mouseExited(MouseEvent mouseEvent) {}
+        });
+
+        controller.addGameEventListener(new GameEventListener() {
+            @Override
+            public void updateDisplay(UpdateEvent e) {
+                display.update();
+            }
+
+            @Override
+            public void check(CheckEvent e) {
+                display.checkHandler();
+            }
+
+            @Override
+            public void mate(MateEvent e) {
+                display.mateHandler();
+            }
+
+            @Override
+            public void promotion(PromotionEvent e) {
+                String type = display.promotionHandler();
+                chessboard.promote(e.id, type.charAt(0));
+                display.update();
+            }
+        });
+
         // Uncomment this if you want to get path to your .jar file
         File f = new File(System.getProperty("java.class.path"));
         File dir = f.getAbsoluteFile().getParentFile();
@@ -23,11 +63,23 @@ public class Main {
 
         // Tell the board and controller where to output
         logger.init(path);
-        controller.init(display);
+        controller.init();
 
         logger.log("Starting main function");
+        logger.log("Collecting information about game type...", true);
 
-        String[] gameParams = controller.gameType();
+        String s = display.netPrompt();
+        String[] gameParams = new String[2];
+        gameParams[0] = s;
+        if (gameParams[0].equals("client")) {
+            gameParams[1] = display.clientPrompt();
+        }
+        else {
+            gameParams[1] = "";
+        }
+
+        logger.log("Collected!", false);
+
         if (gameParams[0].equals("server")) {
             net = Server.INSTANCE;
             String ip = net.getIP();
