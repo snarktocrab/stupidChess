@@ -193,11 +193,9 @@ public class ScreenDisplay extends JFrame implements View {
 
     private void saveHandler() {
         String filename;
-        do {
-            filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
-                    JOptionPane.PLAIN_MESSAGE, null, null, "");
-        } while (filename == null);
-        saver.save(filename, false);
+        filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
+                JOptionPane.PLAIN_MESSAGE, null, null, "");
+        if (filename != null) saver.save(filename, false);
     }
 
     private void loadHandler() {

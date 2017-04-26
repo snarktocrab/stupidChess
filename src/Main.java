@@ -94,7 +94,7 @@ public class Main {
             catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); }
         }
 
-        Saver.INSTANCE.setNetworkActivity(net != null);
+        Saver.INSTANCE.setNetwork(net);
 
         display.startHandler();
 
