@@ -17,6 +17,9 @@ public class Main {
     private static Board chessboard = Board.INSTANCE;
     private static Net net = null;
 
+    private static boolean autosaveEnabled, highlightingEnabled;
+    private static int numAutosaveFiles, gapTurns;
+
     public static void main(String[] args) {
         boolean colour = true;
 
@@ -56,6 +59,34 @@ public class Main {
 
         logger.init(path);
         controller.init();
+
+        // Creating settings if it doesn't exist
+        File settings = new File(logger.getCurr_path() + "/settings.opt");
+        if (!settings.exists()) {
+            try {
+                FileOutputStream fs = new FileOutputStream(logger.getCurr_path() + "/settings.opt");
+                ObjectOutputStream out = new ObjectOutputStream(fs);
+                out.writeBoolean(true); // Enable autosave
+                out.writeInt(3); // Number of autosave files
+                out.writeInt(5); // Turns between autosaves;
+                out.writeBoolean(true); // Enable tiles highlighting
+                out.flush();
+            } catch (IOException e) {
+                System.err.println("Unable to create settings!\n" + e);
+                System.exit(0);
+            }
+        }
+
+        // Reading settings
+        try {
+            FileInputStream fs = new FileInputStream(logger.getCurr_path() + "/settings.opt");
+            ObjectInputStream in = new ObjectInputStream(fs);
+            autosaveEnabled = in.readBoolean();
+            numAutosaveFiles = in.readInt();
+            gapTurns = in.readInt();
+            highlightingEnabled = in.readBoolean();
+
+        } catch (IOException e) { System.err.println("Unable to read settings!\n" + e); }
 
         logger.log("Starting main function");
         logger.log("Collecting information about game type...", true);
