@@ -1,6 +1,7 @@
 package Logging;
 
 import Events.*;
+import Network.*;
 import Piece.Board;
 import Piece.Piece;
 import Piece.Turn;

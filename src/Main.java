@@ -32,22 +32,15 @@ public class Main {
         });
 
         controller.addGameEventListener(new GameEventListener() {
-            @Override
             public void updateDisplay(UpdateEvent e) {
                 display.update();
             }
-
-            @Override
             public void check(CheckEvent e) {
                 display.checkHandler();
             }
-
-            @Override
             public void mate(MateEvent e) {
                 display.mateHandler();
             }
-
-            @Override
             public void promotion(PromotionEvent e) {
                 String type = display.promotionHandler();
                 chessboard.promote(e.id, type.charAt(0));
@@ -61,7 +54,6 @@ public class Main {
         String path = dir.toString();
         path = new String(); //For running in IntelliJ not in terminal
 
-        // Tell the board and controller where to output
         logger.init(path);
         controller.init();
 

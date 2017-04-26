@@ -4,8 +4,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -21,7 +19,7 @@ import Piece.*;
  * Created by yury on 13.12.16.
  */
 public class ScreenDisplay extends JFrame implements View {
-    private int width = 545, height = 545 + 26;
+    private int width = 545, height = 545 + 20;
     private ChessPanel boardPane;
     private JPanel settingsPane;
 
@@ -55,14 +53,13 @@ public class ScreenDisplay extends JFrame implements View {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Game");
         menuBar.add(gameMenu);
+        JMenu exitItem = new JMenu("Exit");
+        menuBar.add(exitItem);
 
         JMenu saveItem = new JMenu("Save");
         gameMenu.add(saveItem);
         JMenu loadItem = new JMenu("Load");
         gameMenu.add(loadItem);
-        gameMenu.addSeparator();
-        JMenu exitItem = new JMenu("Exit");
-        gameMenu.add(exitItem);
 
         saveItem.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -96,7 +93,7 @@ public class ScreenDisplay extends JFrame implements View {
         });
 
         boardPane.add(menuBar);
-        //this.setJMenuBar(menuBar); // This sets menuBar at the top of the window
+        this.setJMenuBar(menuBar); // This sets menuBar at the top of the window
 
         this.setVisible(true);
     }

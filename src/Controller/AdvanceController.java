@@ -1,14 +1,11 @@
 package Controller;
 
 import Piece.*;
-import View.*;
 import Events.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Stack;
 
 /**
  * Created by yury on 13.12.16.
