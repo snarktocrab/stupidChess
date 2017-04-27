@@ -1,5 +1,8 @@
 package View;
 
+import Events.SettingsEvent;
+import Events.SettingsEventListener;
+
 import javax.swing.*;
 
 /**
@@ -19,4 +22,7 @@ public interface View {
 
     JPanel getSettingsPanel();
     ChessPanel getChessPanel();
+
+    void addSettingsEventListener(SettingsEventListener listener);
+    void throwSettingsEvent(boolean as, int numFiles, int gap, boolean highlight);
 }

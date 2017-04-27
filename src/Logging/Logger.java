@@ -32,6 +32,23 @@ public class Logger {
             l.flush();
         } catch (IOException e) { System.err.println("Log Error: " + e); }
 
+        // Creating settings file if it doesn't exist
+        File settings = new File(path + "/settings.opt");
+        if (!settings.exists()) {
+            try {
+                FileOutputStream fs = new FileOutputStream(path + "/settings.opt");
+                ObjectOutputStream outstr = new ObjectOutputStream(fs);
+                outstr.writeBoolean(true); // Enable autosave
+                outstr.writeInt(3); // Number of autosave files
+                outstr.writeInt(5); // Turns between autosaves;
+                outstr.writeBoolean(true); // Enable tiles highlighting
+                outstr.flush();
+            } catch (IOException e) {
+                System.err.println("Unable to create settings!\n" + e);
+                System.exit(0);
+            }
+        }
+
         if (out == null || l == null) { System.err.println("Unable to open file"); }
     }
 
@@ -86,6 +103,20 @@ public class Logger {
 
         if (entered) tabs++;
         //System.out.println(msg);
+    }
+
+    public void recordSettings (boolean as, int numFiles, int gap, boolean highlight) {
+        try {
+            FileOutputStream fs = new FileOutputStream(curr_path + "/settings.opt");
+            ObjectOutputStream outstr = new ObjectOutputStream(fs);
+            outstr.writeBoolean(as);
+            outstr.writeInt(numFiles);
+            outstr.writeInt(gap);
+            outstr.writeBoolean(highlight);
+            outstr.flush();
+        } catch (IOException e) {
+            System.err.println("Unable to open settings!\n" + e);
+        }
     }
 
     public void err(String msg, Exception ex) {

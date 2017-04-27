@@ -51,6 +51,16 @@ public class Main {
             }
         });
 
+        display.addSettingsEventListener(new SettingsEventListener() {
+            public void updateSettings(SettingsEvent e) {
+                autosaveEnabled = e.isAutosaveEnabled();
+                numAutosaveFiles = e.getNumFiles();
+                gapTurns = e.getGapTurns();
+                highlightingEnabled = e.isHighlightingEnabled();
+                logger.recordSettings(autosaveEnabled, numAutosaveFiles, gapTurns, highlightingEnabled);
+            }
+        });
+
         // Uncomment this if you want to get path to your .jar file
         File f = new File(System.getProperty("java.class.path"));
         File dir = f.getAbsoluteFile().getParentFile();
@@ -59,23 +69,6 @@ public class Main {
 
         logger.init(path);
         controller.init();
-
-        // Creating settings if it doesn't exist
-        File settings = new File(logger.getCurr_path() + "/settings.opt");
-        if (!settings.exists()) {
-            try {
-                FileOutputStream fs = new FileOutputStream(logger.getCurr_path() + "/settings.opt");
-                ObjectOutputStream out = new ObjectOutputStream(fs);
-                out.writeBoolean(true); // Enable autosave
-                out.writeInt(3); // Number of autosave files
-                out.writeInt(5); // Turns between autosaves;
-                out.writeBoolean(true); // Enable tiles highlighting
-                out.flush();
-            } catch (IOException e) {
-                System.err.println("Unable to create settings!\n" + e);
-                System.exit(0);
-            }
-        }
 
         // Reading settings
         try {
@@ -92,6 +85,12 @@ public class Main {
         logger.log("Collecting information about game type...", true);
 
         String s = display.netPrompt();
+
+        if (s == null) { // Exiting our game if we didn't get any option
+            logger.quit();
+            System.exit(0);
+        }
+
         String[] gameParams = new String[2];
         gameParams[0] = s;
         if (gameParams[0].equals("client")) {
