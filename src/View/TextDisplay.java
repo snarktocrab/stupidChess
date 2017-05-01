@@ -1,5 +1,8 @@
 package View;
 
+import Events.Settings;
+import Events.SettingsEvent;
+import Events.SettingsEventListener;
 import Piece.Piece;
 import Piece.Board;
 
@@ -115,5 +118,8 @@ public class TextDisplay implements View {
     public boolean colourPrompt() { return true; }
 
     public JPanel getSettingsPanel() { return null; }
-    public ChessPanel getChessPanel() { return  null; }
+    public ChessPanel getChessPanel() { return null; }
+
+    public void addSettingsEventListener(SettingsEventListener listener) {}
+    public void throwSettingsEvent(Settings s) {}
 }

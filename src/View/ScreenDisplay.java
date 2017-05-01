@@ -4,8 +4,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -13,7 +11,9 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
+import Events.*;
 import Logging.*;
 import Piece.*;
 
@@ -21,13 +21,15 @@ import Piece.*;
  * Created by yury on 13.12.16.
  */
 public class ScreenDisplay extends JFrame implements View {
-    private int width = 545, height = 545 + 26;
+    private int width = 545, height = 545 + 20;
     private ChessPanel boardPane;
     private JPanel settingsPane;
 
     private Board chessboard = Board.INSTANCE;
     private Logger logger = Logger.INSTANCE;
     private Saver saver = Saver.INSTANCE;
+
+    private LinkedList<SettingsEventListener> listeners = new LinkedList<SettingsEventListener>();
 
     // Singleton
     public static ScreenDisplay INSTANCE = new ScreenDisplay();
@@ -55,14 +57,15 @@ public class ScreenDisplay extends JFrame implements View {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Game");
         menuBar.add(gameMenu);
+        JMenu exitItem = new JMenu("Exit");
+        menuBar.add(exitItem);
 
         JMenu saveItem = new JMenu("Save");
         gameMenu.add(saveItem);
         JMenu loadItem = new JMenu("Load");
         gameMenu.add(loadItem);
-        gameMenu.addSeparator();
-        JMenu exitItem = new JMenu("Exit");
-        gameMenu.add(exitItem);
+        JMenu settingsMenu = new JMenu("Settings");
+        gameMenu.add(settingsMenu);
 
         saveItem.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -95,8 +98,18 @@ public class ScreenDisplay extends JFrame implements View {
             public void mouseExited(MouseEvent mouseEvent) {}
         });
 
+        settingsMenu.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                SettingsWindow win = new SettingsWindow(INSTANCE, throwGetSettingsEvent());
+            }
+            public void mousePressed(MouseEvent mouseEvent) {}
+            public void mouseReleased(MouseEvent mouseEvent) {}
+            public void mouseEntered(MouseEvent mouseEvent) {}
+            public void mouseExited(MouseEvent mouseEvent) {}
+        });
+
         boardPane.add(menuBar);
-        //this.setJMenuBar(menuBar); // This sets menuBar at the top of the window
+        this.setJMenuBar(menuBar); // This sets menuBar at the top of the window
 
         this.setVisible(true);
     }
@@ -194,13 +207,27 @@ public class ScreenDisplay extends JFrame implements View {
     public JPanel getSettingsPanel() { return settingsPane; }
     public ChessPanel getChessPanel() { return boardPane; }
 
+    public void addSettingsEventListener(SettingsEventListener listener) {
+        boardPane.addSettingsEventListener(listener);
+        listeners.add(listener);
+    }
+    public void throwSettingsEvent(Settings s) {
+        for (SettingsEventListener listener : listeners)
+            listener.updateSettings(new SettingsEvent(this, s));
+    }
+
+    private Settings throwGetSettingsEvent() {
+        Settings s = null;
+        for (SettingsEventListener listener : listeners)
+            if (listener.getCurrentSettings() != null) s = new Settings(listener.getCurrentSettings());
+        return s;
+    }
+
     private void saveHandler() {
         String filename;
-        do {
-            filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
-                    JOptionPane.PLAIN_MESSAGE, null, null, "");
-        } while (filename == null);
-        saver.save(filename, false);
+        filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
+                JOptionPane.PLAIN_MESSAGE, null, null, "");
+        if (filename != null) saver.save(filename, false);
     }
 
     private void loadHandler() {
@@ -258,6 +285,8 @@ class ChessPanel extends JPanel {
     private static final int tileWidth = 60, tileHeight = 60;
     private static final Point startPoint = new Point(27, 27);
 
+    private LinkedList<SettingsEventListener> listeners = new LinkedList<SettingsEventListener>();
+
     public ChessPanel() {
         try {
             boardImg = ImageIO.read(getClass().getResourceAsStream("/res/images/board.jpg"));
@@ -270,7 +299,7 @@ class ChessPanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         //super.paintComponent(g);
-        drawFrames();
+        if (throwGetSettingsEvent().isHighlightingEnabled) drawFrames();
         g.drawImage(currentBoard, 0, 0, null);
         chessboard.setSelectedFigure(null);
         chessboard.setBoardState();
@@ -337,6 +366,15 @@ class ChessPanel extends JPanel {
                 }
             }
         }
+    }
+
+    public void addSettingsEventListener(SettingsEventListener listener) { listeners.add(listener); }
+
+    private Settings throwGetSettingsEvent() {
+        Settings s = null;
+        for (SettingsEventListener listener : listeners)
+            if (listener.getCurrentSettings() != null) s = new Settings(listener.getCurrentSettings());
+        return s;
     }
 
     private void loadImages() {

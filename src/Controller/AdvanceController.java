@@ -1,14 +1,11 @@
 package Controller;
 
 import Piece.*;
-import View.*;
 import Events.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Stack;
 
 /**
  * Created by yury on 13.12.16.
@@ -27,59 +24,13 @@ public class AdvanceController extends Controller {
     // For the runtime loop
     private AdvanceController() { running = true; }
 
-    public void init(View v) {
-        super.init(v);
+    public void init() {
 
         wasInformed = false;
         hasMateChecked = false;
         isFirstClick = true;
 
         currPlayer = chessboard.getTurn();
-
-        JPanel boardPane = v.getChessPanel();
-        boardPane.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent mouseEvent) {
-                int x = mouseEvent.getX(), y = mouseEvent.getY();
-
-                // We are outside the board
-                if (x < startPoint.x || y < startPoint.y || x > 8 + startPoint.x + 8 * tileWidth || y > 8 + startPoint.y + 8 * tileHeight)
-                    return;
-
-                x -= startPoint.x;
-                y -= startPoint.y;
-                int boardX = x / (tileWidth + 1), boardY = 7 - y / (tileHeight + 1);
-
-                if (isFirstClick) {
-                    Piece p = chessboard.getPiece(boardX, boardY).get();
-
-                    // If we first click on empty tile or this figure isn't ours
-                    if (p == null || p.getColour() != chessboard.getTurn()) return;
-                    chessboard.setSelectedFigure(p);
-                    display.update();
-                    isFirstClick = false;
-                }
-                else {
-                    chessboard.setBoardState();
-                    chessboard.setSelectedFigure(null);
-                    display.update();
-                    isFirstClick = true;
-                    newCommand += "-";
-                }
-
-                String s = "" + (char)(boardX + 'a') + (boardY + 1);
-
-                newCommand += s;
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {}
-            }
-
-            public void mousePressed(MouseEvent mouseEvent) {}
-            public void mouseReleased(MouseEvent mouseEvent) {}
-            public void mouseEntered(MouseEvent mouseEvent) {}
-            public void mouseExited(MouseEvent mouseEvent) {}
-        });
 
         saver.addSaveLoadListener(new SaveLoadListener() {
             public void saveOpponent(SaveLoadEvent event) {
@@ -92,26 +43,41 @@ public class AdvanceController extends Controller {
         });
     }
 
-    public String[] gameType() {
-        logger.log("Collecting information about game type...", true);
+    public void mouseClicked(MouseEvent mouseEvent) {
+        int x = mouseEvent.getX(), y = mouseEvent.getY();
 
-        String s = display.netPrompt();
-        String[] params = new String[2];
-        if (s == null) {
-            quit();
-            params[0] = "null";
-            return params;
-        }
-        params[0] = s;
-        if (params[0].equals("client")) {
-            params[1] = display.clientPrompt();
+        // We are outside the board
+        if (x < startPoint.x || y < startPoint.y || x > 8 + startPoint.x + 8 * tileWidth || y > 8 + startPoint.y + 8 * tileHeight)
+            return;
+
+        x -= startPoint.x;
+        y -= startPoint.y;
+        int boardX = x / (tileWidth + 1), boardY = 7 - y / (tileHeight + 1);
+
+        if (isFirstClick) {
+            Piece p = chessboard.getPiece(boardX, boardY).get();
+
+            // If we first click on empty tile or this figure isn't ours
+            if (p == null || p.getColour() != chessboard.getTurn()) return;
+            chessboard.setSelectedFigure(p);
+            throwUpdateEvent();
+            isFirstClick = false;
         }
         else {
-            params[1] = "";
+            chessboard.setBoardState();
+            chessboard.setSelectedFigure(null);
+            throwUpdateEvent();
+            isFirstClick = true;
+            newCommand += "-";
         }
 
-        logger.log("Collected!", false);
-        return params;
+        String s = "" + (char)(boardX + 'a') + (boardY + 1);
+
+        newCommand += s;
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {}
     }
 
     public Turn getCommand() {
@@ -129,7 +95,7 @@ public class AdvanceController extends Controller {
 
         // Ends the game if checkmate
         if (!hasMateChecked && chessboard.isMate(chessboard.getTurn())) {
-            display.mateHandler();
+            throwMateEvent();
             super.quit();
             return new Turn('q');
         }
@@ -137,7 +103,7 @@ public class AdvanceController extends Controller {
 
         // Informs the current player of check
         if (!wasInformed && chessboard.isCheck(chessboard.getTurn())) {
-            display.checkHandler();
+            throwCheckEvent();
             wasInformed = true;
         }
 
@@ -175,19 +141,16 @@ public class AdvanceController extends Controller {
                 return null;
             }
         }
-        display.update();
+        throwUpdateEvent();
 
         int id = chessboard.needsPromotion(!chessboard.getTurn());
 
         if (id >= 0) {
-            String ss = display.promotionHandler();
-            chessboard.promote(id, ss.charAt(0));
-
-            display.update();
+            throwPromotionEvent(id);
             Turn prevt = chessboard.log.pop();
             if (prevt.type == 'm')
-                return new Turn('p', prevt.x, prevt.y, prevt.x2, prevt.y2, prevt.pieceID, ss.charAt(0));
-            return new Turn('P', prevt.x, prevt.y, prevt.x2, prevt.y2, prevt.pieceID, prevt.targID, ss.charAt(0));
+                return new Turn('p', prevt.x, prevt.y, prevt.x2, prevt.y2, prevt.pieceID, chessboard.getPiece(id).get().getType());
+            return new Turn('P', prevt.x, prevt.y, prevt.x2, prevt.y2, prevt.pieceID, prevt.targID, chessboard.getPiece(id).get().getType());
         }
 
         return chessboard.log.peek();

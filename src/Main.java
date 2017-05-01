@@ -1,8 +1,13 @@
 import Controller.*;
+import Events.*;
 import Network.*;
 import Piece.*;
 import View.*;
 import Logging.*;
+
+import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.*;
 
 public class Main {
@@ -12,8 +17,46 @@ public class Main {
     private static Board chessboard = Board.INSTANCE;
     private static Net net = null;
 
+    private static Settings settings;
+
     public static void main(String[] args) {
         boolean colour = true;
+
+        JPanel boardPane = display.getChessPanel();
+        boardPane.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                controller.mouseClicked(mouseEvent);
+            }
+            public void mousePressed(MouseEvent mouseEvent) {}
+            public void mouseReleased(MouseEvent mouseEvent) {}
+            public void mouseEntered(MouseEvent mouseEvent) {}
+            public void mouseExited(MouseEvent mouseEvent) {}
+        });
+
+        controller.addGameEventListener(new GameEventListener() {
+            public void updateDisplay(UpdateEvent e) {
+                display.update();
+            }
+            public void check(CheckEvent e) {
+                display.checkHandler();
+            }
+            public void mate(MateEvent e) {
+                display.mateHandler();
+            }
+            public void promotion(PromotionEvent e) {
+                String type = display.promotionHandler();
+                chessboard.promote(e.id, type.charAt(0));
+                display.update();
+            }
+        });
+
+        display.addSettingsEventListener(new SettingsEventListener() {
+            public void updateSettings(SettingsEvent e) {
+                settings = new Settings(e.getSettings());
+                logger.recordSettings(settings);
+            }
+            public Settings getCurrentSettings() { return settings; }
+        });
 
         // Uncomment this if you want to get path to your .jar file
         File f = new File(System.getProperty("java.class.path"));
@@ -21,13 +64,39 @@ public class Main {
         String path = dir.toString();
         path = new String(); //For running in IntelliJ not in terminal
 
-        // Tell the board and controller where to output
         logger.init(path);
-        controller.init(display);
+        controller.init();
+
+        // Reading settings
+        try {
+            FileInputStream fs = new FileInputStream(logger.getCurr_path() + "/settings.opt");
+            ObjectInputStream in = new ObjectInputStream(fs);
+            settings = new Settings((Settings)in.readObject());
+
+        } catch (IOException e) { System.err.println("Unable to read settings!\n" + e); }
+        catch (ClassNotFoundException e) { System.err.println("Class Exception!\n" + e);}
 
         logger.log("Starting main function");
+        logger.log("Collecting information about game type...", true);
 
-        String[] gameParams = controller.gameType();
+        String s = display.netPrompt();
+
+        if (s == null) { // Exiting our game if we didn't get any option
+            logger.quit();
+            System.exit(0);
+        }
+
+        String[] gameParams = new String[2];
+        gameParams[0] = s;
+        if (gameParams[0].equals("client")) {
+            gameParams[1] = display.clientPrompt();
+        }
+        else {
+            gameParams[1] = "";
+        }
+
+        logger.log("Collected!", false);
+
         if (gameParams[0].equals("server")) {
             net = Server.INSTANCE;
             String ip = net.getIP();
@@ -50,22 +119,28 @@ public class Main {
             catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); }
         }
 
-        Saver.INSTANCE.setNetworkActivity(net != null);
+        Saver.INSTANCE.setNetwork(net);
 
         display.startHandler();
 
         //Run the game
+        int cntTurn = 0, fileNumber = 0;
         while (controller.isRunning()) {
             Turn currTurn;
 
-            if (net == null) {
+            if (net == null || chessboard.getTurn() == colour) {
                 currTurn = controller.getCommand();
                 logger.log(currTurn);
-            }
-            else if (chessboard.getTurn() == colour) {
-                currTurn = controller.getCommand();
-                logger.log(currTurn);
-                if (currTurn != null)
+
+                if (settings.isAutosaveEnabled && currTurn != null && cntTurn % settings.gapTurns == 0) {
+                    Saver.INSTANCE.save("AUTOSAVE" + Integer.toString(fileNumber + 1), false);
+                    fileNumber++;
+                    fileNumber %= settings.numFiles;
+                    cntTurn++;
+                    cntTurn %= settings.gapTurns;
+                }
+
+                if (net != null && currTurn != null)
                     net.sendTurn(currTurn);
             }
             else {
