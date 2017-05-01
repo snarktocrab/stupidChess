@@ -124,17 +124,23 @@ public class Main {
         display.startHandler();
 
         //Run the game
+        int cntTurn = 0, fileNumber = 0;
         while (controller.isRunning()) {
             Turn currTurn;
 
-            if (net == null) {
+            if (net == null || chessboard.getTurn() == colour) {
                 currTurn = controller.getCommand();
                 logger.log(currTurn);
-            }
-            else if (chessboard.getTurn() == colour) {
-                currTurn = controller.getCommand();
-                logger.log(currTurn);
-                if (currTurn != null)
+
+                if (settings.isAutosaveEnabled && currTurn != null && cntTurn % settings.gapTurns == 0) {
+                    Saver.INSTANCE.save("AUTOSAVE" + Integer.toString(fileNumber + 1), false);
+                    fileNumber++;
+                    fileNumber %= settings.numFiles;
+                    cntTurn++;
+                    cntTurn %= settings.gapTurns;
+                }
+
+                if (net != null && currTurn != null)
                     net.sendTurn(currTurn);
             }
             else {

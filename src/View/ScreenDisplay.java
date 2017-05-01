@@ -207,7 +207,10 @@ public class ScreenDisplay extends JFrame implements View {
     public JPanel getSettingsPanel() { return settingsPane; }
     public ChessPanel getChessPanel() { return boardPane; }
 
-    public void addSettingsEventListener(SettingsEventListener listener) { listeners.add(listener); }
+    public void addSettingsEventListener(SettingsEventListener listener) {
+        boardPane.addSettingsEventListener(listener);
+        listeners.add(listener);
+    }
     public void throwSettingsEvent(Settings s) {
         for (SettingsEventListener listener : listeners)
             listener.updateSettings(new SettingsEvent(this, s));
@@ -282,6 +285,8 @@ class ChessPanel extends JPanel {
     private static final int tileWidth = 60, tileHeight = 60;
     private static final Point startPoint = new Point(27, 27);
 
+    private LinkedList<SettingsEventListener> listeners = new LinkedList<SettingsEventListener>();
+
     public ChessPanel() {
         try {
             boardImg = ImageIO.read(getClass().getResourceAsStream("/res/images/board.jpg"));
@@ -294,7 +299,7 @@ class ChessPanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         //super.paintComponent(g);
-        drawFrames();
+        if (throwGetSettingsEvent().isHighlightingEnabled) drawFrames();
         g.drawImage(currentBoard, 0, 0, null);
         chessboard.setSelectedFigure(null);
         chessboard.setBoardState();
@@ -361,6 +366,15 @@ class ChessPanel extends JPanel {
                 }
             }
         }
+    }
+
+    public void addSettingsEventListener(SettingsEventListener listener) { listeners.add(listener); }
+
+    private Settings throwGetSettingsEvent() {
+        Settings s = null;
+        for (SettingsEventListener listener : listeners)
+            if (listener.getCurrentSettings() != null) s = new Settings(listener.getCurrentSettings());
+        return s;
     }
 
     private void loadImages() {
