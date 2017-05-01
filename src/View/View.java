@@ -1,5 +1,6 @@
 package View;
 
+import Events.Settings;
 import Events.SettingsEvent;
 import Events.SettingsEventListener;
 
@@ -24,5 +25,5 @@ public interface View {
     ChessPanel getChessPanel();
 
     void addSettingsEventListener(SettingsEventListener listener);
-    void throwSettingsEvent(boolean as, int numFiles, int gap, boolean highlight);
+    void throwSettingsEvent(Settings s);
 }

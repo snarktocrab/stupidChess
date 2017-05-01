@@ -7,19 +7,12 @@ import java.util.EventObject;
  * Created by yury on 27.04.17.
  */
 public class SettingsEvent extends EventObject {
-    private boolean enableAutosave, enableHighlighting;
-    private int numFiles, gapTurns;
+    private Settings settings;
 
-    public SettingsEvent(Object _source, boolean autosave, int nFiles, int gTurns, boolean highlighting) {
+    public SettingsEvent(Object _source, Settings s) {
         super(_source);
-        enableAutosave = autosave;
-        numFiles = nFiles;
-        gapTurns = gTurns;
-        enableHighlighting = highlighting;
+        settings = new Settings(s);
     }
 
-    public boolean isAutosaveEnabled() { return enableAutosave; }
-    public int getNumFiles() { return numFiles; }
-    public int getGapTurns() { return gapTurns; }
-    public boolean isHighlightingEnabled() { return enableHighlighting; }
+    public Settings getSettings() { return settings; }
 }

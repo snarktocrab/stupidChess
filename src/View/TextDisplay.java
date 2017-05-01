@@ -1,5 +1,6 @@
 package View;
 
+import Events.Settings;
 import Events.SettingsEvent;
 import Events.SettingsEventListener;
 import Piece.Piece;
@@ -120,5 +121,5 @@ public class TextDisplay implements View {
     public ChessPanel getChessPanel() { return null; }
 
     public void addSettingsEventListener(SettingsEventListener listener) {}
-    public void throwSettingsEvent(boolean as, int numFiles, int gap, boolean highlight) {}
+    public void throwSettingsEvent(Settings s) {}
 }

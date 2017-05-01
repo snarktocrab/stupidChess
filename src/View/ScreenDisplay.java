@@ -13,8 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import Events.SettingsEvent;
-import Events.SettingsEventListener;
+import Events.*;
 import Logging.*;
 import Piece.*;
 
@@ -68,9 +67,6 @@ public class ScreenDisplay extends JFrame implements View {
         JMenu settingsMenu = new JMenu("Settings");
         gameMenu.add(settingsMenu);
 
-        JMenu autosaveItem = new JMenu("Enable/Disable autosave");
-        
-
         saveItem.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {
                 saveHandler();
@@ -104,7 +100,7 @@ public class ScreenDisplay extends JFrame implements View {
 
         settingsMenu.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {
-                SettingsWindow win = new SettingsWindow(INSTANCE);
+                SettingsWindow win = new SettingsWindow(INSTANCE, throwGetSettingsEvent());
             }
             public void mousePressed(MouseEvent mouseEvent) {}
             public void mouseReleased(MouseEvent mouseEvent) {}
@@ -212,9 +208,16 @@ public class ScreenDisplay extends JFrame implements View {
     public ChessPanel getChessPanel() { return boardPane; }
 
     public void addSettingsEventListener(SettingsEventListener listener) { listeners.add(listener); }
-    public void throwSettingsEvent(boolean as, int numFiles, int gap, boolean highlight) {
+    public void throwSettingsEvent(Settings s) {
         for (SettingsEventListener listener : listeners)
-            listener.updateSettings(new SettingsEvent(this, as, numFiles, gap, highlight));
+            listener.updateSettings(new SettingsEvent(this, s));
+    }
+
+    private Settings throwGetSettingsEvent() {
+        Settings s = null;
+        for (SettingsEventListener listener : listeners)
+            if (listener.getCurrentSettings() != null) s = new Settings(listener.getCurrentSettings());
+        return s;
     }
 
     private void saveHandler() {

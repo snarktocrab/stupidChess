@@ -7,4 +7,5 @@ import java.util.EventListener;
  */
 public interface SettingsEventListener extends EventListener {
     void updateSettings(SettingsEvent e);
+    Settings getCurrentSettings();
 }

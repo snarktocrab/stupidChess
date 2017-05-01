@@ -1,5 +1,6 @@
 package Logging;
 
+import Events.Settings;
 import Piece.Turn;
 
 import java.io.*;
@@ -38,10 +39,7 @@ public class Logger {
             try {
                 FileOutputStream fs = new FileOutputStream(path + "/settings.opt");
                 ObjectOutputStream outstr = new ObjectOutputStream(fs);
-                outstr.writeBoolean(true); // Enable autosave
-                outstr.writeInt(3); // Number of autosave files
-                outstr.writeInt(5); // Turns between autosaves;
-                outstr.writeBoolean(true); // Enable tiles highlighting
+                outstr.writeObject(new Settings(true, 3, 5, true));
                 outstr.flush();
             } catch (IOException e) {
                 System.err.println("Unable to create settings!\n" + e);
@@ -105,14 +103,11 @@ public class Logger {
         //System.out.println(msg);
     }
 
-    public void recordSettings (boolean as, int numFiles, int gap, boolean highlight) {
+    public void recordSettings (Settings s) {
         try {
             FileOutputStream fs = new FileOutputStream(curr_path + "/settings.opt");
             ObjectOutputStream outstr = new ObjectOutputStream(fs);
-            outstr.writeBoolean(as);
-            outstr.writeInt(numFiles);
-            outstr.writeInt(gap);
-            outstr.writeBoolean(highlight);
+            outstr.writeObject(s);
             outstr.flush();
         } catch (IOException e) {
             System.err.println("Unable to open settings!\n" + e);

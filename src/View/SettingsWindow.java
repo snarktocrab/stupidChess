@@ -1,18 +1,19 @@
 package View;
 
+import Events.Settings;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
  * Created by yury on 26.04.17.
  */
-public class SettingsWindow extends JFrame {
+class SettingsWindow extends JFrame {
     private static int width = 300, height = 145;
 
-    public SettingsWindow(View display) {
+    SettingsWindow(View display, Settings settings) {
         super("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         JPanel contentPane = new JPanel();
@@ -31,30 +32,30 @@ public class SettingsWindow extends JFrame {
         settingsPane.add(titleAS);
 
         ButtonGroup group = new ButtonGroup();
-        JRadioButton enable = new JRadioButton("Enable", true);
+        JRadioButton enable = new JRadioButton("Enable", settings.isAutosaveEnabled);
         group.add(enable);
-        JRadioButton disable = new JRadioButton("Disable", false);
+        JRadioButton disable = new JRadioButton("Disable", !settings.isAutosaveEnabled);
         group.add(disable);
         settingsPane.add(enable);
         settingsPane.add(disable);
 
         JLabel numFiles = new JLabel("Number of files:");
         settingsPane.add(numFiles);
-        JTextField num = new JTextField("3", 3);
+        JTextField num = new JTextField(Integer.toString(settings.numFiles), 4);
         settingsPane.add(num);
 
         JLabel gapTurns = new JLabel("Time between autosaves:");
         settingsPane.add(gapTurns);
-        JTextField gap = new JTextField("5", 3);
+        JTextField gap = new JTextField(Integer.toString(settings.gapTurns), 4);
         settingsPane.add(gap);
 
         JLabel titleFr = new JLabel("Tiles highlighting:");
         settingsPane.add(titleFr);
 
         ButtonGroup group2 = new ButtonGroup();
-        JRadioButton en = new JRadioButton("Enable", true);
+        JRadioButton en = new JRadioButton("Enable", settings.isHighlightingEnabled);
         group2.add(en);
-        JRadioButton dis = new JRadioButton("Disable", false);
+        JRadioButton dis = new JRadioButton("Disable", !settings.isHighlightingEnabled);
         group2.add(dis);
         settingsPane.add(en);
         settingsPane.add(dis);
@@ -63,8 +64,8 @@ public class SettingsWindow extends JFrame {
         settingsPane.add(ok);
         ok.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {
-                display.throwSettingsEvent(enable.isSelected(), Integer.parseInt(num.getText()),
-                        Integer.parseInt(gap.getText()), en.isSelected());
+                display.throwSettingsEvent(new Settings(enable.isSelected(), Integer.parseInt(num.getText()),
+                        Integer.parseInt(gap.getText()), en.isSelected()));
                 dispose();
             }
             public void mousePressed(MouseEvent mouseEvent) {}

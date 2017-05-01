@@ -17,8 +17,7 @@ public class Main {
     private static Board chessboard = Board.INSTANCE;
     private static Net net = null;
 
-    private static boolean autosaveEnabled, highlightingEnabled;
-    private static int numAutosaveFiles, gapTurns;
+    private static Settings settings;
 
     public static void main(String[] args) {
         boolean colour = true;
@@ -53,12 +52,10 @@ public class Main {
 
         display.addSettingsEventListener(new SettingsEventListener() {
             public void updateSettings(SettingsEvent e) {
-                autosaveEnabled = e.isAutosaveEnabled();
-                numAutosaveFiles = e.getNumFiles();
-                gapTurns = e.getGapTurns();
-                highlightingEnabled = e.isHighlightingEnabled();
-                logger.recordSettings(autosaveEnabled, numAutosaveFiles, gapTurns, highlightingEnabled);
+                settings = new Settings(e.getSettings());
+                logger.recordSettings(settings);
             }
+            public Settings getCurrentSettings() { return settings; }
         });
 
         // Uncomment this if you want to get path to your .jar file
@@ -74,12 +71,10 @@ public class Main {
         try {
             FileInputStream fs = new FileInputStream(logger.getCurr_path() + "/settings.opt");
             ObjectInputStream in = new ObjectInputStream(fs);
-            autosaveEnabled = in.readBoolean();
-            numAutosaveFiles = in.readInt();
-            gapTurns = in.readInt();
-            highlightingEnabled = in.readBoolean();
+            settings = new Settings((Settings)in.readObject());
 
         } catch (IOException e) { System.err.println("Unable to read settings!\n" + e); }
+        catch (ClassNotFoundException e) { System.err.println("Class Exception!\n" + e);}
 
         logger.log("Starting main function");
         logger.log("Collecting information about game type...", true);

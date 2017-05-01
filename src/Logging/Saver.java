@@ -76,7 +76,7 @@ public class Saver {
         } catch (IOException e) { System.err.println("Load Error: " + e); }
         catch (ClassNotFoundException e) { System.err.println("Class not found Error: " + e); }
         if (isNetworkActive && !isRepeat) {
-            throwEvent(new SaveLoadEvent(this, 'l', filename));
+            //throwEvent(new SaveLoadEvent(this, 'l', filename));
             saveNet();
         }
         logger.log("Successfully", false);
@@ -115,6 +115,7 @@ public class Saver {
         Board b = Board.INSTANCE;
         try {
             ObjectOutputStream sv = net.getOutStream();
+            sv.writeObject(new Turn('l', "remove this please"));
             sv.writeObject(b.getTurn());
             for (int i = 0; i < 32; ++i) {
                 sv.writeObject(b.getPiece(i).get());
