@@ -17,6 +17,8 @@ public class Main {
     private static Board chessboard = Board.INSTANCE;
     private static Net net = null;
 
+    private static Settings settings;
+
     public static void main(String[] args) {
         boolean colour = true;
 
@@ -48,6 +50,14 @@ public class Main {
             }
         });
 
+        display.addSettingsEventListener(new SettingsEventListener() {
+            public void updateSettings(SettingsEvent e) {
+                settings = new Settings(e.getSettings());
+                logger.recordSettings(settings);
+            }
+            public Settings getCurrentSettings() { return settings; }
+        });
+
         // Uncomment this if you want to get path to your .jar file
         File f = new File(System.getProperty("java.class.path"));
         File dir = f.getAbsoluteFile().getParentFile();
@@ -57,10 +67,25 @@ public class Main {
         logger.init(path);
         controller.init();
 
+        // Reading settings
+        try {
+            FileInputStream fs = new FileInputStream(logger.getCurr_path() + "/settings.opt");
+            ObjectInputStream in = new ObjectInputStream(fs);
+            settings = new Settings((Settings)in.readObject());
+
+        } catch (IOException e) { System.err.println("Unable to read settings!\n" + e); }
+        catch (ClassNotFoundException e) { System.err.println("Class Exception!\n" + e);}
+
         logger.log("Starting main function");
         logger.log("Collecting information about game type...", true);
 
         String s = display.netPrompt();
+
+        if (s == null) { // Exiting our game if we didn't get any option
+            logger.quit();
+            System.exit(0);
+        }
+
         String[] gameParams = new String[2];
         gameParams[0] = s;
         if (gameParams[0].equals("client")) {
@@ -94,22 +119,28 @@ public class Main {
             catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); }
         }
 
-        Saver.INSTANCE.setNetworkActivity(net != null);
+        Saver.INSTANCE.setNetwork(net);
 
         display.startHandler();
 
         //Run the game
+        int cntTurn = 0, fileNumber = 0;
         while (controller.isRunning()) {
             Turn currTurn;
 
-            if (net == null) {
+            if (net == null || chessboard.getTurn() == colour) {
                 currTurn = controller.getCommand();
                 logger.log(currTurn);
-            }
-            else if (chessboard.getTurn() == colour) {
-                currTurn = controller.getCommand();
-                logger.log(currTurn);
-                if (currTurn != null)
+
+                if (settings.isAutosaveEnabled && currTurn != null && cntTurn % settings.gapTurns == 0) {
+                    Saver.INSTANCE.save("AUTOSAVE" + Integer.toString(fileNumber + 1), false);
+                    fileNumber++;
+                    fileNumber %= settings.numFiles;
+                    cntTurn++;
+                    cntTurn %= settings.gapTurns;
+                }
+
+                if (net != null && currTurn != null)
                     net.sendTurn(currTurn);
             }
             else {

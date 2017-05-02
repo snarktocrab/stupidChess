@@ -47,11 +47,8 @@ public abstract class Controller {
             case 'u':
                 chessboard.undo();
                 break;
-            case 's':
-                saver.save(t.filename, true);
-                break;
             case 'l':
-                saver.load(t.filename, true);
+                saver.loadNet();
                 display.update();
                 break;
             default:
