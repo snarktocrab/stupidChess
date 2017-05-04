@@ -25,25 +25,17 @@ public class AdvanceController extends Controller {
     private AdvanceController() { running = true; }
 
     public void init() {
-
+        throwLogEvent("Initializing controller");
         wasInformed = false;
         hasMateChecked = false;
         isFirstClick = true;
 
         currPlayer = chessboard.getTurn();
-
-        saver.addSaveLoadListener(new SaveLoadListener() {
-            public void saveOpponent(SaveLoadEvent event) {
-                saveLoadTurn = new Turn('s', event.getFilename());
-            }
-
-            public void loadOpponent(SaveLoadEvent event) {
-                saveLoadTurn = new Turn('l', event.getFilename());
-            }
-        });
+        throwLogEvent("Controller has been successfully initialized!");
     }
 
     public void mouseClicked(MouseEvent mouseEvent) {
+        throwLogEvent("Handling mouseClicked...");
         int x = mouseEvent.getX(), y = mouseEvent.getY();
 
         // We are outside the board

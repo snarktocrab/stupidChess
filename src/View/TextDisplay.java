@@ -1,5 +1,6 @@
 package View;
 
+import Events.LogEventListener;
 import Events.Settings;
 import Events.SettingsEvent;
 import Events.SettingsEventListener;
@@ -122,4 +123,5 @@ public class TextDisplay implements View {
 
     public void addSettingsEventListener(SettingsEventListener listener) {}
     public void throwSettingsEvent(Settings s) {}
+    public void addLogEventListener(LogEventListener listener) {}
 }

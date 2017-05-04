@@ -1,5 +1,6 @@
 package View;
 
+import Events.LogEventListener;
 import Events.Settings;
 import Events.SettingsEvent;
 import Events.SettingsEventListener;
@@ -26,4 +27,5 @@ public interface View {
 
     void addSettingsEventListener(SettingsEventListener listener);
     void throwSettingsEvent(Settings s);
+    void addLogEventListener(LogEventListener listener);
 }

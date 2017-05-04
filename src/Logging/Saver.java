@@ -48,10 +48,6 @@ public class Saver {
             }
             sv.writeObject(b.log);
         } catch (IOException e) { System.err.println("Save Error: " + e); }
-        /*if (isNetworkActive && !isRepeat) {
-            throwEvent(new SaveLoadEvent(this, 's', filename));
-            netSave();
-        }*/
         logger.log("Successfully!", false);
     }
 

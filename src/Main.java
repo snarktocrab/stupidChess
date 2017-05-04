@@ -58,6 +58,23 @@ public class Main {
             public Settings getCurrentSettings() { return settings; }
         });
 
+        LogEventListener logEventListener = new LogEventListener() {
+            public void logMessage(LogEvent e) {
+                logger.log(e.getMessage());
+            }
+            public void logFunction(LogEvent e, boolean b) {
+                logger.log(e.getMessage(), b);
+            }
+            public void logError(LogEvent e) {
+                logger.err(e.getMessage(), e.getEx());
+            }
+            public String getCurrentPath() {
+                return logger.getCurr_path();
+            }
+        };
+        controller.addLogEventListener(logEventListener);
+        display.addLogEventListener(logEventListener);
+
         // Uncomment this if you want to get path to your .jar file
         File f = new File(System.getProperty("java.class.path"));
         File dir = f.getAbsoluteFile().getParentFile();
@@ -120,6 +137,7 @@ public class Main {
         }
 
         Saver.INSTANCE.setNetwork(net);
+        if (net != null) net.addLogEventListener(logEventListener);
 
         display.startHandler();
 

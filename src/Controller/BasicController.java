@@ -38,7 +38,7 @@ public class BasicController extends Controller {
 
     // Receives a move from input
     public Turn getCommand() {
-        logger.log("Getting command...");
+        //logger.log("Getting command...");
 
         // Ends the game if checkmate
         if (chessboard.isMate(chessboard.getTurn())) {

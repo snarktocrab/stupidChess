@@ -26,15 +26,16 @@ public class ScreenDisplay extends JFrame implements View {
     private JPanel settingsPane;
 
     private Board chessboard = Board.INSTANCE;
-    private Logger logger = Logger.INSTANCE;
     private Saver saver = Saver.INSTANCE;
 
-    private LinkedList<SettingsEventListener> listeners = new LinkedList<SettingsEventListener>();
+    private LinkedList<SettingsEventListener> listeners = new LinkedList<>();
+    private LinkedList<LogEventListener> logListeners = new LinkedList<>();
 
     // Singleton
     public static ScreenDisplay INSTANCE = new ScreenDisplay();
     private ScreenDisplay() {
         super("Chess");
+        throwLogEvent("Initializing display...", true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel contentPane = new JPanel();
 
@@ -112,6 +113,12 @@ public class ScreenDisplay extends JFrame implements View {
         this.setJMenuBar(menuBar); // This sets menuBar at the top of the window
 
         this.setVisible(true);
+        throwLogEvent("Display has been successfully initialized!", false);
+    }
+
+    public void addLogEventListener(LogEventListener listener) {
+        boardPane.addLogEventListener(listener);
+        logListeners.add(listener);
     }
 
     public void update() {
@@ -231,18 +238,18 @@ public class ScreenDisplay extends JFrame implements View {
     }
 
     private void loadHandler() {
-        String path = logger.getCurr_path() + "/saves";
+        String path = getCurr_path() + "/saves";
         File folder = new File(path);
         if (!folder.exists()) {
             System.err.println("Can't find any saved game!");
-            logger.log("Error: Can't find any saved game!", false);
+            throwLogEvent("Error: Can't find any saved game!");
             return;
         }
 
         File[] flist = folder.listFiles();
         if (flist == null || flist.length == 0) {
             System.err.println("ERROR: There are no saved games!");
-            logger.log("Error: Can't find any saved games");
+            throwLogEvent("Error: Can't find any saved games");
             return;
         }
 
@@ -251,7 +258,7 @@ public class ScreenDisplay extends JFrame implements View {
             if (flist[i].isFile() && flist[i].getName().endsWith(".sav")) cnt++;
         if (cnt == 0) {
             System.err.println("ERROR: There are no saved games!");
-            logger.log("Error: Can't find any saved games");
+            throwLogEvent("Error: Can't find any saved games");
             return;
         }
 
@@ -270,6 +277,26 @@ public class ScreenDisplay extends JFrame implements View {
         saver.load(filename + ".sav", false);
         update();
     }
+
+    private void throwLogEvent(String msg) {
+        for (LogEventListener listener : logListeners)
+            listener.logMessage(new LogEvent(this, msg));
+    }
+    private void throwLogEvent(String msg, boolean enter) {
+        for (LogEventListener listener : logListeners)
+            listener.logFunction(new LogEvent(this, msg), enter);
+    }
+    private void throwLogEvent(String msg, Exception ex) {
+        for (LogEventListener listener : logListeners)
+            listener.logError(new LogEvent(this, msg, ex));
+    }
+
+    private String getCurr_path() {
+        String s = null;
+        for (LogEventListener listener : logListeners)
+            s = listener.getCurrentPath();
+        return s;
+    }
 }
 
 class ChessPanel extends JPanel {
@@ -285,9 +312,11 @@ class ChessPanel extends JPanel {
     private static final int tileWidth = 60, tileHeight = 60;
     private static final Point startPoint = new Point(27, 27);
 
-    private LinkedList<SettingsEventListener> listeners = new LinkedList<SettingsEventListener>();
+    private LinkedList<SettingsEventListener> listeners = new LinkedList<>();
+    private LinkedList<LogEventListener> logListeners = new LinkedList<>();
 
     public ChessPanel() {
+        throwLogEvent("Initializing board...", true);
         try {
             boardImg = ImageIO.read(getClass().getResourceAsStream("/res/images/board.jpg"));
         } catch (IOException e) {
@@ -295,7 +324,10 @@ class ChessPanel extends JPanel {
         }
 
         loadImages();
+        throwLogEvent("Board has been successfully initialized!", false);
     }
+
+    public void addLogEventListener(LogEventListener listener) { logListeners.add(listener); }
 
     public void paintComponent(Graphics g) {
         //super.paintComponent(g);
@@ -306,7 +338,6 @@ class ChessPanel extends JPanel {
     }
 
     public void resetBoard() {
-        if (boardImg == null) System.out.println("yep");
         ColorModel cm = boardImg.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = boardImg.copyData(null);
@@ -377,7 +408,21 @@ class ChessPanel extends JPanel {
         return s;
     }
 
+    private void throwLogEvent(String msg) {
+        for (LogEventListener listener : logListeners)
+            listener.logMessage(new LogEvent(this, msg));
+    }
+    private void throwLogEvent(String msg, boolean enter) {
+        for (LogEventListener listener : logListeners)
+            listener.logFunction(new LogEvent(this, msg), enter);
+    }
+    private void throwLogEvent(String msg, Exception ex) {
+        for (LogEventListener listener : logListeners)
+            listener.logError(new LogEvent(this, msg, ex));
+    }
+
     private void loadImages() {
+        throwLogEvent("Loading images", true);
         try {
             figuresImg[0] = ImageIO.read(getClass().getResourceAsStream("/res/images/pawn-w.png"));
             figuresImg[1] = ImageIO.read(getClass().getResourceAsStream("/res/images/pawn-b.png"));
@@ -395,6 +440,10 @@ class ChessPanel extends JPanel {
             attack = ImageIO.read(getClass().getResourceAsStream("/res/images/red-sqr.png"));
             move = ImageIO.read(getClass().getResourceAsStream("/res/images/blue-sqr.png"));
             select = ImageIO.read(getClass().getResourceAsStream("/res/images/yellow-sqr.png"));
-        } catch (IOException e) {}
+            throwLogEvent("Successfully!", false);
+        } catch (IOException e) {
+            System.err.println("Error while loading images: " + e);
+            throwLogEvent("Error while loading images: ", e);
+        }
     }
 }

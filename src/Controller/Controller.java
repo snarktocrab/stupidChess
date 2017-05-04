@@ -14,9 +14,9 @@ public abstract class Controller {
 
     protected Board chessboard = Board.INSTANCE;
     protected View display;
-    protected Logger logger = Logger.INSTANCE;
     protected Saver saver = Saver.INSTANCE;
     protected LinkedList<GameEventListener> listeners = new LinkedList<>();
+    protected LinkedList<LogEventListener> logListeners = new LinkedList<>();
 
     // Tell the controller where to output
     public abstract void init();
@@ -26,7 +26,7 @@ public abstract class Controller {
     // Input a command, relay it to Board
     public abstract Turn getCommand();
     public void turnHandler(Turn t) {
-        logger.log("Handling turn...");
+        throwLogEvent("Handling turn...", true);
         switch (t.type) {
             case 'q':
                 quit();
@@ -55,11 +55,13 @@ public abstract class Controller {
                 return;
         }
         throwUpdateEvent();
+        throwLogEvent("Successfully!", false);
     }
 
     public void addGameEventListener(GameEventListener listener) {
         listeners.add(listener);
     }
+    public void addLogEventListener(LogEventListener listener) { logListeners.add(listener); }
 
     // Instead of infinity loop
     public boolean isRunning() { return running; }
@@ -67,16 +69,32 @@ public abstract class Controller {
     // Quits the program
     public void quit() { running = false; }
 
-    public void throwUpdateEvent() {
-        for (GameEventListener listener : listeners) listener.updateDisplay(new UpdateEvent(this));
+    protected void throwUpdateEvent() {
+        for (GameEventListener listener : listeners)
+            listener.updateDisplay(new UpdateEvent(this));
     }
-    public void throwCheckEvent() {
-        for (GameEventListener listener : listeners) listener.check(new CheckEvent(this));
+    protected void throwCheckEvent() {
+        for (GameEventListener listener : listeners)
+            listener.check(new CheckEvent(this));
     }
-    public void throwMateEvent() {
-        for (GameEventListener listener : listeners) listener.mate(new MateEvent(this));
+    protected void throwMateEvent() {
+        for (GameEventListener listener : listeners)
+            listener.mate(new MateEvent(this));
     }
-    public void throwPromotionEvent(int id) {
-        for (GameEventListener listener : listeners) listener.promotion(new PromotionEvent(this, id));
+    protected void throwPromotionEvent(int id) {
+        for (GameEventListener listener : listeners)
+            listener.promotion(new PromotionEvent(this, id));
+    }
+    protected void throwLogEvent(String msg) {
+        for (LogEventListener listener : logListeners)
+            listener.logMessage(new LogEvent(this, msg));
+    }
+    protected void throwLogEvent(String msg, boolean enter) {
+        for (LogEventListener listener : logListeners)
+            listener.logFunction(new LogEvent(this, msg), enter);
+    }
+    protected void throwLogEvent(String msg, Exception ex) {
+        for (LogEventListener listener : logListeners)
+            listener.logError(new LogEvent(this, msg, ex));
     }
 }
