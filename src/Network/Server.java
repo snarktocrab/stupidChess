@@ -52,7 +52,7 @@ public class Server implements Net{
                 Enumeration ee = n.getInetAddresses();
                 while (ee.hasMoreElements()) {
                     InetAddress i = (InetAddress) ee.nextElement();
-                    if (i.getHostAddress().startsWith("192.168")) {
+                    if (i instanceof Inet4Address) {
                         throwLogEvent("Got it!", false);
                         return i.getHostAddress();
                     }
