@@ -14,7 +14,7 @@ public abstract class Controller {
 
     protected Board chessboard = Board.INSTANCE;
     protected View display;
-    protected Saver saver = Saver.INSTANCE;
+    private LinkedList<SaveLoadListener> saveListeners = new LinkedList<>();
     protected LinkedList<GameEventListener> listeners = new LinkedList<>();
     protected LinkedList<LogEventListener> logListeners = new LinkedList<>();
 
@@ -48,7 +48,7 @@ public abstract class Controller {
                 chessboard.undo();
                 break;
             case 'l':
-                saver.loadNet();
+                loadNet();
                 display.update();
                 break;
             default:
@@ -62,6 +62,7 @@ public abstract class Controller {
         listeners.add(listener);
     }
     public void addLogEventListener(LogEventListener listener) { logListeners.add(listener); }
+    public void addSaveLoadListener(SaveLoadListener listener) { saveListeners.add(listener); }
 
     // Instead of infinity loop
     public boolean isRunning() { return running; }
@@ -96,5 +97,10 @@ public abstract class Controller {
     protected void throwLogEvent(String msg, Exception ex) {
         for (LogEventListener listener : logListeners)
             listener.logError(new LogEvent(this, msg, ex));
+    }
+
+    protected void loadNet() {
+        for (SaveLoadListener listener : saveListeners)
+            listener.loadNet();
     }
 }

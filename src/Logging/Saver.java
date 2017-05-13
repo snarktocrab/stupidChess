@@ -17,21 +17,12 @@ public class Saver {
     public static Saver INSTANCE = new Saver();
 
     private Logger logger = Logger.INSTANCE;
-    private LinkedList<SaveLoadListener> listeners = new LinkedList<>();
     private Net net;
     private boolean isNetworkActive;
 
     private Saver() {}
 
-    public void addSaveLoadListener(SaveLoadListener saveLoadListener) {
-        listeners.add(saveLoadListener);
-    }
-
-    public void removeSaveLoadListener(SaveLoadListener sll) {
-        listeners.remove(sll);
-    }
-
-    public void save(String filename, boolean isRepeat) {
+    public void save(String filename) {
         logger.log("Saving game...", true);
         String path = logger.getCurr_path() + "/saves";
         File folder = new File(path);
@@ -51,7 +42,7 @@ public class Saver {
         logger.log("Successfully!", false);
     }
 
-    public void load(String filename, boolean isRepeat) {
+    public void load(String filename) {
         logger.log("Loading game...", true);
         Board.INSTANCE.setSelectedFigure(null);
         String path = logger.getCurr_path() + "/saves";
@@ -71,8 +62,7 @@ public class Saver {
             b.log = (Stack<Turn>)ld.readObject();
         } catch (IOException e) { System.err.println("Load Error: " + e); }
         catch (ClassNotFoundException e) { System.err.println("Class not found Error: " + e); }
-        if (isNetworkActive && !isRepeat) {
-            //throwEvent(new SaveLoadEvent(this, 'l', filename));
+        if (isNetworkActive) {
             saveNet();
         }
         logger.log("Successfully", false);
@@ -96,15 +86,6 @@ public class Saver {
     public void setNetwork(Net network) {
         net = network;
         isNetworkActive = (network != null);
-    }
-
-    private void throwEvent(SaveLoadEvent event) {
-        for (SaveLoadListener next : listeners) {
-            if (event.getType() == 's')
-                next.saveOpponent(event);
-            else if (event.getType() == 'l')
-                next.loadOpponent(event);
-        }
     }
 
     private void saveNet() {

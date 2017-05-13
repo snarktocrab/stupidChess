@@ -15,7 +15,6 @@ public class AdvanceController extends Controller {
     private static final Point startPoint = new Point(27, 27);
 
     private String newCommand = "";
-    private Turn saveLoadTurn = null;
     private boolean currPlayer, wasInformed, hasMateChecked, isFirstClick;
 
     //Singleton
@@ -77,12 +76,6 @@ public class AdvanceController extends Controller {
             currPlayer = chessboard.getTurn();
             wasInformed = false;
             hasMateChecked = false;
-        }
-
-        if (saveLoadTurn != null) {
-            Turn t = new Turn(saveLoadTurn);
-            saveLoadTurn = null;
-            return t;
         }
 
         // Ends the game if checkmate

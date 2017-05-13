@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.io.*;
 
 public class Main {
+    private static Saver saver = Saver.INSTANCE;
     private static Logger logger = Logger.INSTANCE;
     private static View display = ScreenDisplay.INSTANCE;
     private static Controller controller = AdvanceController.INSTANCE;
@@ -75,6 +76,18 @@ public class Main {
         controller.addLogEventListener(logEventListener);
         display.addLogEventListener(logEventListener);
 
+        SaveLoadListener saveLoadListener = new SaveLoadListener() {
+            public void save(SaveLoadEvent e) {
+                saver.save(e.getFilename());
+            }
+            public void load(SaveLoadEvent e) {
+                saver.load(e.getFilename());
+            }
+            public void loadNet() { saver.loadNet(); }
+        };
+        controller.addSaveLoadListener(saveLoadListener);
+        display.addSaveLoadListener(saveLoadListener);
+
         // Uncomment this if you want to get path to your .jar file
         File f = new File(System.getProperty("java.class.path"));
         File dir = f.getAbsoluteFile().getParentFile();
@@ -136,7 +149,7 @@ public class Main {
             catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); }
         }
 
-        Saver.INSTANCE.setNetwork(net);
+        saver.setNetwork(net);
         if (net != null) net.addLogEventListener(logEventListener);
 
         display.startHandler();
@@ -151,7 +164,7 @@ public class Main {
                 logger.log(currTurn);
 
                 if (settings.isAutosaveEnabled && currTurn != null && cntTurn % settings.gapTurns == 0) {
-                    Saver.INSTANCE.save("AUTOSAVE" + Integer.toString(fileNumber + 1), false);
+                    saver.save("AUTOSAVE" + Integer.toString(fileNumber + 1));
                     fileNumber++;
                     fileNumber %= settings.numFiles;
                     cntTurn++;

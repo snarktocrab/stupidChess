@@ -1,9 +1,6 @@
 package View;
 
-import Events.LogEventListener;
-import Events.Settings;
-import Events.SettingsEvent;
-import Events.SettingsEventListener;
+import Events.*;
 
 import javax.swing.*;
 
@@ -28,4 +25,5 @@ public interface View {
     void addSettingsEventListener(SettingsEventListener listener);
     void throwSettingsEvent(Settings s);
     void addLogEventListener(LogEventListener listener);
+    void addSaveLoadListener(SaveLoadListener listener);
 }

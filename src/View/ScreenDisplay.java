@@ -26,10 +26,10 @@ public class ScreenDisplay extends JFrame implements View {
     private JPanel settingsPane;
 
     private Board chessboard = Board.INSTANCE;
-    private Saver saver = Saver.INSTANCE;
 
     private LinkedList<SettingsEventListener> listeners = new LinkedList<>();
     private LinkedList<LogEventListener> logListeners = new LinkedList<>();
+    private LinkedList<SaveLoadListener> saveListeners = new LinkedList<>();
 
     // Singleton
     public static ScreenDisplay INSTANCE = new ScreenDisplay();
@@ -120,6 +120,8 @@ public class ScreenDisplay extends JFrame implements View {
         boardPane.addLogEventListener(listener);
         logListeners.add(listener);
     }
+
+    public void addSaveLoadListener(SaveLoadListener listener) { saveListeners.add(listener); }
 
     public void update() {
         // Activate this to monitor the state of every board piece
@@ -234,7 +236,7 @@ public class ScreenDisplay extends JFrame implements View {
         String filename;
         filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
                 JOptionPane.PLAIN_MESSAGE, null, null, "");
-        if (filename != null) saver.save(filename, false);
+        if (filename != null) throwSaveLoadEvent(new SaveLoadEvent(this, filename), 's');
     }
 
     private void loadHandler() {
@@ -274,7 +276,7 @@ public class ScreenDisplay extends JFrame implements View {
         String filename = (String)JOptionPane.showInputDialog(this, "Choose saved game:", "Loading",
                 JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
         if (filename == null) return;
-        saver.load(filename + ".sav", false);
+        throwSaveLoadEvent(new SaveLoadEvent(this, filename + ".sav"), 'l');
         update();
     }
 
@@ -296,6 +298,15 @@ public class ScreenDisplay extends JFrame implements View {
         for (LogEventListener listener : logListeners)
             s = listener.getCurrentPath();
         return s;
+    }
+
+    private void throwSaveLoadEvent(SaveLoadEvent e, char type) {
+        for (SaveLoadListener listener : saveListeners) {
+            if (type == 's')
+                listener.save(e);
+            else if (type == 'l')
+                listener.load(e);
+        }
     }
 }
 
