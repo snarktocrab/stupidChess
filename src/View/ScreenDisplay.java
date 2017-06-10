@@ -4,8 +4,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -13,7 +11,9 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
+import Events.*;
 import Logging.*;
 import Piece.*;
 
@@ -21,18 +21,21 @@ import Piece.*;
  * Created by yury on 13.12.16.
  */
 public class ScreenDisplay extends JFrame implements View {
-    private int width = 545, height = 545 + 26;
+    private int width = 545, height = 545 + 20;
     private ChessPanel boardPane;
     private JPanel settingsPane;
 
     private Board chessboard = Board.INSTANCE;
-    private Logger logger = Logger.INSTANCE;
-    private Saver saver = Saver.INSTANCE;
+
+    private LinkedList<SettingsEventListener> listeners = new LinkedList<>();
+    private LinkedList<LogEventListener> logListeners = new LinkedList<>();
+    private LinkedList<SaveLoadListener> saveListeners = new LinkedList<>();
 
     // Singleton
     public static ScreenDisplay INSTANCE = new ScreenDisplay();
     private ScreenDisplay() {
         super("Chess");
+        throwLogEvent("Initializing display...", true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel contentPane = new JPanel();
 
@@ -55,14 +58,15 @@ public class ScreenDisplay extends JFrame implements View {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Game");
         menuBar.add(gameMenu);
+        JMenu exitItem = new JMenu("Exit");
+        menuBar.add(exitItem);
 
         JMenu saveItem = new JMenu("Save");
         gameMenu.add(saveItem);
         JMenu loadItem = new JMenu("Load");
         gameMenu.add(loadItem);
-        gameMenu.addSeparator();
-        JMenu exitItem = new JMenu("Exit");
-        gameMenu.add(exitItem);
+        JMenu settingsMenu = new JMenu("Settings");
+        gameMenu.add(settingsMenu);
 
         saveItem.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -95,11 +99,29 @@ public class ScreenDisplay extends JFrame implements View {
             public void mouseExited(MouseEvent mouseEvent) {}
         });
 
+        settingsMenu.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                SettingsWindow win = new SettingsWindow(INSTANCE, throwGetSettingsEvent());
+            }
+            public void mousePressed(MouseEvent mouseEvent) {}
+            public void mouseReleased(MouseEvent mouseEvent) {}
+            public void mouseEntered(MouseEvent mouseEvent) {}
+            public void mouseExited(MouseEvent mouseEvent) {}
+        });
+
         boardPane.add(menuBar);
-        //this.setJMenuBar(menuBar); // This sets menuBar at the top of the window
+        this.setJMenuBar(menuBar); // This sets menuBar at the top of the window
 
         this.setVisible(true);
+        throwLogEvent("Display has been successfully initialized!", false);
     }
+
+    public void addLogEventListener(LogEventListener listener) {
+        boardPane.addLogEventListener(listener);
+        logListeners.add(listener);
+    }
+
+    public void addSaveLoadListener(SaveLoadListener listener) { saveListeners.add(listener); }
 
     public void update() {
         // Activate this to monitor the state of every board piece
@@ -194,28 +216,42 @@ public class ScreenDisplay extends JFrame implements View {
     public JPanel getSettingsPanel() { return settingsPane; }
     public ChessPanel getChessPanel() { return boardPane; }
 
+    public void addSettingsEventListener(SettingsEventListener listener) {
+        boardPane.addSettingsEventListener(listener);
+        listeners.add(listener);
+    }
+    public void throwSettingsEvent(Settings s) {
+        for (SettingsEventListener listener : listeners)
+            listener.updateSettings(new SettingsEvent(this, s));
+    }
+
+    private Settings throwGetSettingsEvent() {
+        Settings s = null;
+        for (SettingsEventListener listener : listeners)
+            if (listener.getCurrentSettings() != null) s = new Settings(listener.getCurrentSettings());
+        return s;
+    }
+
     private void saveHandler() {
         String filename;
-        do {
-            filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
-                    JOptionPane.PLAIN_MESSAGE, null, null, "");
-        } while (filename == null);
-        saver.save(filename, false);
+        filename = (String) JOptionPane.showInputDialog(this, "Enter save name:\n", "Saving",
+                JOptionPane.PLAIN_MESSAGE, null, null, "");
+        if (filename != null) throwSaveLoadEvent(new SaveLoadEvent(this, filename), 's');
     }
 
     private void loadHandler() {
-        String path = logger.getCurr_path() + "/saves";
+        String path = getCurr_path() + "/saves";
         File folder = new File(path);
         if (!folder.exists()) {
             System.err.println("Can't find any saved game!");
-            logger.log("Error: Can't find any saved game!", false);
+            throwLogEvent("Error: Can't find any saved game!");
             return;
         }
 
         File[] flist = folder.listFiles();
         if (flist == null || flist.length == 0) {
             System.err.println("ERROR: There are no saved games!");
-            logger.log("Error: Can't find any saved games");
+            throwLogEvent("Error: Can't find any saved games");
             return;
         }
 
@@ -224,7 +260,7 @@ public class ScreenDisplay extends JFrame implements View {
             if (flist[i].isFile() && flist[i].getName().endsWith(".sav")) cnt++;
         if (cnt == 0) {
             System.err.println("ERROR: There are no saved games!");
-            logger.log("Error: Can't find any saved games");
+            throwLogEvent("Error: Can't find any saved games");
             return;
         }
 
@@ -240,8 +276,37 @@ public class ScreenDisplay extends JFrame implements View {
         String filename = (String)JOptionPane.showInputDialog(this, "Choose saved game:", "Loading",
                 JOptionPane.PLAIN_MESSAGE, null, files, files[0]);
         if (filename == null) return;
-        saver.load(filename + ".sav", false);
+        throwSaveLoadEvent(new SaveLoadEvent(this, filename + ".sav"), 'l');
         update();
+    }
+
+    private void throwLogEvent(String msg) {
+        for (LogEventListener listener : logListeners)
+            listener.logMessage(new LogEvent(this, msg));
+    }
+    private void throwLogEvent(String msg, boolean enter) {
+        for (LogEventListener listener : logListeners)
+            listener.logFunction(new LogEvent(this, msg), enter);
+    }
+    private void throwLogEvent(String msg, Exception ex) {
+        for (LogEventListener listener : logListeners)
+            listener.logError(new LogEvent(this, msg, ex));
+    }
+
+    private String getCurr_path() {
+        String s = null;
+        for (LogEventListener listener : logListeners)
+            s = listener.getCurrentPath();
+        return s;
+    }
+
+    private void throwSaveLoadEvent(SaveLoadEvent e, char type) {
+        for (SaveLoadListener listener : saveListeners) {
+            if (type == 's')
+                listener.save(e);
+            else if (type == 'l')
+                listener.load(e);
+        }
     }
 }
 
@@ -258,7 +323,11 @@ class ChessPanel extends JPanel {
     private static final int tileWidth = 60, tileHeight = 60;
     private static final Point startPoint = new Point(27, 27);
 
+    private LinkedList<SettingsEventListener> listeners = new LinkedList<>();
+    private LinkedList<LogEventListener> logListeners = new LinkedList<>();
+
     public ChessPanel() {
+        throwLogEvent("Initializing board...", true);
         try {
             boardImg = ImageIO.read(getClass().getResourceAsStream("/res/images/board.jpg"));
         } catch (IOException e) {
@@ -266,18 +335,20 @@ class ChessPanel extends JPanel {
         }
 
         loadImages();
+        throwLogEvent("Board has been successfully initialized!", false);
     }
+
+    public void addLogEventListener(LogEventListener listener) { logListeners.add(listener); }
 
     public void paintComponent(Graphics g) {
         //super.paintComponent(g);
-        drawFrames();
+        if (throwGetSettingsEvent().isHighlightingEnabled) drawFrames();
         g.drawImage(currentBoard, 0, 0, null);
         chessboard.setSelectedFigure(null);
         chessboard.setBoardState();
     }
 
     public void resetBoard() {
-        if (boardImg == null) System.out.println("yep");
         ColorModel cm = boardImg.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = boardImg.copyData(null);
@@ -339,7 +410,30 @@ class ChessPanel extends JPanel {
         }
     }
 
+    public void addSettingsEventListener(SettingsEventListener listener) { listeners.add(listener); }
+
+    private Settings throwGetSettingsEvent() {
+        Settings s = null;
+        for (SettingsEventListener listener : listeners)
+            if (listener.getCurrentSettings() != null) s = new Settings(listener.getCurrentSettings());
+        return s;
+    }
+
+    private void throwLogEvent(String msg) {
+        for (LogEventListener listener : logListeners)
+            listener.logMessage(new LogEvent(this, msg));
+    }
+    private void throwLogEvent(String msg, boolean enter) {
+        for (LogEventListener listener : logListeners)
+            listener.logFunction(new LogEvent(this, msg), enter);
+    }
+    private void throwLogEvent(String msg, Exception ex) {
+        for (LogEventListener listener : logListeners)
+            listener.logError(new LogEvent(this, msg, ex));
+    }
+
     private void loadImages() {
+        throwLogEvent("Loading images", true);
         try {
             figuresImg[0] = ImageIO.read(getClass().getResourceAsStream("/res/images/pawn-w.png"));
             figuresImg[1] = ImageIO.read(getClass().getResourceAsStream("/res/images/pawn-b.png"));
@@ -357,6 +451,10 @@ class ChessPanel extends JPanel {
             attack = ImageIO.read(getClass().getResourceAsStream("/res/images/red-sqr.png"));
             move = ImageIO.read(getClass().getResourceAsStream("/res/images/blue-sqr.png"));
             select = ImageIO.read(getClass().getResourceAsStream("/res/images/yellow-sqr.png"));
-        } catch (IOException e) {}
+            throwLogEvent("Successfully!", false);
+        } catch (IOException e) {
+            System.err.println("Error while loading images: " + e);
+            throwLogEvent("Error while loading images: ", e);
+        }
     }
 }

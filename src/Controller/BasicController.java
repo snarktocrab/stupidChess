@@ -1,6 +1,8 @@
 package Controller;
 
 import Piece.*;
+
+import java.awt.event.MouseEvent;
 import java.util.Scanner;
 
 public class BasicController extends Controller {
@@ -13,7 +15,9 @@ public class BasicController extends Controller {
         running = true;
     }
 
-    public String[] gameType() {
+    public void init() {}
+
+    /*public String[] gameType() {
         logger.log("Collecting information about game type...", true);
 
         display.netPrompt();
@@ -30,11 +34,11 @@ public class BasicController extends Controller {
 
         logger.log("Collected!", false);
         return params;
-    }
+    }*/
 
     // Receives a move from input
     public Turn getCommand() {
-        logger.log("Getting command...");
+        //logger.log("Getting command...");
 
         // Ends the game if checkmate
         if (chessboard.isMate(chessboard.getTurn())) {
@@ -107,4 +111,6 @@ public class BasicController extends Controller {
 
         return chessboard.log.peek();
     }
+
+    public void mouseClicked(MouseEvent mouseEvent) {}
 }

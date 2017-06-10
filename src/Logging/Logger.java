@@ -1,5 +1,6 @@
 package Logging;
 
+import Events.Settings;
 import Piece.Turn;
 
 import java.io.*;
@@ -31,6 +32,20 @@ public class Logger {
             l.write("Path to JAR file: " + path + "\n");
             l.flush();
         } catch (IOException e) { System.err.println("Log Error: " + e); }
+
+        // Creating settings file if it doesn't exist
+        File settings = new File(path + "/settings.opt");
+        if (!settings.exists()) {
+            try {
+                FileOutputStream fs = new FileOutputStream(path + "/settings.opt");
+                ObjectOutputStream outstr = new ObjectOutputStream(fs);
+                outstr.writeObject(new Settings(true, 3, 5, true));
+                outstr.flush();
+            } catch (IOException e) {
+                System.err.println("Unable to create settings!\n" + e);
+                System.exit(0);
+            }
+        }
 
         if (out == null || l == null) { System.err.println("Unable to open file"); }
     }
@@ -86,6 +101,17 @@ public class Logger {
 
         if (entered) tabs++;
         //System.out.println(msg);
+    }
+
+    public void recordSettings (Settings s) {
+        try {
+            FileOutputStream fs = new FileOutputStream(curr_path + "/settings.opt");
+            ObjectOutputStream outstr = new ObjectOutputStream(fs);
+            outstr.writeObject(s);
+            outstr.flush();
+        } catch (IOException e) {
+            System.err.println("Unable to open settings!\n" + e);
+        }
     }
 
     public void err(String msg, Exception ex) {

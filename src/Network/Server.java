@@ -1,11 +1,14 @@
 package Network;
 
+import Events.LogEvent;
+import Events.LogEventListener;
 import Logging.Logger;
 import Piece.Turn;
 
 import java.io.*;
 import java.net.*;
 import java.util.Enumeration;
+import java.util.LinkedList;
 
 public class Server implements Net{
     public static Server INSTANCE = new Server();
@@ -14,10 +17,10 @@ public class Server implements Net{
     private ServerSocket server;
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    private Logger logger = Logger.INSTANCE;
+    private LinkedList<LogEventListener> logListeners = new LinkedList<>();
 
     public void init(String ip) {
-        logger.log("Initializing server...", true);
+        throwLogEvent("Initializing server...", true);
         s = null;
         try {
             server = new ServerSocket(8030);
@@ -27,19 +30,21 @@ public class Server implements Net{
             InputStream i = s.getInputStream();
             ObjectInputStream inn = new ObjectInputStream(i);
             in = inn;
-            logger.log("Client was successfully initialized!", false);
-        } catch (IOException e) { System.err.println("Error: " + e); }
+            throwLogEvent("Client was successfully initialized!", false);
+        } catch (IOException e) { System.err.println("InitError: " + e); throwLogEvent("InitError: ", e);}
     }
+
+    public void addLogEventListener(LogEventListener listener) { logListeners.add(listener); }
 
     public void quit() {
         try {
             if (s != null) s.close();
             if (server != null) server.close();
-        } catch (IOException e) { System.err.println("Error: " + e); }
+        } catch (IOException e) { System.err.println("QuitError: " + e); throwLogEvent("QuitError: ", e);}
     }
 
     public String getIP() {
-        logger.log("Getting IP address...", true);
+        throwLogEvent("Getting IP address...", true);
         try {
             Enumeration e = NetworkInterface.getNetworkInterfaces();
             while (e.hasMoreElements()) {
@@ -47,8 +52,8 @@ public class Server implements Net{
                 Enumeration ee = n.getInetAddresses();
                 while (ee.hasMoreElements()) {
                     InetAddress i = (InetAddress) ee.nextElement();
-                    if (i.getHostAddress().startsWith("192.168")) {
-                        logger.log("Got it!", false);
+                    if (i instanceof Inet4Address) {
+                        throwLogEvent("Got it!", false);
                         return i.getHostAddress();
                     }
                 }
@@ -61,22 +66,35 @@ public class Server implements Net{
     public ObjectInputStream getInStream() { return in; }
 
     public void sendTurn(Turn t) {
-        logger.log("Preparing to send turn...", true);
+        throwLogEvent("Preparing to send turn...", true);
         try {
             out.writeObject(t);
             out.flush();
-            logger.log("Turn was successfully sent!", false);
-        } catch (IOException e) { System.err.println("Error: " + e); }
+            throwLogEvent("Turn has been successfully sent!", false);
+        } catch (IOException e) { System.err.println("Error while sending turn: " + e); throwLogEvent("Error while sending turn: ", e);}
     }
 
     public Turn receiveTurn() {
-        logger.log("Waiting for turn...", true);
+        throwLogEvent("Waiting for turn...", true);
         try {
             Turn t = (Turn)in.readObject();
-            logger.log("Turn was collected!", false);
+            throwLogEvent("Turn has been collected!", false);
             return t;
-        } catch (IOException e) { System.err.println("Error: " + e); }
-        catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); }
+        } catch (IOException e) { System.err.println("Error while receiving turn: " + e); throwLogEvent("Error while receiving turn: ", e);}
+        catch (ClassNotFoundException e) { System.err.println("Class Error: " + e); throwLogEvent("Class Error: ", e);}
         return null;
+    }
+
+    private void throwLogEvent(String msg) {
+        for (LogEventListener listener : logListeners)
+            listener.logMessage(new LogEvent(this, msg));
+    }
+    private void throwLogEvent(String msg, boolean enter) {
+        for (LogEventListener listener : logListeners)
+            listener.logFunction(new LogEvent(this, msg), enter);
+    }
+    private void throwLogEvent(String msg, Exception ex) {
+        for (LogEventListener listener : logListeners)
+            listener.logError(new LogEvent(this, msg, ex));
     }
 }

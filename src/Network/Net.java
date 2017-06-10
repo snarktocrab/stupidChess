@@ -2,6 +2,7 @@ package Network;
 
 import java.io.*;
 
+import Events.LogEventListener;
 import Logging.Logger;
 import Piece.Turn;
 
@@ -16,4 +17,5 @@ public interface Net {
     ObjectOutputStream getOutStream();
     void sendTurn(Turn t);
     Turn receiveTurn();
+    void addLogEventListener(LogEventListener listener);
 }
