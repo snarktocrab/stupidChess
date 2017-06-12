@@ -1,10 +1,7 @@
 package Controller;
 
 import Events.*;
-import Logging.Logger;
-import Logging.Saver;
 import Piece.*;
-import View.*;
 
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -13,10 +10,10 @@ public abstract class Controller {
     protected boolean running;
 
     protected Board chessboard = Board.INSTANCE;
-    protected View display;
     private LinkedList<SaveLoadListener> saveListeners = new LinkedList<>();
     protected LinkedList<GameEventListener> listeners = new LinkedList<>();
     protected LinkedList<LogEventListener> logListeners = new LinkedList<>();
+    protected LinkedList<QuitResetListener> quitResetListeners = new LinkedList<>();
 
     // Tell the controller where to output
     public abstract void init();
@@ -49,8 +46,10 @@ public abstract class Controller {
                 break;
             case 'l':
                 loadNet();
-                display.update();
+                throwUpdateEvent();
                 break;
+            case 'r':
+                throwResetEvent();
             default:
                 return;
         }
@@ -63,6 +62,7 @@ public abstract class Controller {
     }
     public void addLogEventListener(LogEventListener listener) { logListeners.add(listener); }
     public void addSaveLoadListener(SaveLoadListener listener) { saveListeners.add(listener); }
+    public void addQuitResetListener(QuitResetListener listener) { quitResetListeners.add(listener); }
 
     // Instead of infinity loop
     public boolean isRunning() { return running; }
@@ -78,9 +78,11 @@ public abstract class Controller {
         for (GameEventListener listener : listeners)
             listener.check(new CheckEvent(this));
     }
-    protected void throwMateEvent() {
+    protected boolean throwMateEvent() {
+        boolean ans = true;
         for (GameEventListener listener : listeners)
-            listener.mate(new MateEvent(this));
+            ans = listener.mate(new MateEvent(this));
+        return ans;
     }
     protected void throwPromotionEvent(int id) {
         for (GameEventListener listener : listeners)
@@ -98,9 +100,16 @@ public abstract class Controller {
         for (LogEventListener listener : logListeners)
             listener.logError(new LogEvent(this, msg, ex));
     }
-
     protected void loadNet() {
         for (SaveLoadListener listener : saveListeners)
             listener.loadNet();
+    }
+    protected void throwResetEvent() {
+        for (QuitResetListener listener : quitResetListeners)
+            listener.reset(new ResetEvent(this));
+    }
+    protected void throwQuitEvent() {
+        for (QuitResetListener listener : quitResetListeners)
+            listener.quit(new QuitEvent(this));
     }
 }

@@ -42,14 +42,14 @@ public class BasicController extends Controller {
 
         // Ends the game if checkmate
         if (chessboard.isMate(chessboard.getTurn())) {
-            display.mateHandler();
+            throwMateEvent();
             super.quit();
             return new Turn('q');
         }
 
         // Informs the current player of check
         if (chessboard.isCheck(chessboard.getTurn())) {
-            display.checkHandler();
+            throwCheckEvent();
         }
 
         String s = in.nextLine();
@@ -93,16 +93,16 @@ public class BasicController extends Controller {
                 return null;
             }
         }
-        display.update();
+        throwUpdateEvent();
 
         int id = chessboard.needsPromotion(!chessboard.getTurn());
 
         if (id >= 0) {
-            display.promotionHandler();
+            throwPromotionEvent(id);
             String ss = in.nextLine();
             chessboard.promote(id, ss.charAt(0));
 
-            display.update();
+            throwUpdateEvent();
             Turn prevt = chessboard.log.pop();
             if (prevt.type == 'm')
                 return new Turn('p', prevt.x, prevt.y, prevt.x2, prevt.y2, prevt.pieceID, ss.charAt(0));

@@ -30,6 +30,7 @@ public class ScreenDisplay extends JFrame implements View {
     private LinkedList<SettingsEventListener> listeners = new LinkedList<>();
     private LinkedList<LogEventListener> logListeners = new LinkedList<>();
     private LinkedList<SaveLoadListener> saveListeners = new LinkedList<>();
+    private LinkedList<QuitResetListener> quitResetListeners = new LinkedList<>();
 
     // Singleton
     public static ScreenDisplay INSTANCE = new ScreenDisplay();
@@ -58,6 +59,8 @@ public class ScreenDisplay extends JFrame implements View {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Game");
         menuBar.add(gameMenu);
+        JMenu resetItem = new JMenu("Reset");
+        menuBar.add(resetItem);
         JMenu exitItem = new JMenu("Exit");
         menuBar.add(exitItem);
 
@@ -88,10 +91,17 @@ public class ScreenDisplay extends JFrame implements View {
             public void mouseExited(MouseEvent mouseEvent) {}
         });
 
+        resetItem.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent mouseEvent) { throwResetEvent(); }
+            public void mousePressed(MouseEvent mouseEvent) {}
+            public void mouseReleased(MouseEvent mouseEvent) {}
+            public void mouseEntered(MouseEvent mouseEvent) {}
+            public void mouseExited(MouseEvent mouseEvent) {}
+        });
+
         exitItem.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent mouseEvent) {
-                // TODO: Do smth to exit game
-                System.exit(0);
+                throwQuitEvent();
             }
             public void mousePressed(MouseEvent mouseEvent) {}
             public void mouseReleased(MouseEvent mouseEvent) {}
@@ -146,7 +156,7 @@ public class ScreenDisplay extends JFrame implements View {
         JOptionPane.showMessageDialog(this, "Check!", "Watch out!", JOptionPane.WARNING_MESSAGE);
     }
 
-    public void mateHandler() {
+    public boolean mateHandler() {
         String s = "Checkmate!\n";
         if (!chessboard.getTurn())
             s += "White ";
@@ -154,6 +164,8 @@ public class ScreenDisplay extends JFrame implements View {
             s += "Black ";
         s += "wins!";
         JOptionPane.showMessageDialog(this, s, "Game over!", JOptionPane.WARNING_MESSAGE);
+        return (JOptionPane.showConfirmDialog(this, "Do you want to play again?",
+                "Play again?", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION);
     }
 
     public String promotionHandler() {
@@ -307,6 +319,16 @@ public class ScreenDisplay extends JFrame implements View {
             else if (type == 'l')
                 listener.load(e);
         }
+    }
+
+    public void addQuitResetListener(QuitResetListener listener) { quitResetListeners.add(listener); }
+    public void throwResetEvent() {
+        for (QuitResetListener listener : quitResetListeners)
+            listener.reset(new ResetEvent(this));
+    }
+    public void throwQuitEvent() {
+        for (QuitResetListener listener : quitResetListeners)
+            listener.quit(new QuitEvent(this));
     }
 }
 

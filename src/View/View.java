@@ -10,7 +10,7 @@ import javax.swing.*;
 public interface View {
     void update();
     void checkHandler();
-    void mateHandler();
+    boolean mateHandler();
     String promotionHandler();
     void waitHandler();
     String netPrompt();
@@ -26,4 +26,7 @@ public interface View {
     void throwSettingsEvent(Settings s);
     void addLogEventListener(LogEventListener listener);
     void addSaveLoadListener(SaveLoadListener listener);
+    void addQuitResetListener(QuitResetListener listener);
+    void throwResetEvent();
+    void throwQuitEvent();
 }

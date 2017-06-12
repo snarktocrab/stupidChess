@@ -81,7 +81,7 @@ public class TextDisplay implements View {
         System.out.println("Check!");
     }
 
-    public void mateHandler() {
+    public boolean mateHandler() {
         String s = "Checkmate!\n";
         if (!chessboard.getTurn())
             s += "White ";
@@ -89,6 +89,7 @@ public class TextDisplay implements View {
             s += "Black ";
         s += "wins!";
         System.out.println(s);
+        return false;
     }
 
     public String netPrompt() {
@@ -122,4 +123,7 @@ public class TextDisplay implements View {
     public void throwSettingsEvent(Settings s) {}
     public void addLogEventListener(LogEventListener listener) {}
     public void addSaveLoadListener(SaveLoadListener listener) {}
+    public void addQuitResetListener(QuitResetListener listener) {}
+    public void throwResetEvent() {}
+    public void throwQuitEvent() {}
 }

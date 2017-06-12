@@ -6,8 +6,8 @@ import java.io.Serializable;
  * Created by daniel on 30.11.16.
  */
 public class Turn implements Serializable {
-    public char type; // m - move, t - take, O - castle queenside, o - castle kingside, p - promote move, P - promote take, q - quit, u - undo
-    public char newPiece;
+    public char type; // m - move, t - take, O - castle queenside, o - castle kingside, p - promote move, P - promote take, q - quit, u - undo,
+    public char newPiece; // r - reset
     public int pieceID, targID;
     public int x, y, x2, y2;
     public boolean moved;

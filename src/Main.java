@@ -41,9 +41,7 @@ public class Main {
             public void check(CheckEvent e) {
                 display.checkHandler();
             }
-            public void mate(MateEvent e) {
-                display.mateHandler();
-            }
+            public boolean mate(MateEvent e) { return display.mateHandler(); }
             public void promotion(PromotionEvent e) {
                 String type = display.promotionHandler();
                 chessboard.promote(e.id, type.charAt(0));
@@ -58,6 +56,15 @@ public class Main {
             }
             public Settings getCurrentSettings() { return settings; }
         });
+
+        QuitResetListener quitResetListener = new QuitResetListener() {
+            public void reset(ResetEvent e) {
+
+            }
+            public void quit(QuitEvent e) { exit(); }
+        };
+        controller.addQuitResetListener(quitResetListener);
+        display.addQuitResetListener(quitResetListener);
 
         LogEventListener logEventListener = new LogEventListener() {
             public void logMessage(LogEvent e) {
@@ -112,7 +119,7 @@ public class Main {
         String s = display.netPrompt();
 
         if (s == null) { // Exiting our game if we didn't get any option
-            quit();
+            exit();
         }
 
         String[] gameParams = new String[2];
@@ -181,10 +188,10 @@ public class Main {
             }
         }
 
-        quit();
+        exit();
     }
 
-    private static void quit() {
+    private static void exit() {
         logger.log("Exiting our program");
         if (net != null) net.quit();
         logger.quit();

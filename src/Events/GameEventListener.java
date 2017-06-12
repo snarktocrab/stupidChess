@@ -8,6 +8,6 @@ import java.util.EventListener;
 public interface GameEventListener extends EventListener {
     void updateDisplay(UpdateEvent e);
     void check(CheckEvent e);
-    void mate(MateEvent e);
+    boolean mate(MateEvent e);
     void promotion(PromotionEvent e);
 }

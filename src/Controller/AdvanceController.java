@@ -80,9 +80,14 @@ public class AdvanceController extends Controller {
 
         // Ends the game if checkmate
         if (!hasMateChecked && chessboard.isMate(chessboard.getTurn())) {
-            throwMateEvent();
-            super.quit();
-            return new Turn('q');
+            if (throwMateEvent()) { // User wants to play again
+                throwResetEvent();
+                return new Turn('r');
+            }
+            else {
+                super.quit();
+                return new Turn('q');
+            }
         }
         hasMateChecked = true;
 
