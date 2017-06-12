@@ -112,8 +112,7 @@ public class Main {
         String s = display.netPrompt();
 
         if (s == null) { // Exiting our game if we didn't get any option
-            logger.quit();
-            System.exit(0);
+            quit();
         }
 
         String[] gameParams = new String[2];
@@ -182,6 +181,10 @@ public class Main {
             }
         }
 
+        quit();
+    }
+
+    private static void quit() {
         logger.log("Exiting our program");
         if (net != null) net.quit();
         logger.quit();
